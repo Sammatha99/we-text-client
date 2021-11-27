@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+// import { useEffect } from "react";
+// import io from "socket.io-client";
+// let socket;
+import Login from "./components/auth/login/Login";
+import Register from "./components/auth/register/Register";
+import ForgotPassword from "./components/auth/forgotPassword/ForgotPassword";
+import MainDashboard from "./components/dashboard/MainDashboard";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCheckSquare,
+  faCoffee,
+  faEye,
+  faEyeSlash,
+  faChevronRight,
+  faChevronLeft,
+  faThLarge,
+  faUser,
+  faCommentDots,
+  faPowerOff,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+  fab,
+  faCheckSquare,
+  faCoffee,
+  faEye,
+  faEyeSlash,
+  faChevronRight,
+  faChevronLeft,
+  faThLarge,
+  faUser,
+  faCommentDots,
+  faPowerOff
+);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  // useEffect(() => {
+  //   socket = io("http://localhost:3000");
+  // }, []);
+  // return <Login />;
+  // return <Register />;
+  // return <ForgotPassword />;
+  return <MainDashboard />;
 }
 
 export default App;
