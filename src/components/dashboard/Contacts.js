@@ -1,7 +1,7 @@
 import React from "react";
 
-import "../../style/contact.css";
+import "../../style/contacts.css";
 
 export default function Contacts() {
-  return <div className="contact content"></div>;
+  return <div className="contacts content"></div>;
 }

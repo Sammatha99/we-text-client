@@ -18,6 +18,10 @@ import {
   faUser,
   faCommentDots,
   faPowerOff,
+  faSearch,
+  faPlus,
+  faTimesCircle,
+  faEllipsisH,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -31,7 +35,11 @@ library.add(
   faThLarge,
   faUser,
   faCommentDots,
-  faPowerOff
+  faPowerOff,
+  faSearch,
+  faPlus,
+  faTimesCircle,
+  faEllipsisH
 );
 
 function App() {

@@ -65,9 +65,16 @@ export default function Sidebar() {
 
       <div className="sidebar__user-wrapper center">
         <div
-          className={clsx("sidebar__avatar-wrapper", "center", {
-            "user-active-dots": userData.status,
-          })}
+          className={clsx(
+            "sidebar__avatar-wrapper",
+            "avatar--pink-border",
+            "avatar",
+            "avatar--big",
+            "center",
+            {
+              "user-active-dots": userData.status,
+            }
+          )}
         >
           <img src={userData.avatar} alt="user avatar" />
         </div>

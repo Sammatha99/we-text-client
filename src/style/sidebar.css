@@ -34,32 +34,7 @@
   flex-direction: column;
 }
 
-.sidebar__avatar-wrapper {
-  border: 3px solid var(--pink-color);
-  border-radius: 100%;
-  width: var(--avatar-big);
-  height: var(--avatar-big);
-  position: relative;
-  transition: all 0.3s ease;
-}
 
-.sidebar__avatar-wrapper img {
-  border-radius: 100%;
-  width: calc(var(--avatar-big) - 15px);
-  transition: all 0.3s ease;
-}
-
-.user-active-dots::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--white-color);
-  border-radius: 100%;
-  background-color: var(--green-color);
-}
 
 .sidebar__user-name {
   color: var(--white-color);
@@ -146,14 +121,25 @@
   visibility: hidden;
 }
 
+.sidebar__avatar-wrapper {
+  border: 3px solid var(--pink-color);
+  background-color: transparent;
+  padding: 0;
+}
+
+.sidebar__avatar-wrapper img {
+  width: calc(100% - 15px);
+}
+
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper {
   width: var(--avatar-x-small);
   height: var(--avatar-x-small);
+  border: 2px solid var(--pink-color);
 }
 
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper img {
   border-radius: 100%;
-  width: calc(var(--avatar-x-small) - 10px);
+  width: calc(100% - 10px);
 }
 
 #checkbox-sidebar:not(:checked) ~ .sidebar .user-active-dots::after {

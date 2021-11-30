@@ -2,7 +2,8 @@ import React from "react";
 
 import "../../style/dashboard.css";
 import Sidebar from "./Sidebar";
-import Contacts from "./Contacts";
+import ChatList from "./ChatList";
+// import Contacts from "./Contacts";
 import OtherUserPofile from "./OtherUserPofile";
 import Chat from "./Chat";
 // import ThisUserProfile from "./ThisUserProfile";
@@ -16,7 +17,8 @@ export default function MainDashboard() {
         style={{ display: "none" }}
       />
       <Sidebar />
-      <Contacts />
+      {/* <Contacts /> */}
+      <ChatList />
       <Chat />
       <OtherUserPofile />
       {/* <ThisUserProfile /> */}
