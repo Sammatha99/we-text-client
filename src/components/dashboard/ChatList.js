@@ -1,11 +1,11 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingScreen, ChatCard } from "../utils";
+import { LoadingComponent, ChatCard } from "../utils";
 import "../../style/chatList.css";
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 
-const chatRooms = [...chatRoomsData];
+const chatRooms = JSON.parse(JSON.stringify(chatRoomsData));
 
 export default function ChatList() {
   const [selectChatroom, setSelectChatroom] = useState(0);
@@ -48,10 +48,10 @@ export default function ChatList() {
   }, []);
 
   return (
-    <div className="chatList content">
-      <div className="chatList-header">
-        <div className="chatList-header-info">
-          <div className="chatList-header-info__left">
+    <div className="smallPanel content">
+      <div>
+        <div className="smallPanelLeft-header-info">
+          <div>
             <p className="text--header">Chats</p>
             <select className="chatList-header-info__select">
               {optionsChatList.map((option) => (
@@ -61,7 +61,7 @@ export default function ChatList() {
               ))}
             </select>
           </div>
-          <button className="btn btn--medium btn--primary chatList-header-info__right">
+          <button className="btn btn--medium btn--primary">
             <Icon className="icon--margin-right" icon="plus" />
             Create new chat
           </button>
@@ -76,11 +76,11 @@ export default function ChatList() {
           </div>
         </div>
       </div>
-      <div className="chatList-content">
+      <div className="smallPanel-content">
         {loading ? (
-          <LoadingScreen />
+          <LoadingComponent.LoadingChats />
         ) : (
-          chatRoomsData.map((chatroom) => (
+          chatRooms.map((chatroom) => (
             <ChatCard
               isSelected={selectChatroom === chatroom.id}
               key={chatroom.id}

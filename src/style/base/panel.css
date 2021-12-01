@@ -1,0 +1,39 @@
+.content {
+  margin: var(--spacing-content);
+  border-radius: var(--border-radius);
+  transition: all 3s ease;
+}
+
+.content ~ .content {
+  margin-left: 0;
+}
+
+/* small panel */
+.smallPanel {
+  width: var(--content-width-small);
+  height: calc(100% - 2 * var(--spacing-content));
+  display: flex;
+  flex-direction: column;
+}
+
+.smallPanelLeft-header-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.smallPanelLeft-header-info p {
+  color: var(--white-color);
+}
+
+.smallPanel-content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* big panel  */
+.bigPanelMiddle {
+  flex-grow: 1;
+  background-color: var(--white-color);
+}

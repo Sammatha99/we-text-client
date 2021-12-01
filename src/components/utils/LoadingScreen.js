@@ -1,15 +1,14 @@
 import React from "react";
-import "../../style/loadingScreen.css";
+import { UserCard, ChatCard } from ".";
 
-export default function LoadingScreen() {
-  return (
-    <div className="loadingScreen loadingScreen--primary-theme">
-      <div className="lds-facebook">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <p className="loadingScreen__text">Just a moment</p>
-    </div>
-  );
-}
+const listNumber = [0, 1, 2, 3];
+
+const LoadingContacts = () => {
+  return listNumber.map((index) => <UserCard key={index} />);
+};
+
+const LoadingChats = () => {
+  return listNumber.map((index) => <ChatCard key={index} />);
+};
+
+export { LoadingContacts, LoadingChats };

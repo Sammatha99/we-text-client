@@ -5,13 +5,3 @@
   display: flex;
   flex-direction: row;
 }
-
-.content {
-  margin: var(--spacing-content);
-  border-radius: var(--border-radius);
-  transition: all 3s ease;
-}
-
-.content ~ .content {
-  margin-left: 0;
-}

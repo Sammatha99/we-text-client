@@ -1,0 +1,113 @@
+/* avatar size */
+.avatar {
+  border-radius: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+  background-color: var(--white-color);
+  flex-shrink: 0;
+}
+
+.avatar--big {
+  width: var(--avatar-big);
+  height: var(--avatar-big);
+  padding: var(--spacing-1);
+  border-radius: 100%;
+}
+
+.avatar--medium {
+  width: var(--avatar-medium);
+  height: var(--avatar-medium);
+  padding: 2px;
+  border-radius: 100%;
+}
+
+.avatar--small {
+  width: var(--avatar-small);
+  height: var(--avatar-small);
+  padding: 1px;
+  border-radius: 100%;
+}
+
+.avatar--x-small {
+  width: var(--avatar-x-small);
+  height: var(--avatar-x-small);
+  padding: 1px;
+  border-radius: 100%;
+}
+
+.avatar img {
+  width: 100%;
+  border-radius: 100%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* multible imgs avatar*/
+.avatar--double-img {
+  background-color: transparent;
+}
+
+.avatar--double-img img {
+  width: 65%;
+}
+
+.avatar--double-img img:nth-child(1) {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.avatar--double-img img:nth-child(2) {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/* avatar status */
+.user-active-dots::after {
+  content: "";
+  position: absolute;
+  transition: all 0.3s ease;
+  border-radius: 100%;
+  background-color: var(--green-color);
+}
+
+.avatar--big.user-active-dots::after {
+  bottom: -3px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--white-color);
+}
+
+.avatar--medium.user-active-dots::after {
+  bottom: -2px;
+  right: 3px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--white-color);
+}
+
+.avatar--small.user-active-dots::after {
+  bottom: -2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--white-color);
+}
+
+.avatar--x-small.user-active-dots::after {
+  bottom: -2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--white-color);
+}
+
+.loading {
+  background-color: var(--border-color);
+}
+
+.avatar.loading {
+  overflow: hidden;
+}

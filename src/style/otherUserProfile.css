@@ -1,5 +1,0 @@
-.otherUserProfile {
-  background-color: green;
-  width: var(--content-width-small);
-  height: calc(100% - 2 * var(--spacing-content));
-}

@@ -1,5 +1,0 @@
-.contacts {
-  background-color: red;
-  width: var(--content-width-small);
-  height: calc(100% - 2 * var(--spacing-content));
-}

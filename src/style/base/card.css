@@ -1,21 +1,35 @@
-.chatCard ~ .chatCard {
+.chatCard ~ .chatCard,
+.userCard ~ .userCard {
   margin-top: var(--spacing-2);
 }
 
-.chatCard {
+.chatCard,
+.userCard {
   background-color: var(--text-bold-color);
   border-radius: var(--border-radius);
   padding: var(--spacing-6) var(--spacing-3);
   width: 100%;
   display: flex;
   position: relative;
+  cursor: pointer;
+}
+
+.userCard {
+  padding: var(--spacing-3) var(--spacing-3);
+  align-items: center;
+}
+
+.chatCard:hover:not(.chatCard--active),
+.userCard:hover {
+  opacity: 0.6;
 }
 
 .chatCard--active {
   background-color: var(--primary-color);
 }
 
-.chatCard__content {
+.chatCard__content,
+.userCard__content {
   color: var(--white-color);
   flex-grow: 1;
   margin-left: var(--spacing-3);
@@ -25,7 +39,8 @@
 }
 
 .chatCard__name,
-.chatCard__last-message {
+.chatCard__last-message,
+.userCard__name {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -34,8 +49,12 @@
   word-break: break-word;
 }
 
-.chatCard__name {
+.chatCard__name,
+.userCard__name {
   font-weight: var(--font-weight-medium);
+}
+
+.chatCard__name {
   margin-top: var(--spacing-2);
 }
 
@@ -49,15 +68,22 @@
   position: absolute;
 }
 
-.chatCard__options-wrapper {
+.chatCard__options-wrapper,
+.userCard__options-wrapper {
+  color: var(--white-color);
   font-size: var(--font-size-3);
+  cursor: pointer;
+  padding: var(--spacing-2);
+}
+
+.chatCard__options-wrapper {
   top: 0;
   right: 0;
-  cursor: pointer;
   padding: var(--spacing-1) var(--spacing-2) var(--spacing-2);
 }
 
-.chatCard__options-wrapper:hover {
+.chatCard__options-wrapper:hover,
+.userCard__options-wrapper:hover {
   opacity: 0.5;
 }
 
@@ -68,4 +94,29 @@
   bottom: 0;
   right: 0;
   padding: 0 var(--spacing-2);
+}
+
+/* loading  */
+.loading.userCard__name {
+  width: 100%;
+  overflow: hidden;
+  color: transparent;
+}
+
+.chatCard__name.loading {
+  width: 50%;
+  overflow: hidden;
+  color: transparent;
+}
+
+.chatCard__last-message.loading {
+  width: 70%;
+  overflow: hidden;
+  color: transparent;
+}
+
+.chatCard__time.loading {
+  width: 30%;
+  overflow: hidden;
+  color: transparent;
 }

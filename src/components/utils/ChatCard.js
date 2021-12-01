@@ -3,13 +3,12 @@ import clsx from "clsx";
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import "../../style/chatCard.css";
 import { thisUserData } from "../../utils/fakeData";
+import { utilFunction } from "../utils";
 
 export default function ChatCard({ chatroom, isSelected }) {
   const lastMessage = () => {
     var senderName = "";
-    console.log(thisUserData.id === chatroom.lastMessage.sender);
 
     // lấy tên sender name: chính bạn, ng còn lại của personal chat, trong nhóm, rời nhóm
     if (thisUserData.id === chatroom.lastMessage.sender) {
@@ -51,52 +50,54 @@ export default function ChatCard({ chatroom, isSelected }) {
     }
   };
 
-  const chatRoomStatus = () => {
-    if (!chatroom.isGroupChat) {
-      return chatroom.membersPopulate[0].status;
-    }
-    for (const member of chatroom.membersPopulate) {
-      if (member.status) return true;
-    }
-    return false;
-  };
-
-  return (
-    <div
-      className={clsx("chatCard", {
-        "chatCard--active": isSelected,
-      })}
-    >
-      <div className="chatCard__options-wrapper">
-        <Icon icon="ellipsis-h" />
-      </div>
+  if (chatroom) {
+    return (
       <div
-        className={clsx("avatar", "avatar--small", "center", {
-          "user-active-dots": chatRoomStatus(),
-          "avatar--double-img": chatroom.isGroupChat,
+        className={clsx("chatCard", {
+          "chatCard--active": isSelected,
         })}
       >
-        <img
-          className="avatar"
-          src={chatroom.membersPopulate[0].avatar}
-          alt={`${chatroom.membersPopulate[0].name} avatar`}
-        />
-        {chatroom.isGroupChat && (
+        <div className="chatCard__options-wrapper">
+          <Icon icon="ellipsis-h" />
+        </div>
+        <div
+          className={clsx("avatar", "avatar--small", "center", {
+            "user-active-dots": utilFunction.chatRoomStatus(chatroom),
+            "avatar--double-img": chatroom.isGroupChat,
+          })}
+        >
           <img
             className="avatar"
             src={chatroom.membersPopulate[0].avatar}
             alt={`${chatroom.membersPopulate[0].name} avatar`}
           />
-        )}
+          {chatroom.isGroupChat && (
+            <img
+              className="avatar"
+              src={chatroom.membersPopulate[1].avatar}
+              alt={`${chatroom.membersPopulate[1].name} avatar`}
+            />
+          )}
+        </div>
+        <div className="chatCard__content">
+          <p className="chatCard__name">{chatroom.name}</p>
+          <p className="chatCard__last-message">{lastMessage()}</p>
+        </div>
+        <p className="chatCard__time">
+          {dateFormat(chatroom.lastMessage.time)}
+        </p>
       </div>
-      <div className="chatCard__content">
-        <p className="chatCard__name">{chatroom.name}</p>
-        <p className="chatCard__last-message">{lastMessage()}</p>
+    );
+  } else {
+    return (
+      <div className="chatCard">
+        <div className="avatar avatar--small center loading"></div>
+        <div className="chatCard__content">
+          <p className="chatCard__name loading">.</p>
+          <p className="chatCard__last-message loading">.</p>
+        </div>
+        <p className="chatCard__time loading">.</p>
       </div>
-      <p className="chatCard__time">
-        {/* {new Date(chatroom.lastMessage.time).format()} */}
-        {dateFormat(chatroom.lastMessage.time)}
-      </p>
-    </div>
-  );
+    );
+  }
 }

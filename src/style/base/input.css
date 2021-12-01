@@ -1,0 +1,70 @@
+input {
+  text-transform: none;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  outline: none;
+  padding: var(--spacing-3);
+  background: var(--white-color);
+  color: var(--text-color);
+}
+
+input::placeholder {
+  color: var(--text-x-light-color);
+}
+
+.input-icon {
+  position: relative;
+}
+
+.input-icon .input-icon__input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.input-icon .input-icon__icon--right {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--spacing-2);
+  color: var(--text-color);
+}
+
+.input-icon .input-icon__icon--left {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: var(--spacing-2);
+}
+
+.input-icon__icon--link {
+  cursor: pointer;
+}
+
+.input-icon__icon--link:hover {
+  opacity: 0.4;
+}
+
+.input-icon--dark input {
+  outline: none;
+  border: none;
+  background-color: var(--text-bold-color);
+  color: var(--white-color);
+}
+
+.input-icon--search {
+  margin: var(--spacing-5) 0;
+}
+
+.input-icon__icon--clear {
+  display: none;
+}
+
+.input-icon--search .input-icon__input:focus ~ .input-icon__icon--right {
+  display: none;
+}
+
+.input-icon--search .input-icon__input:focus ~ .input-icon__icon--clear {
+  display: block;
+}

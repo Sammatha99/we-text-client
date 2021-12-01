@@ -9,7 +9,7 @@ const usersData = [
   },
   {
     id: 1,
-    name: "Nguyen Thanh Vinh Phuc",
+    name: "Nguyen Thanh Vinh Phuc phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3",
     email: "phucnguyen@gmail.com",
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
@@ -81,15 +81,24 @@ const usersData = [
   },
 ];
 
+const usersId = (users) => {
+  var ids = [];
+  users.forEach((user) => ids.push(user.id));
+  return ids;
+};
+
 const thisUserData = usersData[0];
 
 const thisUserDetailData = {
   id: thisUserData.id,
   desription: "hello, nice to meet you, do u want some coffe ?",
   phoneNumber: "0332087063",
-  followers: usersData.slice(1),
-  followings: usersData.slice(1),
-  contacts: usersData.slice(1),
+  followers: usersId(usersData.slice(1)),
+  followings: usersId(usersData.slice(1)),
+  contacts: usersId(usersData.slice(1)),
+  followersPopulate: usersData.slice(1),
+  followingsPopulate: usersData.slice(1),
+  contactsPopulate: usersData.slice(1),
 };
 
 const messagesPersonalData = [
@@ -237,12 +246,6 @@ const messagesChatgroupData = [
     time: 1638183600957,
   },
 ];
-
-const usersId = (users) => {
-  var ids = [];
-  users.forEach((user) => ids.push(user.id));
-  return ids;
-};
 
 const chatRoomsData = [
   {

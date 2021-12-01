@@ -1,12 +1,14 @@
 import React from "react";
 
 import "../../style/dashboard.css";
-import Sidebar from "./Sidebar";
-import ChatList from "./ChatList";
-// import Contacts from "./Contacts";
-import OtherUserPofile from "./OtherUserPofile";
-import Chat from "./Chat";
-// import ThisUserProfile from "./ThisUserProfile";
+import {
+  Sidebar,
+  ChatList,
+  Chat,
+  Contacts,
+  ThisUserProfile,
+  OtherUserPofile,
+} from "../dashboard";
 
 export default function MainDashboard() {
   return (
@@ -18,9 +20,9 @@ export default function MainDashboard() {
       />
       <Sidebar />
       {/* <Contacts /> */}
-      <ChatList />
-      <Chat />
-      <OtherUserPofile />
+      {/* <ChatList /> */}
+      <Chat id={1} />
+      {/* <OtherUserPofile /> */}
       {/* <ThisUserProfile /> */}
     </div>
   );
