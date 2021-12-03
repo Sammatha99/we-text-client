@@ -36,4 +36,6 @@
 .bigPanelMiddle {
   flex-grow: 1;
   background-color: var(--white-color);
+  display: flex;
+  flex-direction: column;
 }

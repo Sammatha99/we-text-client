@@ -12,16 +12,36 @@ import { ChatComponents } from "../utils";
 
 export default function Chat({ id }) {
   const [chatroom, setChatroom] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
     if (id != null) {
       const getChatroom = JSON.parse(JSON.stringify(chatRoomsData[id]));
+      let getMessages;
+      // TODO get messages
       if (getChatroom.isGroupChat) {
-        setMessages(JSON.parse(JSON.stringify(messagesChatgroupData)));
+        getMessages = JSON.parse(JSON.stringify(messagesChatgroupData));
       } else {
-        setMessages(JSON.parse(JSON.stringify(messagesPersonalData)));
+        getMessages = JSON.parse(JSON.stringify(messagesPersonalData));
       }
+      // get sender for each message
+      getMessages.forEach((message) => {
+        if (getChatroom.members.includes(message.sender)) {
+          message.sender = getChatroom.membersPopulate.find(
+            (member) => member.id === message.sender
+          );
+        } else {
+          message.sender = getChatroom.outGroupMembersPopulate.find(
+            (member) => member.id === message.sender
+          );
+        }
+      });
+
+      // TODO trong backend gửi lên cần được reverse sẵn
+      getMessages = getMessages.reverse();
+
+      setMessages(getMessages);
+
       // lọc members để loại bỏ chính mình đi
       const myIndex = getChatroom.members.findIndex(
         (id) => id === thisUserData.id
@@ -47,7 +67,7 @@ export default function Chat({ id }) {
   return (
     <div className="bigPanelMiddle content">
       <ChatComponents.ChatHeader chatroom={chatroom} />
-      <ChatComponents.ChatBody messages={messages} />
+      <ChatComponents.ChatBody messages={messages} chatroom={chatroom} />
       <ChatComponents.ChatInput thisUser={thisUserData} />
     </div>
   );

@@ -7,6 +7,7 @@
   --text-color: #505172;
   --text-light-color: #707c97;
   --text-x-light-color: #979797;
+  --text-2x-light-color: #cccccc;
 
   --border-color: rgb(151, 151, 151, 0.2);
 
@@ -30,6 +31,8 @@
   --avatar-medium: 63px;
   --avatar-small: 50px;
   --avatar-x-small: 40px;
+  --avatar-2x-small: 30px;
+  --avatar-3x-small: 20px;
 
   --border-radius: 3px;
 
@@ -59,6 +62,7 @@
   --spacing-content: 16px;
 
   --content-width-small: 320px;
+  --normal-line-height: 1.8rem;
 
   --header-height: 120px;
   --navbar-height: 31px;

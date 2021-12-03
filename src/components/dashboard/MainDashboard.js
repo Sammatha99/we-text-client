@@ -21,7 +21,7 @@ export default function MainDashboard() {
       <Sidebar />
       {/* <Contacts /> */}
       {/* <ChatList /> */}
-      <Chat id={1} />
+      <Chat id={0} />
       {/* <OtherUserPofile /> */}
       {/* <ThisUserProfile /> */}
     </div>

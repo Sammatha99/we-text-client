@@ -9,7 +9,7 @@ const usersData = [
   },
   {
     id: 1,
-    name: "Nguyen Thanh Vinh Phuc phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3 phuc1 phuc2 phuc 3",
+    name: "Nguyen Thanh Vinh Phuc",
     email: "phucnguyen@gmail.com",
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
@@ -258,7 +258,7 @@ const chatRoomsData = [
     seenHistory: {
       [usersData[0].id]: messagesChatgroupData[7].id,
       [usersData[1].id]: messagesChatgroupData[9].id,
-      [usersData[2].id]: messagesChatgroupData[7].id,
+      [usersData[2].id]: messagesChatgroupData[9].id,
       [usersData[3].id]: messagesChatgroupData[7].id,
       [usersData[4].id]: messagesChatgroupData[7].id,
     },

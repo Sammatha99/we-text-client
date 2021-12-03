@@ -19,6 +19,9 @@ import {
   faPlus,
   faTimesCircle,
   faEllipsisH,
+  faPhotoVideo,
+  faPaperclip,
+  faSmileBeam,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Login, Register, ForgotPassword } from "./components/auth";
@@ -39,7 +42,10 @@ library.add(
   faSearch,
   faPlus,
   faTimesCircle,
-  faEllipsisH
+  faEllipsisH,
+  faPhotoVideo,
+  faPaperclip,
+  faSmileBeam
 );
 
 function App() {

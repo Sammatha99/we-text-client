@@ -1,7 +1,6 @@
 /* Button */
 .btn {
   padding: var(--spacing-2);
-  min-width: 100px;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
@@ -21,18 +20,21 @@
   font-weight: var(--font-weight-light);
   font-size: var(--font-size-5);
   line-height: calc(var(--font-size-5) + 0.2rem);
+  padding: var(--spacing-1) var(--spacing-3);
 }
 
 .btn--medium {
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-4);
   line-height: calc(var(--font-size-4) + 0.2rem);
+  min-width: 100px;
 }
 
 .btn--big {
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-3);
   line-height: calc(var(--font-size-3) + 0.2rem);
+  min-width: 100px;
 }
 
 .btn--primary {

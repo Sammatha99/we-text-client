@@ -1,4 +1,5 @@
-input {
+input,
+textarea {
   text-transform: none;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
@@ -8,7 +9,8 @@ input {
   color: var(--text-color);
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
   color: var(--text-x-light-color);
 }
 
@@ -67,4 +69,8 @@ input::placeholder {
 
 .input-icon--search .input-icon__input:focus ~ .input-icon__icon--clear {
   display: block;
+}
+
+textarea {
+  line-height: 2rem;
 }
