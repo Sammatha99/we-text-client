@@ -145,40 +145,90 @@ const ChatInput = function ({ thisUser }) {
 };
 
 const MessageCard = function ({ thisUserId, message, usersSeen, isGroupChat }) {
-  // TODO messageCard--img, messageCard--notify , messageCard--video
+  const MessageContent = (type, text) => {
+    switch (type) {
+      case "text":
+        return <div className="messageCard--text">{text}</div>;
+      case "image":
+        return (
+          <div className="messageCard--image messageCard--text">
+            {/* TODO click open zoom image  */}
+            <img src={text} alt={text} />
+          </div>
+        );
+      case "video":
+        return (
+          <div className="messageCard--video messageCard--text">
+            <video controls>
+              <source src={text} type="video/mp4" />
+            </video>
+          </div>
+        );
+      case "record":
+        return <div className="messageCard--record">record {text}</div>;
+      default:
+        return (
+          <div className=" messageCard--text messageCard--error">
+            This message is invalid
+          </div>
+        );
+    }
+  };
 
   if (message) {
-    return (
-      <div>
-        <div
-          className={clsx("messageCard-wraper", {
-            "messageCard--end": thisUserId,
-          })}
-        >
-          <div className="messageCard-wrap-avatar">
-            <div className="avatar avatar--2x-small center">
-              <img src={message.sender.avatar} alt={message.sender.name} />
+    if (message.type === "notify") {
+      return (
+        <>
+          <div className="messageCard-wrap-notify">
+            {thisUserId ? "You" : isGroupChat && message.sender.name}{" "}
+            {message.text}
+            {" - "}
+            {dateFormat(message.time)}
+          </div>
+          <div className="messageCard-wrap-userseen">
+            {usersSeen &&
+              usersSeen.map((user) => (
+                <div className="avatar avatar--3x-small center tooltip">
+                  <img src={user.avatar} alt={user.name} />
+                  <span className="tooltiptext  tooltip-left">{user.name}</span>
+                </div>
+              ))}
+          </div>
+        </>
+      );
+    } else
+      return (
+        <>
+          <div
+            className={clsx("messageCard-wraper", {
+              "messageCard--end": thisUserId,
+            })}
+          >
+            <div className="messageCard-wrap-avatar">
+              <div className="avatar avatar--2x-small center">
+                <img src={message.sender.avatar} alt={message.sender.name} />
+              </div>
+            </div>
+            <div className="messageCard-wrap-text">
+              {MessageContent(message.type, message.text)}
+              <p className="messageCard-time">
+                {`${
+                  thisUserId ? "You" : isGroupChat && message.sender.name
+                } - ${dateFormat(message.time)}`}
+              </p>
             </div>
           </div>
-          <div className="messageCard-wrap-text">
-            <div className="messageCard--text">{message.text}</div>
-            <p className="messageCard-time">
-              {`${isGroupChat && message.sender.name} - ${dateFormat(
-                message.time
-              )}`}
-            </p>
+          <div className="messageCard-wrap-userseen">
+            {usersSeen &&
+              usersSeen.map((user) => (
+                <div className="avatar avatar--3x-small center tooltip">
+                  <img src={user.avatar} alt={user.name} />
+                  <span className="tooltiptext  tooltip-left">{user.name}</span>
+                </div>
+              ))}
           </div>
-        </div>
-        <div className="messageCard-wrap-userseen">
-          {usersSeen &&
-            usersSeen.map((user) => (
-              <div className="avatar avatar--3x-small center">
-                <img src={user.avatar} alt={user.name} />
-              </div>
-            ))}
-        </div>
-      </div>
-    );
+        </>
+      );
   } else {
     return (
       <div

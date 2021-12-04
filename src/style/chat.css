@@ -165,6 +165,36 @@
   background-color: var(--primary-light-color);
 }
 
+/* message card notify  */
+.messageCard-wrap-notify {
+  text-align: center;
+  font-size: var(--font-size-6);
+  font-weight: var(--font-weight-light);
+  color: var(--text-light-color);
+  margin: var(--spacing-2);
+}
+
+.messageCard-wrap-notify ~ .messageCard-wrap-notify {
+  margin-bottom: 0;
+}
+
+/* message card image  */
+.messageCard--image img {
+  cursor: pointer;
+  max-width: 100%;
+}
+
+/* message card video  */
+.messageCard--video video {
+  max-width: 100%;
+}
+
+/* message card error  */
+.messageCard--error.messageCard--text {
+  color: var(--white-color);
+  background-color: var(--red-light-color);
+}
+
 /* user Seen  */
 .messageCard-wrap-userseen {
   display: flex;

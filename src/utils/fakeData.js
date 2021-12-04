@@ -101,6 +101,8 @@ const thisUserDetailData = {
   contactsPopulate: usersData.slice(1),
 };
 
+
+
 const messagesPersonalData = [
   {
     id: 0,
@@ -219,8 +221,8 @@ const messagesChatgroupData = [
   },
   {
     id: 6,
-    text: "Listen to this song exactly at 11:58:34 PM on December 31st, 2018.  The first beat will drop right when it strikes midnight. Start your year right. c:",
-    type: "text",
+    text: "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/video%2Flan-dau-che-bien-nem-chien-xu-an-sap-ha-noi-short.mp4?alt=media&token=0d6815db-6d7f-4c8b-8d10-000e21b3b7f4",
+    type: "video",
     sender: usersData[1].id,
     time: 1638183586069,
   },
