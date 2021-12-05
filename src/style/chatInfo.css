@@ -1,0 +1,116 @@
+.chatInfo-header-wrapper {
+  flex-direction: column;
+  margin-bottom: var(--spacing-7);
+}
+
+.chatInfo__room-name {
+  line-height: 1.8rem;
+  margin-top: var(--spacing-2);
+}
+
+.chatInfo__btn {
+  margin-top: var(--spacing-2);
+}
+
+.chatInfo-menu-item {
+  padding: var(--spacing-4) 0;
+  border-top: 1px solid var(--border-color);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.chatInfo-menu-item:hover {
+  color: var(--primary-light-color);
+}
+
+.chatInfo-share-files {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: var(--spacing-2);
+  grid-row-gap: var(--spacing-2);
+}
+
+.chatInfo-files-item {
+  width: 100%;
+  padding-top: 100%;
+  height: 0px;
+  position: relative;
+}
+
+.chatInfo-files-item img,
+.chatInfo-files-item video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+}
+
+.chatInfo-menu__members {
+  display: flex;
+  justify-content: space-between;
+  cursor: default;
+}
+
+.chatInfo-menu__members:hover {
+  color: var(--text-color);
+}
+
+.chatInfo-menu__members--left {
+  display: flex;
+}
+
+.chatInfo-menu__members--left .btn {
+  margin-left: var(--spacing-2);
+}
+
+.chatInfo-menu__icon {
+  padding: var(--spacing-2);
+  display: inline-block;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+}
+
+.chatInfo-menu__icon:hover {
+  display: inline-block;
+  color: var(--primary-light-color);
+  background-color: rgba(124, 184, 247, 0.2);
+}
+
+.chatInfo-menu__members-list {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease-out;
+}
+
+#chatInfo-menu__members-list:checked ~ .chatInfo-menu__members-list {
+  height: auto;
+  opacity: 1;
+}
+
+#chatInfo-menu__members-list:checked
+  ~ .chatInfo-menu__members
+  .chatInfo-menu__open-members {
+  display: none;
+}
+
+#chatInfo-menu__members-list:not(:checked)
+  ~ .chatInfo-menu__members
+  .chatInfo-menu__open-members {
+  display: block;
+}
+
+#chatInfo-menu__members-list:checked
+  ~ .chatInfo-menu__members
+  .chatInfo-menu__close-members {
+  display: block;
+}
+
+#chatInfo-menu__members-list:not(:checked)
+  ~ .chatInfo-menu__members
+  .chatInfo-menu__close-members {
+  display: none;
+}

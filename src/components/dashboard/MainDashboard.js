@@ -8,6 +8,7 @@ import {
   Contacts,
   ThisUserProfile,
   OtherUserPofile,
+  ChatInfo,
 } from "../dashboard";
 
 export default function MainDashboard() {
@@ -19,9 +20,10 @@ export default function MainDashboard() {
         style={{ display: "none" }}
       />
       <Sidebar />
-      {/* <Contacts /> */}
+      <Contacts />
       {/* <ChatList /> */}
       <Chat id={0} />
+      <ChatInfo id={0} />
       {/* <OtherUserPofile /> */}
       {/* <ThisUserProfile /> */}
     </div>

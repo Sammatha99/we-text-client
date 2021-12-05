@@ -101,7 +101,19 @@ const thisUserDetailData = {
   contactsPopulate: usersData.slice(1),
 };
 
+const otherUserData = usersData[1];
 
+const otherUserDetailData = {
+  id: otherUserData.id,
+  desription: "hello, nice to meet you, do u want some coffe ?",
+  phoneNumber: "0332087063",
+  followers: usersId(usersData.slice(2)),
+  followings: usersId(usersData.slice(2)),
+  contacts: usersId(usersData.slice(2)),
+  followersPopulate: usersData.slice(2),
+  followingsPopulate: usersData.slice(2),
+  contactsPopulate: usersData.slice(2),
+};
 
 const messagesPersonalData = [
   {
@@ -347,6 +359,53 @@ const chatRoomsData = [
   },
 ];
 
+const chatInfoFilesData = [
+  {
+    text: "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/video%2Flan-dau-che-bien-nem-chien-xu-an-sap-ha-noi-short.mp4?alt=media&token=0d6815db-6d7f-4c8b-8d10-000e21b3b7f4",
+    type: "video",
+  },
+  {
+    type: "image",
+    text: "https://lifetimemix.com/wp-content/uploads/2021/06/1800x1200_cat_relaxing_on_patio_other.jpg",
+  },
+  {
+    text: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg",
+    type: "image",
+  },
+  {
+    type: "image",
+    text: "https://lifetimemix.com/wp-content/uploads/2021/06/1800x1200_cat_relaxing_on_patio_other.jpg",
+  },
+  {
+    text: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg",
+    type: "image",
+  },
+  {
+    type: "image",
+    text: "https://lifetimemix.com/wp-content/uploads/2021/06/1800x1200_cat_relaxing_on_patio_other.jpg",
+  },
+  {
+    text: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg",
+    type: "image",
+  },
+  {
+    type: "image",
+    text: "https://lifetimemix.com/wp-content/uploads/2021/06/1800x1200_cat_relaxing_on_patio_other.jpg",
+  },
+  {
+    text: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg",
+    type: "image",
+  },
+  {
+    type: "image",
+    text: "https://lifetimemix.com/wp-content/uploads/2021/06/1800x1200_cat_relaxing_on_patio_other.jpg",
+  },
+  {
+    text: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/1200px-Cat_November_2010-1a.jpg",
+    type: "image",
+  },
+];
+
 export {
   usersData,
   thisUserData,
@@ -354,4 +413,5 @@ export {
   chatRoomsData,
   messagesChatgroupData,
   messagesPersonalData,
+  chatInfoFilesData,
 };

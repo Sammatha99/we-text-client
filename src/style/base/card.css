@@ -11,6 +11,9 @@
   width: 100%;
   display: flex;
   position: relative;
+}
+
+.chatCard {
   cursor: pointer;
 }
 
@@ -19,8 +22,7 @@
   align-items: center;
 }
 
-.chatCard:hover:not(.chatCard--active),
-.userCard:hover {
+.chatCard:hover:not(.chatCard--active) {
   opacity: 0.6;
 }
 
@@ -94,6 +96,21 @@
   bottom: 0;
   right: 0;
   padding: 0 var(--spacing-2);
+}
+
+/* user card light theme  */
+.userCard.userCard--white {
+  background-color: var(--white-color);
+  padding: var(--spacing-1) 0;
+}
+
+.userCard.userCard--white ~ .userCard.userCard--white {
+  margin-top: 0;
+}
+
+.userCard--white .userCard__content,
+.userCard--white .userCard__options-wrapper {
+  color: var(--text-color);
 }
 
 /* loading  */

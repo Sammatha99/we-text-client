@@ -33,7 +33,9 @@ const ChatHeader = function ({ chatroom }) {
               />
             )}
           </div>
-          <p className="chat-header-info__name text--medium">{chatroom.name}</p>
+          <p className="chat-header-info__name text--medium-2">
+            {chatroom.name}
+          </p>
         </div>
         <div className="chat-header-options-wrapper">
           <Icon icon="ellipsis-h" />
@@ -188,7 +190,10 @@ const MessageCard = function ({ thisUserId, message, usersSeen, isGroupChat }) {
           <div className="messageCard-wrap-userseen">
             {usersSeen &&
               usersSeen.map((user) => (
-                <div className="avatar avatar--3x-small center tooltip">
+                <div
+                  key={user.id}
+                  className="avatar avatar--3x-small center tooltip"
+                >
                   <img src={user.avatar} alt={user.name} />
                   <span className="tooltiptext  tooltip-left">{user.name}</span>
                 </div>
@@ -221,7 +226,10 @@ const MessageCard = function ({ thisUserId, message, usersSeen, isGroupChat }) {
           <div className="messageCard-wrap-userseen">
             {usersSeen &&
               usersSeen.map((user) => (
-                <div className="avatar avatar--3x-small center tooltip">
+                <div
+                  key={user.id}
+                  className="avatar avatar--3x-small center tooltip"
+                >
                   <img src={user.avatar} alt={user.name} />
                   <span className="tooltiptext  tooltip-left">{user.name}</span>
                 </div>

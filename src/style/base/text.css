@@ -23,8 +23,18 @@
   line-height: 2.7rem;
 }
 
+.text--medium-2 {
+  font-size: var(--font-size-4);
+  font-weight: var(--font-weight-medium);
+  line-height: 2.5rem;
+}
+
 .text--primary {
   background: var(--linear-color);
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.text--center {
+  text-align: center;
 }

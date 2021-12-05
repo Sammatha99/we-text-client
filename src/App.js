@@ -22,6 +22,9 @@ import {
   faPhotoVideo,
   faPaperclip,
   faSmileBeam,
+  faUserPlus,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Login, Register, ForgotPassword } from "./components/auth";
@@ -35,6 +38,8 @@ library.add(
   faEyeSlash,
   faChevronRight,
   faChevronLeft,
+  faChevronDown,
+  faChevronUp,
   faThLarge,
   faUser,
   faCommentDots,
@@ -45,7 +50,8 @@ library.add(
   faEllipsisH,
   faPhotoVideo,
   faPaperclip,
-  faSmileBeam
+  faSmileBeam,
+  faUserPlus
 );
 
 function App() {

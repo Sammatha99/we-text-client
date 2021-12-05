@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-export default function UserCard({ user }) {
+export default function UserCard({ user, classes }) {
   const [status, setSatus] = useState(user && user.status);
 
   if (user)
     return (
-      <div className="userCard">
+      <div className={clsx("userCard", classes)}>
         <div
           className={clsx("avatar", "avatar--small", "center", {
             "user-active-dots": status,

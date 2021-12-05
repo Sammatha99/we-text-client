@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingComponent, ChatCard } from "../utils";
+import { LoadingComponent, ChatCard, utilFunction } from "../utils";
 import "../../style/chatList.css";
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 
@@ -25,22 +25,8 @@ export default function ChatList() {
 
   useEffect(() => {
     chatRooms.forEach((chatroom) => {
-      // lọc members để loại bỏ chính mình đi
-      const myIndex = chatroom.members.findIndex(
-        (id) => id === thisUserData.id
-      );
-      chatroom.members.splice(myIndex, 1);
-      chatroom.membersPopulate.splice(myIndex, 1);
-
-      // kiếm name cho chatroom
-      if (!chatroom.name) {
-        const names = [];
-        chatroom.membersPopulate.forEach((member) => {
-          names.push(member.name);
-        });
-        chatroom.name = names.join(", ");
-      }
-
+      chatroom = utilFunction.formatChatroom(chatroom, thisUserData.id);
+      console.log(chatroom);
       return chatroom;
     });
     setLoading(false);
