@@ -10,13 +10,15 @@ import {
 } from "../../utils/fakeData";
 import { ChatComponents } from "../utils";
 
-export default function Chat({ id }) {
+export default function Chat({ selectedChatroom }) {
   const [chatroom, setChatroom] = useState(null);
   const [messages, setMessages] = useState(null);
 
   useEffect(() => {
-    if (id != null) {
-      const getChatroom = JSON.parse(JSON.stringify(chatRoomsData[id]));
+    if (selectedChatroom != null) {
+      const getChatroom = JSON.parse(
+        JSON.stringify(chatRoomsData[selectedChatroom])
+      );
       let getMessages;
       // TODO get messages
       if (getChatroom.isGroupChat) {
@@ -62,7 +64,7 @@ export default function Chat({ id }) {
     }
 
     return () => {};
-  }, [id]);
+  }, [selectedChatroom]);
 
   return (
     <div className="bigPanelMiddle content">

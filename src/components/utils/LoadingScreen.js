@@ -29,4 +29,13 @@ const LoadingRightPanel = () => {
   );
 };
 
-export { LoadingContacts, LoadingChats, LoadingRightPanel };
+// TODO loading for this user profile
+const LoadingThisUserProfile = () => {
+  return <div>loading this user profile</div>;
+};
+export {
+  LoadingContacts,
+  LoadingChats,
+  LoadingRightPanel,
+  LoadingThisUserProfile,
+};

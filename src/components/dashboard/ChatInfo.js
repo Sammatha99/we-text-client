@@ -135,6 +135,7 @@ export default function ChatInfo({ id }) {
                 {files.map((file, index) => (
                   <div key={index} className="chatInfo-files-item">
                     {file.type === "image" ? (
+                      // TODO zoom image
                       <img src={file.text} alt="img" />
                     ) : (
                       <video controls>

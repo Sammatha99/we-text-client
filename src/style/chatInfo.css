@@ -34,7 +34,14 @@
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.chatInfo-files-item img {
   object-fit: cover;
+}
+
+.chatInfo-files-item video {
+  object-fit: contain;
 }
 
 .chatInfo-menu__members {

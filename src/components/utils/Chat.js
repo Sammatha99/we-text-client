@@ -63,9 +63,7 @@ const getMembersSeen = (chatroom, messageId) => {
     const getKeys = Object.keys(chatroom.seenHistory).filter(
       (key) => chatroom.seenHistory[key] === messageId
     );
-    // TODO fix sau
-    // eslint-disable-next-line eqeqeq
-    return getKeys.find((key) => key == member.id);
+    return getKeys.find((key) => key === member.id.toString());
   });
   return members;
 };

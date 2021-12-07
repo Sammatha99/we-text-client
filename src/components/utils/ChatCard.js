@@ -6,7 +6,11 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { thisUserData } from "../../utils/fakeData";
 import { utilFunction } from "../utils";
 
-export default function ChatCard({ chatroom, isSelected }) {
+export default function ChatCard({
+  setSelectedChatroom,
+  chatroom,
+  isSelected,
+}) {
   const lastMessage = () => {
     var senderName = "";
 
@@ -50,9 +54,16 @@ export default function ChatCard({ chatroom, isSelected }) {
     }
   };
 
+  const handleClick = () => {
+    if (!isSelected) {
+      setSelectedChatroom(chatroom.id);
+    }
+  };
+
   if (chatroom) {
     return (
       <div
+        onClick={handleClick}
         className={clsx("chatCard", {
           "chatCard--active": isSelected,
         })}

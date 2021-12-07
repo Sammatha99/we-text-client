@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 
@@ -13,23 +13,26 @@ const userData = {
 
 const tabs = [
   {
-    name: "profile",
-    icon: "th-large",
+    name: "chats",
+    icon: "comment-dots",
   },
   {
     name: "contacts",
     icon: "user",
   },
   {
-    name: "chats",
-    icon: "comment-dots",
+    name: "profile",
+    icon: "th-large",
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({
+  setSelectedTab,
+  selectedTab,
+  setSelectedChatroom,
+}) {
   const activeLine = useRef();
   const activeTab = useRef();
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   useEffect(() => {
     const active = activeTab.current;
@@ -37,13 +40,14 @@ export default function Sidebar() {
       activeLine.current.style.height = active.offsetHeight + "px";
       activeLine.current.style.top = active.offsetTop + "px";
     }
-    return () => {
-      // cleanup
-    };
-  }, [activeTabIndex]);
+    return () => {};
+  }, [selectedTab]);
 
   const onClickTab = (index) => {
-    setActiveTabIndex(index);
+    if (index === 0) {
+      setSelectedChatroom(null);
+    }
+    setSelectedTab(index);
   };
 
   const onShutDown = () => {
@@ -84,9 +88,9 @@ export default function Sidebar() {
           <div
             key={index}
             className={clsx("sidebar__tab-item", "center", {
-              "sidebar__tab-item--active": index === activeTabIndex,
+              "sidebar__tab-item--active": index === selectedTab,
             })}
-            ref={index === activeTabIndex ? activeTab : null}
+            ref={index === selectedTab ? activeTab : null}
             onClick={() => onClickTab(index)}
           >
             <Icon className="sidebar__tab-icon" icon={tab.icon} />

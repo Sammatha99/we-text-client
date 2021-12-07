@@ -1,4 +1,124 @@
 .thisUserProfile {
   flex: 1;
-  background-color: pink;
+  background-color: var(--white-color);
+  display: flex;
+}
+
+.thisUser--panel-left {
+  width: var(--content-width-small);
+  padding: 0 var(--spacing-3);
+  padding-top: var(--thisUser-header-height);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thisUser--panel-right {
+  flex-grow: 1;
+  overflow-x: hidden;
+}
+
+/* panel left   */
+.thisUser--panel-left .avatar {
+  position: relative;
+  margin-bottom: var(--spacing-5);
+}
+
+.thisUser__camera-icon {
+  color: var(--text-color);
+  background-color: var(--text-2x-light-color);
+  border-radius: 100%;
+  border: 2px solid var(--white-color);
+  text-align: center;
+  font-size: var(--font-size-3);
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+}
+
+.thisUser__camera-icon:hover {
+  opacity: 0.5;
+}
+
+.thisUser__email {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  font-size: var(--font-size-3);
+  margin-top: var(--spacing-1);
+}
+
+.thisUser__email > * ~ * {
+  margin-left: var(--spacing-3);
+}
+
+.thisUser--panel-left .btn {
+  margin-top: var(--spacing-7);
+  padding: var(--spacing-2) var(--spacing-6);
+}
+
+/* panel right  */
+.thisUser__tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.thisUser__tab {
+  line-height: var(--thisUser-header-height);
+  text-align: center;
+  width: 150px;
+  color: var(--text-light-color);
+  font-weight: var(--font-weight-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: var(--font-size-6);
+  border-right: 1px solid var(--border-color);
+  cursor: context-menu;
+}
+
+.thisUser__tab:not(.thisUser__tab--active) {
+  cursor: pointer;
+}
+
+.thisUser__tab:not(.thisUser__tab--active):hover {
+  background-color: rgba(124, 184, 247, 0.09);
+}
+
+.thisUser__tab--active {
+  font-weight: var(--font-weight-regular);
+  color: var(--primary-color);
+}
+
+.thisUser__active-line {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  width: var(getWidth);
+  left: var(getLeft);
+  background: var(--primary-color);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+}
+
+.thisUser__tab-content {
+  width: 100%;
+  padding: var(--spacing-5);
+  animation: slideIn 1s ease-in;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

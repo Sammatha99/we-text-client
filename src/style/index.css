@@ -65,10 +65,7 @@
   --normal-line-height: 1.8rem;
 
   --sidebar-small-width: 50px;
-
-  /* --header-height: 120px;
-  --navbar-height: 31px;
-  --header-with-search: calc(var(--header-height) - var(--navbar-height)); */
+  --thisUser-header-height: 3.5em;
 }
 
 html {
@@ -156,14 +153,14 @@ div {
     left top,
     right top,
     from(transparent),
-    color-stop(rgba(255, 255, 255, 0.2)),
+    color-stop(rgba(245, 245, 245, 0.8)),
     to(transparent)
   );
 
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(245, 245, 245, 0.8),
     transparent
   );
 

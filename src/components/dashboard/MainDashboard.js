@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "../../style/dashboard.css";
 import {
@@ -12,7 +12,29 @@ import {
   BackgroundScreen,
 } from "../dashboard";
 
+// TODO selected chatroom and selected user will be use in redux : state manage
 export default function MainDashboard() {
+  const [selectedTab, setSelectedTab] = useState(2);
+  const [selectedChatroom, setSelectedChatroom] = useState(null);
+
+  const TabOpen = () => {
+    switch (selectedTab) {
+      case 0:
+        return (
+          <ChatList
+            selectedChatroom={selectedChatroom}
+            setSelectedChatroom={setSelectedChatroom}
+          />
+        );
+      case 1:
+        return <Contacts />;
+      case 2:
+        return <ThisUserProfile />;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <BackgroundScreen />
@@ -22,13 +44,20 @@ export default function MainDashboard() {
           id="checkbox-sidebar"
           style={{ display: "none" }}
         />
-        <Sidebar />
-        {/* <Contacts /> */}
-        <ChatList />
-        {/* <Chat id={0} /> */}
+        <Sidebar
+          setSelectedChatroom={setSelectedChatroom}
+          setSelectedTab={setSelectedTab}
+          selectedTab={selectedTab}
+        />
+
+        {TabOpen()}
+
+        {selectedChatroom != null && (
+          <Chat selectedChatroom={selectedChatroom} />
+        )}
+
         {/* <ChatInfo id={0} /> */}
-        <OtherUserPofile />
-        {/* <ThisUserProfile /> */}
+        {/* <OtherUserPofile /> */}
       </div>
     </>
   );
