@@ -4,10 +4,6 @@
   transition: all 3s ease;
 }
 
-.content ~ .content {
-  /* margin-left: 0; */
-}
-
 /* small panel */
 .smallPanel {
   width: var(--content-width-small);
@@ -56,6 +52,14 @@
   letter-spacing: 1px;
   border-bottom: 1px solid var(--border-color);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
+  position: relative;
+}
+
+.smallPanel-header__icon {
+  position: absolute;
+  right: var(--spacing-2);
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* small panel content  */

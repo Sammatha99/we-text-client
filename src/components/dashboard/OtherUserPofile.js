@@ -198,7 +198,12 @@ export default function OtherUserPofile() {
 
   return (
     <div className="smallPanel content  smallPanel--white smallPanel--right">
-      <div className="smallPanel-header">User profile</div>
+      <div className="smallPanel-header">
+        User profile
+        <div className="chat-header-options-wrapper smallPanel-header__icon">
+          <Icon icon="times" />
+        </div>
+      </div>
       {loading ? (
         <div className="smallPanel-content">{LoadingRightPanel()}</div>
       ) : (

@@ -40,8 +40,19 @@
   padding: var(--spacing-2);
   border-radius: 100%;
   background-color: var(--white-color);
+  color: var(--text-light-color);
   box-shadow: var(--box-shadow);
   cursor: pointer;
+}
+
+.chat-header-options-wrapper ~ .chat-header-options-wrapper {
+  margin-left: var(--spacing-2);
+}
+
+.chat-header-options-wrapper * {
+  width: 1em !important;
+  height: 1em;
+  display: inline-block;
 }
 
 .chat-header-options-wrapper:hover {

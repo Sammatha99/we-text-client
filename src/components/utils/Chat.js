@@ -38,6 +38,9 @@ const ChatHeader = function ({ chatroom }) {
           </p>
         </div>
         <div className="chat-header-options-wrapper">
+          <Icon icon="times" />
+        </div>
+        <div className="chat-header-options-wrapper">
           <Icon icon="ellipsis-h" />
         </div>
       </div>

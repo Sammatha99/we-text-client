@@ -14,20 +14,22 @@ import {
 
 export default function MainDashboard() {
   return (
-    <div className="dashboard">
+    <>
       <BackgroundScreen />
-      <input
-        type="checkbox"
-        id="checkbox-sidebar"
-        style={{ display: "none" }}
-      />
-      <Sidebar />
-      <Contacts />
-      {/* <ChatList /> */}
-      {/* <Chat id={0} /> */}
-      <OtherUserPofile />
-      {/* <ChatInfo id={0} /> */}
-      {/* <ThisUserProfile /> */}
-    </div>
+      <div className="dashboard">
+        <input
+          type="checkbox"
+          id="checkbox-sidebar"
+          style={{ display: "none" }}
+        />
+        <Sidebar />
+        {/* <Contacts /> */}
+        <ChatList />
+        {/* <Chat id={0} /> */}
+        {/* <ChatInfo id={0} /> */}
+        <OtherUserPofile />
+        {/* <ThisUserProfile /> */}
+      </div>
+    </>
   );
 }
