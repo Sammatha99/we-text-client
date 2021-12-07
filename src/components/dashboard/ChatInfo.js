@@ -90,7 +90,7 @@ export default function ChatInfo({ id }) {
   };
 
   return (
-    <div className="smallPanel content smallPanel--white">
+    <div className="smallPanel content smallPanel--white smallPanel--right">
       <div className="smallPanel-header">Chat info</div>
       <div className="smallPanel-content">
         {loading ? (

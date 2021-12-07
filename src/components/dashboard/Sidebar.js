@@ -6,7 +6,7 @@ import userAvatar from "../../assets/imgs/userAvatar.png";
 import "../../style/sidebar.css";
 
 const userData = {
-  name: "Henry Jabbawockie eeeeeeeeeeeeee",
+  name: "Henry Jabbawockie",
   status: true,
   avatar: userAvatar,
 };
@@ -67,7 +67,6 @@ export default function Sidebar() {
         <div
           className={clsx(
             "sidebar__avatar-wrapper",
-            "avatar--pink-border",
             "avatar",
             "avatar--big",
             "center",

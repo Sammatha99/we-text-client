@@ -64,9 +64,11 @@
   --content-width-small: 320px;
   --normal-line-height: 1.8rem;
 
-  --header-height: 120px;
+  --sidebar-small-width: 50px;
+
+  /* --header-height: 120px;
   --navbar-height: 31px;
-  --header-with-search: calc(var(--header-height) - var(--navbar-height));
+  --header-with-search: calc(var(--header-height) - var(--navbar-height)); */
 }
 
 html {

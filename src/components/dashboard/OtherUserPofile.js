@@ -197,7 +197,7 @@ export default function OtherUserPofile() {
   };
 
   return (
-    <div className="smallPanel content  smallPanel--white">
+    <div className="smallPanel content  smallPanel--white smallPanel--right">
       <div className="smallPanel-header">User profile</div>
       {loading ? (
         <div className="smallPanel-content">{LoadingRightPanel()}</div>

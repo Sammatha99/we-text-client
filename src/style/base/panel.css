@@ -5,7 +5,7 @@
 }
 
 .content ~ .content {
-  margin-left: 0;
+  /* margin-left: 0; */
 }
 
 /* small panel */
@@ -36,6 +36,14 @@
 .smallPanel--white {
   background-color: var(--white-color);
   border-radius: var(--border-radius);
+}
+
+.smallPanel--right {
+  margin-left: auto;
+}
+
+.smallPanel--left {
+  margin-right: auto;
 }
 
 /* small panel header   */

@@ -6,3 +6,4 @@ export { default as OtherUserPofile } from "./OtherUserPofile";
 export { default as Sidebar } from "./Sidebar";
 export { default as ThisUserProfile } from "./ThisUserProfile";
 export { default as ChatInfo } from "./ChatInfo";
+export { default as BackgroundScreen } from "./Background";

@@ -9,22 +9,24 @@ import {
   ThisUserProfile,
   OtherUserPofile,
   ChatInfo,
+  BackgroundScreen,
 } from "../dashboard";
 
 export default function MainDashboard() {
   return (
     <div className="dashboard">
+      <BackgroundScreen />
       <input
         type="checkbox"
         id="checkbox-sidebar"
         style={{ display: "none" }}
       />
       <Sidebar />
-      {/* <Contacts /> */}
+      <Contacts />
       {/* <ChatList /> */}
       {/* <Chat id={0} /> */}
       <OtherUserPofile />
-      <ChatInfo id={0} />
+      {/* <ChatInfo id={0} /> */}
       {/* <ThisUserProfile /> */}
     </div>
   );

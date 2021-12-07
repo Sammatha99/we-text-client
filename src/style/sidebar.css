@@ -1,7 +1,7 @@
 .sidebar {
   position: relative;
   height: 100vh;
-  width: 50px;
+  width: var(--sidebar-small-width);
   overflow: hidden;
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
   background-color: var(--text-bold-color);
@@ -53,6 +53,7 @@
   font-size: var(--font-size-5);
   line-height: calc(var(--font-size-5) + 0.2rem);
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .sidebar__tab-item {
@@ -89,6 +90,7 @@
 
 .sidebar__logout {
   margin-top: auto;
+  white-space: nowrap;
 }
 
 #checkbox-sidebar:checked ~ .sidebar {
@@ -120,29 +122,19 @@
   visibility: hidden;
 }
 
-.sidebar__avatar-wrapper {
-  border: 3px solid var(--pink-color);
-  background-color: transparent;
-  padding: 0;
-}
-
-.sidebar__avatar-wrapper img {
-  width: calc(100% - 15px);
-}
-
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper {
   width: var(--avatar-x-small);
   height: var(--avatar-x-small);
-  border: 2px solid var(--pink-color);
+  padding: 2px;
 }
 
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper img {
   border-radius: 100%;
-  width: calc(100% - 10px);
 }
 
 #checkbox-sidebar:not(:checked) ~ .sidebar .user-active-dots::after {
-  right: 0px;
+  right: 1px;
+  bottom: 0px;
   width: 8px;
   height: 8px;
   border: 1px solid var(--white-color);

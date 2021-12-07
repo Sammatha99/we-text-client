@@ -34,7 +34,7 @@ export default function ChatList() {
   }, []);
 
   return (
-    <div className="smallPanel content">
+    <div className="smallPanel content smallPanel--left">
       <div>
         <div className="smallPanelLeft-header-info">
           <div>

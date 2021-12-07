@@ -1,7 +1,38 @@
 .dashboard {
   width: 100vw;
   height: 100vh;
-  background-color: var(--black-color);
   display: flex;
   flex-direction: row;
+}
+
+.background {
+  top: 0;
+  left: var(--sidebar-small-width);
+  bottom: 0;
+  right: 0;
+  background-color: var(--black-color);
+  position: fixed;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.background__img {
+  width: 530px;
+  filter: opacity(0.5);
+}
+
+.background__header {
+  letter-spacing: 2px;
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-1);
+  text-transform: uppercase;
+  line-height: 4rem;
+}
+
+.background__text {
+  letter-spacing: 2px;
+  line-height: 2rem;
 }

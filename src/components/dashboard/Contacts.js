@@ -15,7 +15,7 @@ export default function Contacts() {
   }, []);
 
   return (
-    <div className="smallPanel content">
+    <div className="smallPanel content smallPanel--left">
       <div>
         <div className="smallPanelLeft-header-info">
           <div>
