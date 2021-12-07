@@ -17,7 +17,6 @@ export default function ChatInfo({ id }) {
   const [loading, setLoading] = useState(true);
   const [chatroom, setChatroom] = useState(null);
   const [files, setFiles] = useState(null);
-  // TODO loading stuff
 
   useEffect(() => {
     // get chatroom from backend
@@ -42,27 +41,26 @@ export default function ChatInfo({ id }) {
     if (chatroom.isGroupChat) {
       return (
         <>
-          <div className="chatInfo-menu-item">Out group</div>
-          <div className="chatInfo-menu-item">Delete chat</div>
-          <div className="chatInfo-menu-item">Block</div>
-          <div className="chatInfo-menu-item">Change group name</div>
+          <div className="smallPanel-menu-item">Out group</div>
+          <div className="smallPanel-menu-item">Delete chat</div>
+          <div className="smallPanel-menu-item">Block</div>
+          <div className="smallPanel-menu-item">Change group name</div>
         </>
       );
     }
     return (
       <>
-        <div className="chatInfo-menu-item">Delete chat</div>
-        <div className="chatInfo-menu-item">Block</div>
+        <div className="smallPanel-menu-item">Delete chat</div>
+        <div className="smallPanel-menu-item">Block</div>
       </>
     );
   };
 
   const membersInfo = () => {
-    // TODO css this, open and close
     return (
       <>
         <input type="checkbox" hidden id="chatInfo-menu__members-list" />
-        <div className="chatInfo-menu-item chatInfo-menu__members center">
+        <div className="smallPanel-menu-item chatInfo-menu__members center">
           <div className="chatInfo-menu__members--left center">
             Members
             <button className="btn btn--primary btn--small">
@@ -132,7 +130,7 @@ export default function ChatInfo({ id }) {
             {ChatInfoMenus()}
             {chatroom.isGroupChat && membersInfo()}
             <div>
-              <p className="chatInfo-menu-item text--center">Share files</p>
+              <p className="smallPanel-menu-item text--center">Share files</p>
               <div className="chatInfo-share-files">
                 {files.map((file, index) => (
                   <div key={index} className="chatInfo-files-item">

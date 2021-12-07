@@ -55,6 +55,37 @@
   padding: var(--spacing-2) var(--spacing-3);
 }
 
+/* small panel menu item  */
+.smallPanel-menu-item {
+  padding: var(--spacing-4) 0;
+  border-top: 1px solid var(--border-color);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.smallPanel-menu-item:hover {
+  color: var(--primary-light-color);
+}
+
+.smallPanel-menu-item--icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smallPanel-menu-item--icon * {
+  cursor: pointer;
+}
+
+.smallPanel-menu-item--icon:hover * {
+  color: var(--primary-light-color);
+}
+
+.smallPanel-menu-item__icon {
+  color: var(--text-light-color);
+}
+
 /* big panel  */
 .bigPanelMiddle {
   flex-grow: 1;

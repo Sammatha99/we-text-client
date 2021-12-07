@@ -25,6 +25,10 @@ import {
   faUserPlus,
   faChevronDown,
   faChevronUp,
+  faStar,
+  faEnvelope,
+  faPhone,
+  faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Login, Register, ForgotPassword } from "./components/auth";
@@ -51,7 +55,11 @@ library.add(
   faPhotoVideo,
   faPaperclip,
   faSmileBeam,
-  faUserPlus
+  faUserPlus,
+  faStar,
+  faEnvelope,
+  faPhone,
+  faMapMarkerAlt
 );
 
 function App() {

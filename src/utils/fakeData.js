@@ -13,7 +13,7 @@ const usersData = [
     email: "phucnguyen@gmail.com",
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
-    status: false,
+    status: true,
   },
   {
     id: 2,
@@ -91,7 +91,7 @@ const thisUserData = usersData[0];
 
 const thisUserDetailData = {
   id: thisUserData.id,
-  desription: "hello, nice to meet you, do u want some coffe ?",
+  description: "hello, nice to meet you, do u want some coffe ?",
   phoneNumber: "0332087063",
   followers: usersId(usersData.slice(1)),
   followings: usersId(usersData.slice(1)),
@@ -105,7 +105,7 @@ const otherUserData = usersData[1];
 
 const otherUserDetailData = {
   id: otherUserData.id,
-  desription: "hello, nice to meet you, do u want some coffe ?",
+  description: "hello, nice to meet you, Plz contact me via email :3 ?",
   phoneNumber: "0332087063",
   followers: usersId(usersData.slice(2)),
   followings: usersId(usersData.slice(2)),
@@ -414,4 +414,6 @@ export {
   messagesChatgroupData,
   messagesPersonalData,
   chatInfoFilesData,
+  otherUserDetailData,
+  otherUserData,
 };

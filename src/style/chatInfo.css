@@ -1,6 +1,7 @@
 .chatInfo-header-wrapper {
   flex-direction: column;
   margin-bottom: var(--spacing-7);
+  margin-top: var(--spacing-5);
 }
 
 .chatInfo__room-name {
@@ -10,18 +11,6 @@
 
 .chatInfo__btn {
   margin-top: var(--spacing-2);
-}
-
-.chatInfo-menu-item {
-  padding: var(--spacing-4) 0;
-  border-top: 1px solid var(--border-color);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-color);
-  cursor: pointer;
-}
-
-.chatInfo-menu-item:hover {
-  color: var(--primary-light-color);
 }
 
 .chatInfo-share-files {
@@ -60,6 +49,8 @@
 
 .chatInfo-menu__members--left {
   display: flex;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color);
 }
 
 .chatInfo-menu__members--left .btn {

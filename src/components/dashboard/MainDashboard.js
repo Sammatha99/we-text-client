@@ -20,11 +20,11 @@ export default function MainDashboard() {
         style={{ display: "none" }}
       />
       <Sidebar />
-      <Contacts />
+      {/* <Contacts /> */}
       {/* <ChatList /> */}
-      <Chat id={0} />
+      {/* <Chat id={0} /> */}
+      <OtherUserPofile />
       <ChatInfo id={0} />
-      {/* <OtherUserPofile /> */}
       {/* <ThisUserProfile /> */}
     </div>
   );
