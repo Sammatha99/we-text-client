@@ -109,7 +109,7 @@
 .thisUser__tab-content {
   width: 100%;
   padding: var(--spacing-5);
-  animation: slideIn 1s ease-in;
+  animation: slideIn 0.3s ease-in-out;
 }
 
 @keyframes slideIn {
@@ -121,4 +121,70 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* about tab  */
+
+.thisUser__form {
+  width: 100%;
+}
+
+.thisUser__input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.thisUser__input-icon {
+  font-size: var(--font-size-2);
+  color: var(--text-light-color);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.thisUser__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid var(--border-color);
+  padding-left: var(--spacing-7);
+  padding-bottom: var(--spacing-6);
+  padding-top: var(--spacing-6);
+}
+
+.thisUser__input:-webkit-autofill {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+
+.thisUser__input:focus {
+  border-bottom: 1px solid var(--primary-light-color);
+}
+
+.thisUser__input-wrap .thisUser__input:focus ~ .thisUser__input-icon {
+  color: var(--primary-light-color);
+}
+
+.thisUser__btns-wrap {
+  margin-top: var(--spacing-7);
+  display: flex;
+}
+
+.thisUser__btns-wrap .btn ~ .btn {
+  margin-left: var(--spacing-6);
+}
+
+/* form edit  */
+
+.thisUser__form--edit .thisUser__btns-wrap .thisUser__btn--edit {
+  display: none;
+}
+
+.thisUser__form:not(.thisUser__form--edit)
+  .thisUser__btns-wrap
+  .thisUser__btn--submit,
+.thisUser__form:not(.thisUser__form--edit)
+  .thisUser__btns-wrap
+  .thisUser__btn--cancel {
+  display: none;
 }

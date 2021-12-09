@@ -4,6 +4,11 @@ import clsx from "clsx";
 
 import "../../style/thisUserProfile.css";
 import { LoadingComponent } from "../utils";
+import {
+  AboutContent,
+  FollowingsContent,
+  FollowersContent,
+} from "./thisUserProfileContents";
 import { thisUserData, thisUserDetailData } from "../../utils/fakeData";
 
 const thisUserTabs = ["about", "followings", "followers"];
@@ -48,19 +53,19 @@ export default function ThisUserProfile() {
       case 0:
         return (
           <div key={`thisUser__tab${0}`} className="thisUser__tab-content">
-            about content
+            <AboutContent />
           </div>
         );
       case 1:
         return (
           <div key={`thisUser__tab${1}`} className="thisUser__tab-content">
-            followings content
+            <FollowingsContent />
           </div>
         );
       case 2:
         return (
           <div key={`thisUser__tab${2}`} className="thisUser__tab-content">
-            followers content
+            <FollowersContent />
           </div>
         );
       default:

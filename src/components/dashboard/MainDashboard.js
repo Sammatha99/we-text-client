@@ -56,7 +56,7 @@ export default function MainDashboard() {
           <Chat selectedChatroom={selectedChatroom} />
         )}
 
-        {/* <ChatInfo id={0} /> */}
+        {/* <ChatInfo id={1} /> */}
         {/* <OtherUserPofile /> */}
       </div>
     </>

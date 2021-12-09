@@ -45,4 +45,24 @@ const forgotPasswordSchema = yup.object().shape({
   email: yup.string().email("email invalid").required("this field is required"),
 });
 
-export { yup, registerSchema, loginSchema, forgotPasswordSchema };
+const userDetailSchema = yup.object().shape({
+  description: yup.string().max(130, "Max 130 characters"),
+  phoneNumber: yup
+    .string()
+    .test(
+      "empty-or-9-characters-check",
+      "Password must be at least 9 characters",
+      (phoneNumber) => !phoneNumber || phoneNumber.length >= 9
+    )
+    .onlyNumber("Phonenumber only contain number")
+    .max(11, "max 11 characters"),
+  address: yup.string().max(100, "Max 100 characters"),
+});
+
+export {
+  yup,
+  registerSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  userDetailSchema,
+};

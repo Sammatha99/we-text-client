@@ -105,7 +105,8 @@ const otherUserData = usersData[1];
 
 const otherUserDetailData = {
   id: otherUserData.id,
-  description: "hello, nice to meet you, Plz contact me via email :3 ?",
+  description:
+    "This is a free online calculator which counts the number of characters or letters in a text, useful for your tweets on Twitter, face",
   phoneNumber: "0332087063",
   followers: usersId(usersData.slice(2)),
   followings: usersId(usersData.slice(2)),

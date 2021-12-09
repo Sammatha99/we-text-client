@@ -31,6 +31,8 @@ import {
   faPhone,
   faMapMarkerAlt,
   faCamera,
+  faPenSquare,
+  faPhoneSquareAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Login, Register, ForgotPassword } from "./components/auth";
@@ -63,7 +65,9 @@ library.add(
   faEnvelope,
   faPhone,
   faMapMarkerAlt,
-  faCamera
+  faCamera,
+  faPenSquare,
+  faPhoneSquareAlt
 );
 
 function App() {
