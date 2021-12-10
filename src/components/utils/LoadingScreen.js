@@ -3,8 +3,8 @@ import { UserCard, ChatCard } from ".";
 
 const listNumber = [0, 1, 2, 3];
 
-const LoadingContacts = () => {
-  return listNumber.map((index) => <UserCard key={index} />);
+const LoadingContacts = ({ classes }) => {
+  return listNumber.map((index) => <UserCard classes={classes} key={index} />);
 };
 
 const LoadingChats = () => {
@@ -33,6 +33,7 @@ const LoadingRightPanel = () => {
 const LoadingThisUserProfile = () => {
   return <div>loading this user profile</div>;
 };
+
 export {
   LoadingContacts,
   LoadingChats,

@@ -1,0 +1,104 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(151, 151, 151, 0.6);
+  animation: opacityTo 0.2s ease-in-out;
+}
+
+.modal-wrapper {
+  width: 420px;
+  max-height: 90%;
+  min-height: 500px;
+  background-color: var(--white-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: scaleTo 0.3s ease-in-out;
+}
+
+.modal__header {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  padding: var(--spacing-5) var(--spacing-2);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  letter-spacing: 0.5px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.modal__close-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: var(--spacing-2);
+  font-size: var(--font-size-2);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  color: var(--text-light-color);
+}
+
+.modal__close-icon:hover {
+  opacity: 0.3;
+}
+
+.modal__body {
+  flex-grow: 1;
+  padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__body .input-icon {
+  margin: 0;
+}
+
+.modal__footer {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-4) var(--spacing-2);
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes scaleTo {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes opacityTo {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* modal create chat  */
+#create-chat-modal__modal {
+  display: none;
+}
+
+#create-chat-modal:checked ~ #create-chat-modal__modal {
+  display: flex;
+}
+
+.modal__body__contacts {
+  width: 100%;
+  flex-grow: 1;
+  height: 0;
+  margin-top: var(--spacing-2);
+  overflow-y: auto;
+}

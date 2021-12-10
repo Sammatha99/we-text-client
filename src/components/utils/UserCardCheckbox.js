@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-export default function UserCard({ user, classes }) {
+export default function UserCardCheckbox({ user, classes, handleCheckbox }) {
   const [status, setSatus] = useState(user && user.status);
+
+  const handleCheckboxClick = (e) => {
+    handleCheckbox(user, e.target.checked);
+  };
 
   if (user)
     return (
-      <div className={clsx("userCard", classes)}>
+      <label className={clsx("userCard userCard--checkbox", classes)}>
         <div
           className={clsx("avatar", "avatar--small", "center", {
             "user-active-dots": status,
@@ -22,10 +25,13 @@ export default function UserCard({ user, classes }) {
         <div className="userCard__content">
           <p className="userCard__name">{user.name}</p>
         </div>
-        <div className="userCard__options-wrapper">
-          <Icon icon="ellipsis-h" />
-        </div>
-      </div>
+        <input
+          id={`${user.id}_userCardCheckbox`}
+          type="checkbox"
+          onChange={handleCheckboxClick}
+          className="userCard__options-wrapper userCard__options-wrapper--checkbox "
+        />
+      </label>
     );
   else
     return (

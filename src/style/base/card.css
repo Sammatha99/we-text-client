@@ -113,6 +113,39 @@
   color: var(--text-color);
 }
 
+.userCard--checkbox {
+  cursor: pointer;
+}
+
+.userCard--checkbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  background-color: var(--white-color);
+  border: 1.5px solid var(--text-color);
+  width: var(--font-size-4);
+  height: var(--font-size-4);
+  display: grid;
+  place-content: center;
+}
+
+.userCard--checkbox input[type="checkbox"]::before {
+  content: "";
+  width: calc(var(--font-size-4) - 1.5px);
+  height: calc(var(--font-size-4) - 1.5px);
+  border-radius: var(--border-radius);
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--primary-light-color);
+}
+
+.userCard--checkbox input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+/* 
+.userCard__options-wrapper--checkbox:checked ~ .checkmark {
+  color: red;
+} */
+
 /* loading  */
 .loading.userCard__name {
   width: 100%;

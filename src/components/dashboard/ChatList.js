@@ -2,10 +2,9 @@ import React, { useMemo, useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { LoadingComponent, ChatCard, utilFunction } from "../utils";
+import { CreateChatModal, modalsName } from "../modals";
 import "../../style/chatList.css";
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
-
-// const chatRooms = JSON.parse(JSON.stringify(chatRoomsData));
 
 export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
   const [chatrooms, setChatrooms] = useState(null);
@@ -52,10 +51,13 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
                 ))}
               </select>
             </div>
-            <button className="btn btn--medium btn--primary">
+            <label
+              htmlFor={modalsName.createChatModal}
+              className="btn btn--medium btn--primary"
+            >
               <Icon className="icon--margin-right" icon="plus" />
               Create new chat
-            </button>
+            </label>
           </div>
           <div className="input-icon input-icon--dark input-icon--search">
             <input className="input-icon__input" placeholder="Search here" />
@@ -82,6 +84,7 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
           )}
         </div>
       </div>
+      <CreateChatModal />
     </>
   );
 }

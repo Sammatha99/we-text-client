@@ -14,7 +14,7 @@ import {
 
 // TODO selected chatroom and selected user will be use in redux : state manage
 export default function MainDashboard() {
-  const [selectedTab, setSelectedTab] = useState(2);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {

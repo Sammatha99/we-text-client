@@ -54,8 +54,8 @@ export default function ChatCard({
     }
   };
 
-  const handleClick = () => {
-    if (!isSelected) {
+  const handleClick = (e) => {
+    if (!isSelected && !e.target.closest(".chatCard__options-wrapper")) {
       setSelectedChatroom(chatroom.id);
     }
   };

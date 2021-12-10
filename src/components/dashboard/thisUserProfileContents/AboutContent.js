@@ -8,11 +8,6 @@ import { userDetailSchema } from "../../../utils/yupGlobal";
 
 import { thisUserDetailData } from "../../../utils/fakeData";
 
-/* TODO init value
- submit -> change initvalue= new value
- cancel -> return to init value
-*/
-
 export default function AboutContent() {
   const [edit, setEdit] = useState(false);
   const [userDetail, setUserDetail] = useState({ email: "", firstname: "" });

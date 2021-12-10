@@ -44,7 +44,7 @@ export default function Sidebar({
   }, [selectedTab]);
 
   const onClickTab = (index) => {
-    if (index === 0) {
+    if (index === 2) {
       setSelectedChatroom(null);
     }
     setSelectedTab(index);
