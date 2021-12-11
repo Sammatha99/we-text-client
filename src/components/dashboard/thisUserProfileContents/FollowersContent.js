@@ -18,11 +18,12 @@ export default function FollowersContent() {
     <div>
       <div className="input-icon  input-icon--search">
         <input className="input-icon__input" placeholder="Search here" />
-        <div className="input-icon__icon--right input-icon__icon--link">
-          <Icon icon="search" />
-        </div>
-        <div className="input-icon__icon--right input-icon__icon--link input-icon__icon--clear">
-          <Icon icon="times-circle" />
+        <div className="input-icon__icon--right">
+          <Icon className="input-icon__icon--link" icon="search" />
+          <Icon
+            className="input-icon__icon--link input-icon__icon--clear"
+            icon="times-circle"
+          />
         </div>
       </div>
       <div>

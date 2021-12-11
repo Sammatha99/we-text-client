@@ -26,6 +26,8 @@
 
 .smallPanel-content {
   flex-grow: 1;
+  padding: var(--spacing-2) var(--spacing-3);
+
   overflow-y: auto;
 }
 
@@ -60,11 +62,6 @@
   right: var(--spacing-2);
   top: 50%;
   transform: translateY(-50%);
-}
-
-/* small panel content  */
-.smallPanel-content {
-  padding: var(--spacing-2) var(--spacing-3);
 }
 
 /* small panel menu item  */

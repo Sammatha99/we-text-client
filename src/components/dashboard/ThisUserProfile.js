@@ -13,7 +13,7 @@ import { thisUserData, thisUserDetailData } from "../../utils/fakeData";
 
 const thisUserTabs = ["about", "followings", "followers"];
 
-// TODO: edit left panel : email and image
+// TODO 5: edit left panel : email and image
 
 export default function ThisUserProfile() {
   const [user, setUser] = useState(null);

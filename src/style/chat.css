@@ -210,11 +210,14 @@
 /* user Seen  */
 .messageCard-wrap-userseen {
   display: flex;
+  margin-left: auto;
   justify-content: flex-end;
+  padding: var(--spacing-1) var(--spacing-2);
+  cursor: pointer;
 }
 
-.messageCard-wrap-userseen .avatar {
-  cursor: pointer;
+.messageCard-wrap-userseen .avatar ~ .avatar {
+  margin-left: var(--spacing-1);
 }
 
 /* message card loading  */

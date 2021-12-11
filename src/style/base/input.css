@@ -30,6 +30,7 @@ textarea::placeholder {
   transform: translateY(-50%);
   padding: var(--spacing-2);
   color: var(--text-color);
+  display: flex;
 }
 
 .input-icon .input-icon__icon--left {
@@ -61,14 +62,15 @@ textarea::placeholder {
 
 .input-icon__icon--clear {
   display: none;
+  margin-left: var(--spacing-2);
 }
 
-.input-icon--search .input-icon__input:focus ~ .input-icon__icon--right {
-  display: none;
-}
-
-.input-icon--search .input-icon__input:focus ~ .input-icon__icon--clear {
-  display: block;
+.input-icon--search
+  .input-icon__input:focus
+  ~ .input-icon__icon--right
+  .input-icon__icon--clear {
+  display: inline-block;
+  margin-left: var(--spacing-2);
 }
 
 textarea {

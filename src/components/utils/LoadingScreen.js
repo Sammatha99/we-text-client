@@ -29,9 +29,23 @@ const LoadingRightPanel = () => {
   );
 };
 
-// TODO loading for this user profile
 const LoadingThisUserProfile = () => {
-  return <div>loading this user profile</div>;
+  return (
+    <>
+      <div className="thisUser--panel-left">
+        <div className="avatar avatar--big loading"></div>
+        <div className="text--medium text--center loading">.</div>
+        <div className="thisUser__email loading">.</div>
+      </div>
+      <div className="thisUser--panel-right thisUser--panel-right--loading">
+        {listNumber.map((item, index) => (
+          <div key={index} className="chatInfo-menu-item loading--right-panel">
+            <p className="loading">.</p>
+          </div>
+        ))}
+      </div>
+    </>
+  );
 };
 
 export {

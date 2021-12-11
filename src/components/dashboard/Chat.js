@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "../../style/chat.css";
+import { ChatComponents, utilFunction } from "../utils";
 
 import {
   thisUserData,
@@ -8,7 +9,13 @@ import {
   messagesChatgroupData,
   messagesPersonalData,
 } from "../../utils/fakeData";
-import { ChatComponents } from "../utils";
+
+/**
+ * tạo reducer dùng riêng cho chat
+ * - messages
+ * - input: object {inputStr, type}
+ * selectedChatroom đc lấy từ store redux tổng
+ */
 
 export default function Chat({ selectedChatroom }) {
   const [chatroom, setChatroom] = useState(null);
@@ -16,16 +23,21 @@ export default function Chat({ selectedChatroom }) {
 
   useEffect(() => {
     if (selectedChatroom != null) {
-      const getChatroom = JSON.parse(
+      //selectedChatroom đc lấy từ store redux tổng
+      let getChatroom = JSON.parse(
         JSON.stringify(chatRoomsData[selectedChatroom])
       );
+
+      getChatroom = utilFunction.formatChatroom(getChatroom, thisUserData.id);
+
+      // get messages from Backend
       let getMessages;
-      // TODO get messages
       if (getChatroom.isGroupChat) {
         getMessages = JSON.parse(JSON.stringify(messagesChatgroupData));
       } else {
         getMessages = JSON.parse(JSON.stringify(messagesPersonalData));
       }
+
       // get sender for each message
       getMessages.forEach((message) => {
         if (getChatroom.members.includes(message.sender)) {
@@ -39,26 +51,10 @@ export default function Chat({ selectedChatroom }) {
         }
       });
 
-      // TODO trong backend gửi lên cần được reverse sẵn
+      // trong backend gửi lên cần được reverse sẵn
       getMessages = getMessages.reverse();
 
       setMessages(getMessages);
-
-      // lọc members để loại bỏ chính mình đi
-      const myIndex = getChatroom.members.findIndex(
-        (id) => id === thisUserData.id
-      );
-      getChatroom.members.splice(myIndex, 1);
-      getChatroom.membersPopulate.splice(myIndex, 1);
-
-      // kiếm name cho chatroom
-      if (!getChatroom.name) {
-        const names = [];
-        getChatroom.membersPopulate.forEach((member) => {
-          names.push(member.name);
-        });
-        getChatroom.name = names.join(", ");
-      }
 
       setChatroom(getChatroom);
     }
@@ -67,10 +63,12 @@ export default function Chat({ selectedChatroom }) {
   }, [selectedChatroom]);
 
   return (
-    <div className="bigPanelMiddle content">
-      <ChatComponents.ChatHeader chatroom={chatroom} />
-      <ChatComponents.ChatBody messages={messages} chatroom={chatroom} />
-      <ChatComponents.ChatInput thisUser={thisUserData} />
-    </div>
+    <>
+      <div className="bigPanelMiddle content">
+        <ChatComponents.ChatHeader chatroom={chatroom} />
+        <ChatComponents.ChatBody messages={messages} chatroom={chatroom} />
+        <ChatComponents.ChatInput thisUser={thisUserData} />
+      </div>
+    </>
   );
 }

@@ -12,7 +12,16 @@ import {
   BackgroundScreen,
 } from "../dashboard";
 
-// TODO selected chatroom and selected user will be use in redux : state manage
+/**
+ * redux: store
+ * - selectedChatroom: chatroom
+ * - selectedUser: user + userDetail
+ * - smallPanelRight: string: 'otherUserProfile', 'chatInfo' ---> constants
+ * - chatrooms: [chatrooms]
+ * - thisUser: user
+ * - thisUserDetail (followings, followers, contacts) : userDetail
+ */
+
 export default function MainDashboard() {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
@@ -55,8 +64,7 @@ export default function MainDashboard() {
         {selectedChatroom != null && (
           <Chat selectedChatroom={selectedChatroom} />
         )}
-
-        {/* <ChatInfo id={1} /> */}
+        {/* {selectedChatroom != null && <ChatInfo id={selectedChatroom} />} */}
         {/* <OtherUserPofile /> */}
       </div>
     </>

@@ -17,6 +17,8 @@
 .thisUser--panel-right {
   flex-grow: 1;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* panel left   */
@@ -110,6 +112,8 @@
   width: 100%;
   padding: var(--spacing-5);
   animation: slideIn 0.3s ease-in-out;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 @keyframes slideIn {
@@ -187,4 +191,36 @@
   .thisUser__btns-wrap
   .thisUser__btn--cancel {
   display: none;
+}
+
+/* loading  */
+.thisUser--panel-left .text--medium.loading {
+  width: 70%;
+  color: transparent;
+  overflow: hidden;
+}
+
+.thisUser--panel-left .thisUser__email.loading {
+  width: 50%;
+  color: transparent;
+  overflow: hidden;
+}
+
+.thisUser--panel-right--loading {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.thisUser--panel-right .loading--right-panel {
+  margin: var(--spacing-7) auto;
+  width: 80%;
+  overflow: hidden;
+}
+
+.thisUser--panel-right .loading--right-panel .loading {
+  line-height: 50px;
+  overflow: hidden;
+  width: 100%;
 }

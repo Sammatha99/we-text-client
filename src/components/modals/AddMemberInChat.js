@@ -7,36 +7,39 @@ import "../../style/modals.css";
 
 import { thisUserDetailData } from "../../utils/fakeData";
 
-export default function CreateChatModal() {
+export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const modalCheckboxRef = useRef();
 
   useEffect(() => {
-    const getContacts = [...thisUserDetailData.contactsPopulate];
+    // không lấy những đứa đã có trong members list r
+    const getContacts = [...thisUserDetailData.contactsPopulate].filter(
+      (contact) => !membersId.includes(contact.id)
+    );
     setContacts(getContacts);
     setLoading(false);
     return () => {};
-  }, []);
+  }, [membersId]);
 
   const handleCheckbox = (user, isChecked) => {
     if (isChecked) {
-      setSelectedContacts((prev) => {
+      setSelectedUsers((prev) => {
         if (!prev.includes(user.id)) {
           return [...prev, user.id];
         }
       });
     } else {
-      setSelectedContacts((prev) => {
+      setSelectedUsers((prev) => {
         return prev.filter((id) => id !== user.id);
       });
     }
   };
 
   const handleSubmit = () => {
-    // tạo chat và route vào chat mới
-    console.log(selectedContacts);
+    // truyền về cho trang chat info add member vào
+    handleSubmitAdd(selectedUsers);
     modalCheckboxRef.current.checked = false;
   };
 
@@ -45,22 +48,22 @@ export default function CreateChatModal() {
       <input
         ref={modalCheckboxRef}
         type="checkbox"
-        id={modalsName.createChatModal}
+        id={modalsName.addMemberInchat}
         hidden
       />
       <label
-        htmlFor={modalsName.createChatModal}
-        id={`${modalsName.createChatModal}__label`}
+        htmlFor={modalsName.addMemberInchat}
+        id={`${modalsName.addMemberInchat}__label`}
         className="modal-overlay center"
       ></label>
       <div
         className="modal-wrapper"
-        id={`${modalsName.createChatModal}__modal`}
+        id={`${modalsName.addMemberInchat}__modal`}
       >
         <div className="modal__header">
-          Create chat
+          Add members
           <label
-            htmlFor={modalsName.createChatModal}
+            htmlFor={modalsName.addMemberInchat}
             className="modal__close-icon"
           >
             <Icon icon="times" />
@@ -97,7 +100,7 @@ export default function CreateChatModal() {
             onClick={handleSubmit}
             className="btn btn--primary btn--medium"
           >
-            Create
+            Add
           </button>
         </div>
       </div>
