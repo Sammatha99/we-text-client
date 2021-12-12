@@ -48,23 +48,37 @@ const PopupMenuChatPersonalCard = (chatId, userId) => {
   );
 };
 
-const PopupMenuContact = (chatId, userId) => {
+const PopupMenuUserCard = (
+  userId,
+  contacts,
+  handleContact,
+  followings,
+  handleFollow
+) => {
   const handleSeeProfile = (e) => {
     e.stopPropagation();
     // see profile
+    console.log(userId);
   };
 
-  const handleDeleteContact = (e) => {
-    e.stopPropagation();
-    // delete contact
+  const getInContacts = () => {
+    return contacts.includes(userId);
   };
+
+  const getInFollowings = () => {
+    return followings.includes(userId);
+  };
+
   return (
     <div className="popupMenu">
       <div onClick={handleSeeProfile} className="popupMenu__item">
         See profile
       </div>
-      <div onClick={handleDeleteContact} className="popupMenu__item">
-        Delete contact
+      <div onClick={handleContact} className="popupMenu__item">
+        {getInContacts() ? "Delete" : "Add"} contact
+      </div>
+      <div onClick={handleFollow} className="popupMenu__item">
+        {getInFollowings() ? "Unfollow" : "Add follow"}
       </div>
     </div>
   );
@@ -118,5 +132,5 @@ export {
   PopupMenu,
   PopupMenuChatGroupCard,
   PopupMenuChatPersonalCard,
-  PopupMenuContact,
+  PopupMenuUserCard,
 };

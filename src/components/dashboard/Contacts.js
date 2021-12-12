@@ -47,16 +47,3 @@ export default function Contacts() {
     </div>
   );
 }
-
-// TODO 1
-/**
- * userCard popup menu:
- * check contact/ check following
- *    + see profile
- *    + add / delete contact
- *    + follow / unfollow
- * - contacts
- * - chatInfo
- * - other User profile
- * - this user profile
- */

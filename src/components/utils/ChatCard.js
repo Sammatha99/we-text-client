@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
-// import { useLayer, Arrow } from "react-laag";
-
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 

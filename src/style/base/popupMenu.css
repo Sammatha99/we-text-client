@@ -1,6 +1,7 @@
 .popupMenu {
   background-color: var(--white-color);
   min-width: 150px;
+  box-shadow: var(--box-shadow);
 }
 
 .popupMenu__item {
