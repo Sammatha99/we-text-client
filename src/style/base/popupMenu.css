@@ -1,0 +1,16 @@
+.popupMenu {
+  background-color: var(--white-color);
+  min-width: 150px;
+}
+
+.popupMenu__item {
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-3) var(--spacing-3);
+  cursor: pointer;
+  color: var(--text-color);
+  font-weight: var(--font-weight-medium);
+}
+
+.popupMenu__item:hover {
+  opacity: 0.6;
+}

@@ -5,3 +5,4 @@ export { default as UserCardCheckbox } from "./UserCardCheckbox";
 export * as LoadingComponent from "./LoadingScreen";
 export * as utilFunction from "./utilFunction";
 export * as ChatComponents from "./Chat";
+export * as PopupMenus from "./PopupMenu";

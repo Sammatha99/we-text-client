@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import { useLayer, Arrow } from "react-laag";
+// import { useLayer, Arrow } from "react-laag";
 
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { utilFunction } from "../utils";
+import { utilFunction, PopupMenus } from "../utils";
 
 import { thisUserData } from "../../utils/fakeData";
 
@@ -19,6 +19,14 @@ export default function ChatCard({
   chatroom,
   isSelected,
 }) {
+  const { PopupMenu, triggerProps, handleClickPopupMenu } =
+    PopupMenus.PopupMenu();
+
+  const PopupMenuChatCard = () =>
+    chatroom.isGroupChat
+      ? PopupMenus.PopupMenuChatGroupCard(chatroom.id)
+      : PopupMenus.PopupMenuChatPersonalCard(chatroom.id, chatroom.members[0]);
+
   const lastMessage = () => {
     var senderName = "";
 
@@ -69,25 +77,6 @@ export default function ChatCard({
     }
   };
 
-  const [isOpen, setOpen] = useState(false);
-
-  function close() {
-    setOpen(false);
-  }
-
-  const { renderLayer, triggerProps, layerProps, arrowProps } = useLayer({
-    isOpen,
-    onOutsideClick: close, // close the menu when the user clicks outside
-    onDisappear: close, // close the menu when the menu gets scrolled out of sight
-    overflowContainer: true, // keep the menu positioned inside the container
-    auto: true, // automatically find the best placement
-    placement: "bottom-center", // we prefer to place the menu "top-end"
-    preferX: "left",
-    triggerOffset: 4, // keep some distance to the trigger
-    containerOffset: 16, // give the menu some room to breath relative to the container
-    arrowOffset: 8, // let the arrow have some room to breath also
-  });
-
   if (chatroom) {
     return (
       <div
@@ -99,30 +88,13 @@ export default function ChatCard({
       >
         <div
           {...triggerProps}
-          onClick={() => setOpen(!isOpen)}
+          onClick={handleClickPopupMenu}
           className="chatCard__options-wrapper"
         >
           <Icon icon="ellipsis-h" />
         </div>
+        {PopupMenu(PopupMenuChatCard)}
 
-        {renderLayer(
-          isOpen && (
-            <div
-              {...layerProps}
-              style={{
-                ...layerProps.style,
-                width: 200,
-                height: 150,
-                zIndex: "2",
-                backgroundColor: "white",
-              }}
-            >
-              {/* TODO 1 chatCard menu  */}
-              <p className="text--medium"> menu pop up</p>
-              <Arrow {...arrowProps} />
-            </div>
-          )
-        )}
         <div
           className={clsx("avatar", "avatar--small", "center", {
             "user-active-dots": utilFunction.chatRoomStatus(chatroom),
