@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-export default function InputPassword({ id, register, name }) {
+export default function InputPassword({
+  id,
+  register,
+  name,
+  placeholder,
+  classes,
+}) {
   const [showInputValue, setShowInputValue] = useState(false);
 
   const handelInputIconClick = () => {
@@ -15,8 +22,8 @@ export default function InputPassword({ id, register, name }) {
         {...register}
         id={id}
         type={showInputValue ? "text" : "password"}
-        placeholder="Enter your password"
-        className="input-icon__input"
+        placeholder={placeholder || "Enter your password"}
+        className={clsx("input-icon__input", classes)}
       />
       <div
         onClick={handelInputIconClick}

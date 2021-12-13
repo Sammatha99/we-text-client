@@ -29,28 +29,28 @@ const LoadingRightPanel = () => {
   );
 };
 
-const LoadingThisUserProfile = () => {
-  return (
-    <>
-      <div className="thisUser--panel-left">
-        <div className="avatar avatar--big loading"></div>
-        <div className="text--medium text--center loading">.</div>
-        <div className="thisUser__email loading">.</div>
+const LoadingThisUserProfileLeftPanel = () => (
+  <div className="thisUser--panel-left">
+    <div className="avatar avatar--big loading"></div>
+    <div className="text--medium text--center loading">.</div>
+    <div className="thisUser__email loading">.</div>
+  </div>
+);
+
+const LoadingThisUserProfileRightPanel = () => (
+  <div className="thisUser--panel-right thisUser--panel-right--loading">
+    {listNumber.map((item, index) => (
+      <div key={index} className="chatInfo-menu-item loading--right-panel">
+        <p className="loading">.</p>
       </div>
-      <div className="thisUser--panel-right thisUser--panel-right--loading">
-        {listNumber.map((item, index) => (
-          <div key={index} className="chatInfo-menu-item loading--right-panel">
-            <p className="loading">.</p>
-          </div>
-        ))}
-      </div>
-    </>
-  );
-};
+    ))}
+  </div>
+);
 
 export {
   LoadingContacts,
   LoadingChats,
   LoadingRightPanel,
-  LoadingThisUserProfile,
+  LoadingThisUserProfileLeftPanel,
+  LoadingThisUserProfileRightPanel,
 };

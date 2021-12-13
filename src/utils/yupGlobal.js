@@ -59,10 +59,39 @@ const userDetailSchema = yup.object().shape({
   address: yup.string().max(100, "Max 100 characters"),
 });
 
+const userNameSchema = yup.object().shape({
+  name: yup
+    .string()
+    .required("This field is required")
+    .max(36, "Max 36 characters"),
+});
+
+const userEmailSchema = yup.object().shape({
+  email: yup.string().email("email invalid").required("this field is required"),
+});
+
+const updatePasswordSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required("This field is required")
+    .min(8, "Min 8 characters")
+    .max(16, "Max 16 characters")
+    .password("Password must contain at least one letter and one number"),
+  newPassword: yup
+    .string()
+    .required("This field is required")
+    .min(8, "Min 8 characters")
+    .max(16, "Max 16 characters")
+    .password("Password must contain at least one letter and one number"),
+});
+
 export {
   yup,
   registerSchema,
   loginSchema,
   forgotPasswordSchema,
   userDetailSchema,
+  userNameSchema,
+  userEmailSchema,
+  updatePasswordSchema,
 };

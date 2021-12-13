@@ -23,7 +23,7 @@ import {
  */
 
 export default function MainDashboard() {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(2);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {

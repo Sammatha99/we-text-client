@@ -57,6 +57,9 @@ export default function AboutContent() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="thisUser__input-wrap">
+          <div className="thisUser__input-icon">
+            <Icon icon="pen-square" />
+          </div>
           <textarea
             name="description"
             {...register("description")}
@@ -69,11 +72,11 @@ export default function AboutContent() {
           {errors.description && (
             <p className="auth__error-message">{errors.description.message}</p>
           )}
-          <div className="thisUser__input-icon">
-            <Icon icon="pen-square" />
-          </div>
         </div>
         <div className="thisUser__input-wrap">
+          <div className="thisUser__input-icon">
+            <Icon icon="phone-square-alt" />
+          </div>
           <input
             name="phoneNumber"
             {...register("phoneNumber")}
@@ -85,11 +88,11 @@ export default function AboutContent() {
           {errors.phoneNumber && (
             <p className="auth__error-message">{errors.phoneNumber.message}</p>
           )}
-          <div className="thisUser__input-icon">
-            <Icon icon="phone-square-alt" />
-          </div>
         </div>
         <div className="thisUser__input-wrap">
+          <div className="thisUser__input-icon">
+            <Icon icon="map-marker-alt" />
+          </div>
           <textarea
             name="address"
             {...register("address")}
@@ -102,9 +105,6 @@ export default function AboutContent() {
           {errors.address && (
             <p className="auth__error-message">{errors.address.message}</p>
           )}
-          <div className="thisUser__input-icon">
-            <Icon icon="map-marker-alt" />
-          </div>
         </div>
         <div className="thisUser__btns-wrap">
           <button

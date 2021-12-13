@@ -123,3 +123,35 @@
 #add-member-in-chat-modal:checked ~ #add-member-in-chat-modal__label {
   display: flex;
 }
+
+/* modal change avatar  */
+.modal__image-wrapper {
+  flex-grow: 1;
+  width: 100%;
+  text-align: center;
+}
+
+.modal__image-preview {
+  padding-top: 90%;
+  width: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 100%;
+  box-shadow: var(--box-shadow);
+}
+
+.modal__image-btns {
+  display: flex;
+  align-items: center;
+  margin-top: var(--spacing-2);
+}
+
+.modal__image-input {
+  flex-grow: 1;
+}
+
+.modal__image-btns .modal__remove-image {
+  margin-left: var(--spacing-2);
+  margin-top: 0 !important;
+}

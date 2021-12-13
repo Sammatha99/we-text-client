@@ -8,29 +8,23 @@ import {
   AboutContent,
   FollowingsContent,
   FollowersContent,
+  LeftPanelContent,
 } from "./thisUserProfileContents";
 import { thisUserData, thisUserDetailData } from "../../utils/fakeData";
 
 const thisUserTabs = ["about", "followings", "followers"];
 
-// TODO 5: edit left panel : email and image
-
 export default function ThisUserProfile() {
-  const [user, setUser] = useState(null);
   const [userDetail, setUserDetail] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(null);
 
   const activeLine = useRef();
   const activeTab = useRef();
 
   useEffect(() => {
-    const getUser = JSON.parse(JSON.stringify(thisUserData));
     const getUserDetail = JSON.parse(JSON.stringify(thisUserDetailData));
-    setUser(getUser);
     setUserDetail(getUserDetail);
     setSelectedTab(0);
-    setLoading(false);
 
     return () => {};
   }, []);
@@ -75,25 +69,6 @@ export default function ThisUserProfile() {
     }
   };
 
-  const ThisUserProfilePanelLeft = () => {
-    return (
-      <div className="thisUser--panel-left">
-        <div className="avatar avatar--big">
-          <img src={user.avatar} alt={user.name} />
-          <div className="thisUser__camera-icon center">
-            <Icon icon="camera" />
-          </div>
-        </div>
-        <div className="text--medium text--center">{user.name}</div>
-        <div className="thisUser__email">
-          <Icon icon="envelope" />
-          <p>{user.email}</p>
-        </div>
-        <button className="btn btn--primary btn--medium">Update info</button>
-      </div>
-    );
-  };
-
   const ThisUserProfilePanelRight = () => {
     return (
       <div className="thisUser--panel-right">
@@ -117,20 +92,12 @@ export default function ThisUserProfile() {
     );
   };
 
-  const ThisUserProfileContent = () => {
-    return (
-      <>
-        {ThisUserProfilePanelLeft()}
-        {ThisUserProfilePanelRight()}
-      </>
-    );
-  };
-
   return (
     <div className="thisUserProfile content">
-      {loading
-        ? LoadingComponent.LoadingThisUserProfile()
-        : ThisUserProfileContent()}
+      {LeftPanelContent()}
+      {userDetail == null
+        ? LoadingComponent.LoadingThisUserProfileRightPanel()
+        : ThisUserProfilePanelRight()}
     </div>
   );
 }
