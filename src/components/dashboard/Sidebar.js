@@ -2,29 +2,14 @@ import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 
-import userAvatar from "../../assets/imgs/userAvatar.png";
+import { tabs } from "../../utils/constants";
+
 import "../../style/sidebar.css";
 
-const userData = {
-  name: "Henry Jabbawockie",
-  status: true,
-  avatar: userAvatar,
-};
+import { thisUserData } from "../../utils/fakeData";
 
-const tabs = [
-  {
-    name: "chats",
-    icon: "comment-dots",
-  },
-  {
-    name: "contacts",
-    icon: "user",
-  },
-  {
-    name: "profile",
-    icon: "th-large",
-  },
-];
+// get from redux store
+const userData = { ...thisUserData };
 
 export default function Sidebar({
   setSelectedTab,
@@ -43,11 +28,11 @@ export default function Sidebar({
     return () => {};
   }, [selectedTab]);
 
-  const onClickTab = (index) => {
-    if (index === 2) {
+  const onClickTab = (name) => {
+    if (name === "profile") {
       setSelectedChatroom(null);
     }
-    setSelectedTab(index);
+    setSelectedTab(name);
   };
 
   const onShutDown = () => {
@@ -90,8 +75,8 @@ export default function Sidebar({
             className={clsx("sidebar__tab-item", "center", {
               "sidebar__tab-item--active": index === selectedTab,
             })}
-            ref={index === selectedTab ? activeTab : null}
-            onClick={() => onClickTab(index)}
+            ref={tab.name === selectedTab ? activeTab : null}
+            onClick={() => onClickTab(tab.name)}
           >
             <Icon className="sidebar__tab-icon" icon={tab.icon} />
             {tab.name}

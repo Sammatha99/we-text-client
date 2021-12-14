@@ -1,6 +1,6 @@
 import React from "react";
 
-import backgroundImage from "../../assets/imgs/dashboard_background.png";
+import { backgroundImage } from "../../assets/imgs";
 
 import "../../style/dashboard.css";
 

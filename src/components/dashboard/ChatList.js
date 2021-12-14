@@ -1,9 +1,12 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { LoadingComponent, ChatCard, utilFunction } from "../utils";
+import { optionsChatList } from "../../utils/constants";
 import { CreateChatModal, modalsName } from "../modals";
+
 import "../../style/chatList.css";
+
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 
 /**
@@ -18,22 +21,6 @@ import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
   const [chatrooms, setChatrooms] = useState(null);
   const [loading, setLoading] = useState(true);
-  const optionsChatList = useMemo(() => {
-    return [
-      {
-        id: "default",
-        name: "Default",
-      },
-      {
-        id: "recent",
-        name: "Recent chats",
-      },
-      {
-        id: "old",
-        name: "Old chats",
-      },
-    ];
-  }, []);
 
   useEffect(() => {
     /**

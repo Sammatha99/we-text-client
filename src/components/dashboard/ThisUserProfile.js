@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 
 import "../../style/thisUserProfile.css";
@@ -10,7 +9,7 @@ import {
   FollowersContent,
   LeftPanelContent,
 } from "./thisUserProfileContents";
-import { thisUserData, thisUserDetailData } from "../../utils/fakeData";
+import { thisUserDetailData } from "../../utils/fakeData";
 
 const thisUserTabs = ["about", "followings", "followers"];
 

@@ -2,6 +2,15 @@
 // import io from "socket.io-client";
 // let socket;
 
+// TODO 1 email-verify page
+/*
+/:tab/:id => mainDashboard: selectedTab = 'chats' , id -> [selectedChatroom, selectedUser]
+/login
+/register
+/forgot-password
+/verify-email
+*/
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -37,8 +46,7 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Login, Register, ForgotPassword } from "./components/auth";
-import { MainDashboard } from "./components/dashboard";
+import { MainDashboard, NotFoundPage, AuthPages } from "./components";
 
 library.add(
   fab,
@@ -78,7 +86,7 @@ function App() {
   // useEffect(() => {
   //   socket = io("http://localhost:3000");
   // }, []);
-  return <MainDashboard />;
+  return <AuthPages.Login />;
 }
 
 export default App;

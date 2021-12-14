@@ -11,6 +11,7 @@ import {
   ChatInfo,
   BackgroundScreen,
 } from "../dashboard";
+import { tabs } from "../../utils/constants";
 
 /**
  * redux: store
@@ -23,21 +24,21 @@ import {
  */
 
 export default function MainDashboard() {
-  const [selectedTab, setSelectedTab] = useState(2);
+  const [selectedTab, setSelectedTab] = useState(tabs[0].name);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {
     switch (selectedTab) {
-      case 0:
+      case tabs[0].name:
         return (
           <ChatList
             selectedChatroom={selectedChatroom}
             setSelectedChatroom={setSelectedChatroom}
           />
         );
-      case 1:
+      case tabs[1].name:
         return <Contacts />;
-      case 2:
+      case tabs[2].name:
         return <ThisUserProfile />;
       default:
         break;

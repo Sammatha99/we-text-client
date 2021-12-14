@@ -1,16 +1,15 @@
+import { useState } from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { utilFunction } from ".";
 import { UsersSeenChatModal } from "../modals";
+import { list4 } from "../../utils/constants";
 
 import "../../style/chat.css";
 
 import { thisUserData } from "../../utils/fakeData";
-import { useState } from "react";
-
-const listMessage = [0, 1, 2, 3];
 
 const getMembersSeen = (chatroom, messageId) => {
   if (!Object.values(chatroom.seenHistory).includes(messageId)) return null;
@@ -244,7 +243,7 @@ const ChatBody = function ({ messages, chatroom }) {
   } else {
     return (
       <div className="chat-body-wrapper">
-        {listMessage.map((item) => (
+        {list4.map((item) => (
           <MessageCard key={item} thisUserId={item % 2} />
         ))}
       </div>

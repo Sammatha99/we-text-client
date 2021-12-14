@@ -1,14 +1,13 @@
 import React from "react";
 import { UserCard, ChatCard } from ".";
-
-const listNumber = [0, 1, 2, 3];
+import { list4 } from "../../utils/constants";
 
 const LoadingContacts = ({ classes }) => {
-  return listNumber.map((index) => <UserCard classes={classes} key={index} />);
+  return list4.map((index) => <UserCard classes={classes} key={index} />);
 };
 
 const LoadingChats = () => {
-  return listNumber.map((index) => <ChatCard key={index} />);
+  return list4.map((index) => <ChatCard key={index} />);
 };
 
 const LoadingRightPanel = () => {
@@ -20,7 +19,7 @@ const LoadingRightPanel = () => {
           .
         </div>
       </div>
-      {listNumber.map((item, index) => (
+      {list4.map((index) => (
         <div key={index} className="chatInfo-menu-item loading--right-panel">
           <p className="loading">.</p>
         </div>
@@ -39,7 +38,7 @@ const LoadingThisUserProfileLeftPanel = () => (
 
 const LoadingThisUserProfileRightPanel = () => (
   <div className="thisUser--panel-right thisUser--panel-right--loading">
-    {listNumber.map((item, index) => (
+    {list4.map((index) => (
       <div key={index} className="chatInfo-menu-item loading--right-panel">
         <p className="loading">.</p>
       </div>
