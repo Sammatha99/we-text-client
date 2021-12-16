@@ -17,6 +17,10 @@
   justify-content: space-around;
 }
 
+.auth-wrapper--small {
+  min-height: unset;
+}
+
 .auth-wrapper .text--header {
   margin-bottom: var(--spacing-9);
 }
@@ -97,4 +101,25 @@
   font-size: var(--font-size-6);
   text-transform: initial;
   font-weight: var(--font-weight-light);
+}
+
+.auth-btns-wrapper {
+  width: 100%;
+  margin-top: var(--spacing-4);
+  display: flex;
+  justify-content: space-around;
+}
+
+.auth-text-link {
+  color: var(--text-color);
+  text-decoration: underline;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--spacing-2);
+  display: inline-block;
+}
+
+.auth-text-link:hover {
+  color: var(--primary-light-color);
+  font-weight: var(--font-weight-bold);
 }

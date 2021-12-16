@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 
 import "../../style/thisUserProfile.css";
+
 import { LoadingComponent } from "../utils";
 import {
   AboutContent,
@@ -9,9 +10,8 @@ import {
   FollowersContent,
   LeftPanelContent,
 } from "./thisUserProfileContents";
+import { constants } from "../../utils";
 import { thisUserDetailData } from "../../utils/fakeData";
-
-const thisUserTabs = ["about", "followings", "followers"];
 
 export default function ThisUserProfile() {
   const [userDetail, setUserDetail] = useState(null);
@@ -72,7 +72,7 @@ export default function ThisUserProfile() {
     return (
       <div className="thisUser--panel-right">
         <div className="thisUser__tabs">
-          {thisUserTabs.map((item, index) => (
+          {constants.thisUserTabs.map((item, index) => (
             <div
               key={index}
               ref={index === selectedTab ? activeTab : null}

@@ -45,6 +45,14 @@ const forgotPasswordSchema = yup.object().shape({
   email: yup.string().email("email invalid").required("this field is required"),
 });
 
+const verifyEmailSchema = yup.object().shape({
+  otp: yup
+    .string()
+    .length(6)
+    .onlyNumber("This filed only contain numbers")
+    .required(),
+});
+
 const userDetailSchema = yup.object().shape({
   description: yup.string().max(130, "Max 130 characters"),
   phoneNumber: yup
@@ -94,4 +102,5 @@ export {
   userNameSchema,
   userEmailSchema,
   updatePasswordSchema,
+  verifyEmailSchema,
 };

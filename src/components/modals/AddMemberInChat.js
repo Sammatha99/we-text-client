@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingComponent, UserCardCheckbox } from "../utils";
-import { modalsName } from ".";
 import "../../style/modals.css";
+
+import { modalsName } from ".";
+import { LoadingComponent, UserCardCheckbox } from "../utils";
 
 import { thisUserDetailData } from "../../utils/fakeData";
 
 export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
+  const modalCheckboxRef = useRef();
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const modalCheckboxRef = useRef();
 
   useEffect(() => {
     // không lấy những đứa đã có trong members list r

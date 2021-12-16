@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { PopupMenus } from "../utils";
+
 import { thisUserDetailData } from "../../utils/fakeData";
 
 export default function UserCard({ user, classes }) {

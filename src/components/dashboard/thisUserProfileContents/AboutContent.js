@@ -4,7 +4,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { userDetailSchema } from "../../../utils/yupGlobal";
+import { schemas } from "../../../utils";
 
 import { thisUserDetailData } from "../../../utils/fakeData";
 
@@ -17,7 +17,7 @@ export default function AboutContent() {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(userDetailSchema),
+    resolver: yupResolver(schemas.userDetailSchema),
     defaultValues: userDetail,
   });
 

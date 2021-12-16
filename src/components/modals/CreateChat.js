@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingComponent, UserCardCheckbox } from "../utils";
-import { modalsName } from ".";
 import "../../style/modals.css";
+
+import { modalsName } from ".";
+import { LoadingComponent, UserCardCheckbox } from "../utils";
 
 import { thisUserDetailData } from "../../utils/fakeData";
 
 export default function CreateChatModal() {
+  const modalCheckboxRef = useRef();
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
-  const modalCheckboxRef = useRef();
 
   useEffect(() => {
     const getContacts = [...thisUserDetailData.contactsPopulate];

@@ -1,23 +1,28 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
 import "../../../style/auth.css";
-import { forgotPasswordSchema } from "../../../utils/yupGlobal";
+
+import { schemas, constants } from "../../../utils";
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(forgotPasswordSchema),
+    resolver: yupResolver(schemas.forgotPasswordSchema),
   });
 
   const onSubmit = (data) => {
     console.log(data);
+    handleNavigateLogin();
   };
+
+  const handleNavigateLogin = () => navigate(constants.routePath.loginPath);
 
   return (
     <div className="auth-background center">
@@ -46,7 +51,10 @@ export default function ForgotPassword() {
         </form>
 
         <p className="auth__info">
-          Return to <span className="auth__info--link">Login page</span>
+          Return to{" "}
+          <span onClick={handleNavigateLogin} className="auth__info--link">
+            Login page
+          </span>
         </p>
       </div>
     </div>

@@ -13,18 +13,10 @@ import {
 } from "../dashboard";
 import { tabs } from "../../utils/constants";
 
-/**
- * redux: store
- * - selectedChatroom: chatroom
- * - selectedUser: user + userDetail
- * - smallPanelRight: string: 'otherUserProfile', 'chatInfo' ---> constants
- * - chatrooms: [chatrooms]
- * - thisUser: user
- * - thisUserDetail (followings, followers, contacts) : userDetail
- */
+export default function MainDashboard({ tab }) {
+  // const [selectedTab, setSelectedTab] = useState(() => tab || tabs[0].name);
+  const [selectedTab, setSelectedTab] = useState(() => tab || null);
 
-export default function MainDashboard() {
-  const [selectedTab, setSelectedTab] = useState(tabs[0].name);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {
@@ -41,13 +33,13 @@ export default function MainDashboard() {
       case tabs[2].name:
         return <ThisUserProfile />;
       default:
-        break;
+        return <></>;
     }
   };
 
   return (
     <>
-      <BackgroundScreen />
+      {/* <BackgroundScreen /> */}
       <div className="dashboard">
         <input
           type="checkbox"
@@ -55,8 +47,8 @@ export default function MainDashboard() {
           style={{ display: "none" }}
         />
         <Sidebar
-          setSelectedChatroom={setSelectedChatroom}
           setSelectedTab={setSelectedTab}
+          setSelectedChatroom={setSelectedChatroom}
           selectedTab={selectedTab}
         />
 
@@ -65,8 +57,10 @@ export default function MainDashboard() {
         {selectedChatroom != null && (
           <Chat selectedChatroom={selectedChatroom} />
         )}
-        {/* {selectedChatroom != null && <ChatInfo id={selectedChatroom} />} */}
-        {/* <OtherUserPofile /> */}
+
+        {/* {smallPanelRight && selectedChatroom != null && <ChatInfo id={selectedChatroom} />} */}
+
+        {/*{selectedUser && <OtherUserPofile />} */}
       </div>
     </>
   );

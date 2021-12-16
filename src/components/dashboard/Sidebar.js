@@ -1,42 +1,49 @@
 import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-
-import { tabs } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import "../../style/sidebar.css";
 
-import { thisUserData } from "../../utils/fakeData";
-
-// get from redux store
-const userData = { ...thisUserData };
+import { constants } from "../../utils";
 
 export default function Sidebar({
   setSelectedTab,
   selectedTab,
   setSelectedChatroom,
 }) {
+  const navigate = useNavigate();
+  const thisUser = useSelector((state) => state.thisUser.value);
   const activeLine = useRef();
   const activeTab = useRef();
 
   useEffect(() => {
-    const active = activeTab.current;
-    if (active) {
-      activeLine.current.style.height = active.offsetHeight + "px";
-      activeLine.current.style.top = active.offsetTop + "px";
+    if (selectedTab) {
+      const active = activeTab.current;
+      if (active) {
+        activeLine.current.style.height = active.offsetHeight + "px";
+        activeLine.current.style.top = active.offsetTop + "px";
+      }
+      navigate(`/${selectedTab}`);
+    } else {
+      activeLine.current.style.height = "0";
+      activeLine.current.style.top = "0";
     }
-    return () => {};
-  }, [selectedTab]);
 
-  const onClickTab = (name) => {
+    return () => {};
+  }, [navigate, selectedTab]);
+
+  const handleChangeTab = (name) => {
     if (name === "profile") {
       setSelectedChatroom(null);
     }
     setSelectedTab(name);
   };
 
-  const onShutDown = () => {
+  const handleLogout = () => {
     console.log("log out and out to login page");
+    navigate(constants.routePath.loginPath);
   };
 
   return (
@@ -60,23 +67,23 @@ export default function Sidebar({
             "avatar--big",
             "center",
             {
-              "user-active-dots": userData.status,
+              "user-active-dots": thisUser.status,
             }
           )}
         >
-          <img src={userData.avatar} alt="user avatar" />
+          <img src={thisUser.avatar} alt="user avatar" />
         </div>
-        <p className="sidebar__user-name">{userData.name}</p>
+        <p className="sidebar__user-name">{thisUser.name}</p>
       </div>
       <div className="sidebar__tabs">
-        {tabs.map((tab, index) => (
+        {constants.tabs.map((tab, index) => (
           <div
             key={index}
             className={clsx("sidebar__tab-item", "center", {
               "sidebar__tab-item--active": index === selectedTab,
             })}
             ref={tab.name === selectedTab ? activeTab : null}
-            onClick={() => onClickTab(tab.name)}
+            onClick={() => handleChangeTab(tab.name)}
           >
             <Icon className="sidebar__tab-icon" icon={tab.icon} />
             {tab.name}
@@ -86,7 +93,7 @@ export default function Sidebar({
       </div>
       <div
         className="sidebar__logout sidebar__tab-item center"
-        onClick={onShutDown}
+        onClick={handleLogout}
       >
         <Icon className="sidebar__tab-icon" icon="power-off" />
         Log out

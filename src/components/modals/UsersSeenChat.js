@@ -1,8 +1,9 @@
 import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { UserCard } from "../utils";
 import "../../style/modals.css";
+
+import { UserCard } from "../utils";
 
 export default function UsersSeenChat({ usersSeen, showModal, setShowModal }) {
   return showModal ? (

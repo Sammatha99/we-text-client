@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { imageType } from "../../utils/constants";
+
 import "../../style/modals.css";
 
-export default function ChangeAvatar({
-  handleSubmit,
+import { imageType } from "../../utils/constants";
 
-  setShowModal,
-}) {
+export default function ChangeAvatar({ handleSubmit, setShowModal }) {
   const [avatar, setAvatar] = useState(null);
   const [preview, setPreview] = useState(null);
 

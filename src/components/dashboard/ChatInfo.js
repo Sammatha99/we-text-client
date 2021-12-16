@@ -3,6 +3,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 
 import "../../style/chatInfo.css";
+
 import { UserCard, LoadingComponent, utilFunction } from "../utils";
 import { modalsName, AddMemberInChatModal } from "../modals";
 

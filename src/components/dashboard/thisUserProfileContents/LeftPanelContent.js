@@ -3,13 +3,9 @@ import { useForm } from "react-hook-form";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { LoadingComponent, InputPassword } from "../../utils";
-import {
-  userNameSchema,
-  userEmailSchema,
-  updatePasswordSchema,
-} from "../../../utils/yupGlobal";
 import { ChangeAvatarModal } from "../../modals";
+import { LoadingComponent, InputPassword } from "../../utils";
+import { schemas } from "../../../utils";
 
 import { thisUserData } from "../../../utils/fakeData";
 
@@ -24,7 +20,7 @@ export default function LeftPanelContent() {
     reset: nameReset,
     formState: { errors: nameErrors },
   } = useForm({
-    resolver: yupResolver(userNameSchema),
+    resolver: yupResolver(schemas.userNameSchema),
     defaultValues: { name: "" },
   });
 
@@ -34,7 +30,7 @@ export default function LeftPanelContent() {
     reset: emailReset,
     formState: { errors: emailErrors },
   } = useForm({
-    resolver: yupResolver(userEmailSchema),
+    resolver: yupResolver(schemas.userEmailSchema),
     defaultValues: { email: "" },
   });
 
@@ -44,7 +40,7 @@ export default function LeftPanelContent() {
     reset: passwordReset,
     formState: { errors: passwordErrors },
   } = useForm({
-    resolver: yupResolver(updatePasswordSchema),
+    resolver: yupResolver(schemas.updatePasswordSchema),
     defaultValues: {
       password: "",
       newPassword: "",

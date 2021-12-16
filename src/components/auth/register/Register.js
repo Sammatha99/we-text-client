@@ -2,25 +2,30 @@ import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
-import googleIcon from "../../../assets/imgs/Google.png";
+import { googleLogo } from "../../../assets/imgs";
 import "../../../style/auth.css";
 
 import { InputPassword } from "../../utils";
-import { registerSchema } from "../../../utils/yupGlobal";
+import { schemas, constants } from "../../../utils";
 
 export default function Register() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver(schemas.registerSchema),
   });
 
   const onSubmit = (data) => {
     console.log(data);
+    navigate(constants.routePath.verifyEmailPath);
   };
+
+  const handleNavigateLogin = () => navigate(constants.routePath.loginPath);
 
   return (
     <div className="auth-background center">
@@ -90,12 +95,14 @@ export default function Register() {
         </form>
         <p className="auth__info">
           Already have an account?{" "}
-          <span className="auth__info--link">Log in</span>
+          <span onClick={handleNavigateLogin} className="auth__info--link">
+            Log in
+          </span>
         </p>
         <p className="auth__info">OR</p>
         <div className="auth__btn-wrapper">
           <button className="btn auth-btn">
-            <img className="auth-btn__img" src={googleIcon} alt="google logo" />
+            <img className="auth-btn__img" src={googleLogo} alt="google logo" />
             Sign up with Google
           </button>
           <button className="btn auth-btn">

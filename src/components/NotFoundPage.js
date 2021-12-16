@@ -1,4 +1,5 @@
 import React from "react";
+
 import { background404image } from "../assets/imgs";
 
 export default function NotFoundPage() {

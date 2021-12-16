@@ -28,8 +28,36 @@ const optionsChatList = [
   },
 ];
 
+// const thisUserTabs = {
+//   aboutTab: "about",
+//   followingsTab: "followings",
+//   followersTab: "followers",
+// };
+
+const thisUserTabs = ["about", "followings", "followers"];
+
+const smallPanelRightType = {
+  otherUserProfile: "other-user-profile",
+  chatInfo: "chat-info",
+};
+
+const routePath = {
+  loginPath: "/login",
+  registerPath: "/register",
+  forgotPasswordPath: "/forgot-password",
+  verifyEmailPath: "/verify-email",
+};
+
 const imageType = ["image/png", "image/jpeg"];
 
 const list4 = [0, 1, 2, 3];
 
-export { tabs, optionsChatList, imageType, list4 };
+export {
+  tabs,
+  optionsChatList,
+  smallPanelRightType,
+  thisUserTabs,
+  imageType,
+  list4,
+  routePath,
+};

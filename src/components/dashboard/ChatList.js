@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingComponent, ChatCard, utilFunction } from "../utils";
-import { optionsChatList } from "../../utils/constants";
-import { CreateChatModal, modalsName } from "../modals";
-
 import "../../style/chatList.css";
+
+import { LoadingComponent, ChatCard, utilFunction } from "../utils";
+import { CreateChatModal, modalsName } from "../modals";
+import { optionsChatList } from "../../utils/constants";
 
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 

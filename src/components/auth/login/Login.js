@@ -2,24 +2,34 @@ import React from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
-import googleIcon from "../../../assets/imgs/Google.png";
 import "../../../style/auth.css";
+import { googleLogo } from "../../../assets/imgs";
+
 import { InputPassword } from "../../utils";
-import { loginSchema } from "../../../utils/yupGlobal";
+import { schemas, constants } from "../../../utils";
 
 export default function Login() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(schemas.loginSchema),
   });
 
   const onSubmit = (data) => {
     console.log(data);
+    navigate("/");
   };
+
+  const handleNavigateRegister = () =>
+    navigate(constants.routePath.registerPath);
+
+  const handleNavigateForgotPassword = () =>
+    navigate(constants.routePath.forgotPasswordPath);
 
   return (
     <div className="auth-background center">
@@ -59,13 +69,17 @@ export default function Login() {
         </form>
         <p className="auth__info">
           Don't have an account?{" "}
-          <span className="auth__info--link">Create account</span>
+          <span onClick={handleNavigateRegister} className="auth__info--link">
+            Create account
+          </span>
         </p>
-        <p className="auth__info--link">Forget password</p>
+        <p onClick={handleNavigateForgotPassword} className="auth__info--link">
+          Forget password
+        </p>
         <p className="auth__info">OR</p>
         <div className="auth__btn-wrapper">
           <button className="btn auth-btn">
-            <img className="auth-btn__img" src={googleIcon} alt="google logo" />
+            <img className="auth-btn__img" src={googleLogo} alt="google logo" />
             Login with Google
           </button>
           <button className="btn auth-btn">

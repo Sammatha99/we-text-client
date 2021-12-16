@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { LoadingRightPanel } from "../utils/LoadingScreen";
-
 import "../../style/otherUserProfile.css";
-import { UserCard } from "../utils";
+
+import { UserCard, LoadingComponent } from "../utils";
 
 import {
   otherUserData,
@@ -205,7 +204,9 @@ export default function OtherUserPofile() {
         </div>
       </div>
       {loading ? (
-        <div className="smallPanel-content">{LoadingRightPanel()}</div>
+        <div className="smallPanel-content">
+          {LoadingComponent.LoadingRightPanel()}
+        </div>
       ) : (
         <div className="smallPanel-content">
           {OtherUserPofileHeader()}
