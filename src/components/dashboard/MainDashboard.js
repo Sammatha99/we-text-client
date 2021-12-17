@@ -16,7 +16,6 @@ import { tabs } from "../../utils/constants";
 export default function MainDashboard({ tab }) {
   // const [selectedTab, setSelectedTab] = useState(() => tab || tabs[0].name);
   const [selectedTab, setSelectedTab] = useState(() => tab || null);
-
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {
@@ -39,7 +38,7 @@ export default function MainDashboard({ tab }) {
 
   return (
     <>
-      {/* <BackgroundScreen /> */}
+      <BackgroundScreen />
       <div className="dashboard">
         <input
           type="checkbox"

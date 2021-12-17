@@ -3,15 +3,21 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { googleLogo } from "../../../assets/imgs";
 import "../../../style/auth.css";
 
 import { InputPassword } from "../../utils";
 import { schemas, constants } from "../../../utils";
+import { thisUserAction } from "../../../features";
+// import { login } from "../../../features/thisUser";
+
+import { thisUserData } from "../../../utils/fakeData";
 
 export default function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -22,7 +28,7 @@ export default function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
-    navigate(constants.routePath.verifyEmailPath);
+    dispatch(thisUserAction.login({ ...thisUserData }));
   };
 
   const handleNavigateLogin = () => navigate(constants.routePath.loginPath);

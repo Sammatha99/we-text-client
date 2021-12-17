@@ -2,15 +2,6 @@
 // import io from "socket.io-client";
 // let socket;
 
-// TODO 1 react-router-dom
-/*
-/:tab/:id => mainDashboard: selectedTab = 'chats' , id -> [selectedChatroom, selectedUser]
-/login
-/register
-/forgot-password
-/verify-email
-*/
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -45,13 +36,13 @@ import {
   faPhoneSquareAlt,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
+import { useMemo } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { constants } from "./utils";
-import { PublicRoute, PrivateRoute } from "./routes";
+import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
-import { BackgroundScreen } from "./components/dashboard";
 import React from "react";
 
 library.add(
@@ -93,11 +84,14 @@ function App() {
   //   socket = io("http://localhost:3000");
   // }, []);
   const thisUser = useSelector((state) => state.thisUser.value);
-  const isLoggin = thisUser != null;
+  const isLogin = useMemo(() => !!thisUser, [thisUser]);
+  const isEmailVerified = useMemo(
+    () => !!thisUser && thisUser.isEmailVerified,
+    [thisUser]
+  );
 
   return (
     <>
-      <BackgroundScreen />
       <Router>
         <Routes>
           <Route
@@ -105,7 +99,8 @@ function App() {
             element={
               <PrivateRoute
                 Component={<MainDashboard />}
-                isAuthenticated={isLoggin}
+                isAuthenticated={isLogin}
+                isEmailVerified={isEmailVerified}
               />
             }
           />
@@ -116,7 +111,8 @@ function App() {
               element={
                 <PrivateRoute
                   Component={<MainDashboard tab={tab.name} />}
-                  isAuthenticated={isLoggin}
+                  isAuthenticated={isLogin}
+                  isEmailVerified={isEmailVerified}
                 />
               }
             />
@@ -125,7 +121,7 @@ function App() {
             path={constants.routePath.loginPath}
             element={
               <PublicRoute
-                isAuthenticated={isLoggin}
+                isAuthenticated={isLogin}
                 Component={<AuthPages.Login />}
               />
             }
@@ -134,7 +130,7 @@ function App() {
             path={constants.routePath.registerPath}
             element={
               <PublicRoute
-                isAuthenticated={isLoggin}
+                isAuthenticated={isLogin}
                 Component={<AuthPages.Register />}
               />
             }
@@ -143,7 +139,7 @@ function App() {
             path={constants.routePath.forgotPasswordPath}
             element={
               <PublicRoute
-                isAuthenticated={isLoggin}
+                isAuthenticated={isLogin}
                 Component={<AuthPages.ForgotPassword />}
               />
             }
@@ -151,8 +147,9 @@ function App() {
           <Route
             path={constants.routePath.verifyEmailPath}
             element={
-              <PublicRoute
-                isAuthenticated={isLoggin}
+              <VerifyEmailRoute
+                isAuthenticated={isLogin}
+                isEmailVerified={isEmailVerified}
                 Component={<AuthPages.VerifyEmail />}
               />
             }

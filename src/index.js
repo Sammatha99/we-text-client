@@ -12,11 +12,13 @@ import "./style/base/panel.css";
 import "./style/base/card.css";
 import "./style/base/tooltip.css";
 
-import thisUserReducer from "./features/thisUser";
+// import thisUserReducer from "./features/thisUser";
+import { thisUserReducer } from "./features";
 import App from "./App";
 
 /**
  * redux: store
+ * - // TODO 1 refreshtoken:lưu trong localstorage
  * REDUCER features
  * - selectedRightPanel: boolean (isOpen) ---> constants ????
  * - selectedChatroom: chatroomId
@@ -25,6 +27,7 @@ import App from "./App";
  * - chatrooms: [chatrooms]
  * REDUCER thisUser
  * - thisUser: user
+ * - accessToken: string + hsd
  * REDUCER thisUserDetail
  * - thisUserDetail: userDetail
  *            + followers [id - string]

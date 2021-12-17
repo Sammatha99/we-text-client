@@ -47,10 +47,17 @@ const LoadingThisUserProfileRightPanel = () => (
   </div>
 );
 
+const LoadingOTPVerifyEmail = () => (
+  <label className="auth-form__label loading" htmlFor="verify-email-otp">
+    .
+  </label>
+);
+
 export {
   LoadingContacts,
   LoadingChats,
   LoadingRightPanel,
   LoadingThisUserProfileLeftPanel,
   LoadingThisUserProfileRightPanel,
+  LoadingOTPVerifyEmail,
 };

@@ -6,6 +6,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 1,
@@ -14,6 +15,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 2,
@@ -22,6 +24,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: false,
+    isEmailVerified: true,
   },
   {
     id: 3,
@@ -30,6 +33,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: false,
+    isEmailVerified: true,
   },
   {
     id: 4,
@@ -38,6 +42,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 5,
@@ -46,6 +51,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: false,
+    isEmailVerified: true,
   },
   {
     id: 6,
@@ -54,6 +60,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 7,
@@ -62,6 +69,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 8,
@@ -70,6 +78,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
   {
     id: 9,
@@ -78,6 +87,7 @@ const usersData = [
     avatar:
       "https://firebasestorage.googleapis.com/v0/b/we-text-c82e4.appspot.com/o/userAvatars%2FdefaultAvatar.png?alt=media&token=d6d53533-3008-4173-96ed-cff4f08c85d0",
     status: true,
+    isEmailVerified: true,
   },
 ];
 

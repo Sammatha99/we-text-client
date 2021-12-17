@@ -2,11 +2,12 @@ import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/sidebar.css";
 
 import { constants } from "../../utils";
+import { thisUserAction } from "../../features";
 
 export default function Sidebar({
   setSelectedTab,
@@ -14,6 +15,7 @@ export default function Sidebar({
   setSelectedChatroom,
 }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const thisUser = useSelector((state) => state.thisUser.value);
   const activeLine = useRef();
   const activeTab = useRef();
@@ -42,8 +44,7 @@ export default function Sidebar({
   };
 
   const handleLogout = () => {
-    console.log("log out and out to login page");
-    navigate(constants.routePath.loginPath);
+    dispatch(thisUserAction.logout());
   };
 
   return (

@@ -19,10 +19,13 @@ export default function ForgotPassword() {
 
   const onSubmit = (data) => {
     console.log(data);
+    // handle send new password - backend
     handleNavigateLogin();
   };
 
-  const handleNavigateLogin = () => navigate(constants.routePath.loginPath);
+  const handleNavigateLogin = () => {
+    navigate(constants.routePath.loginPath, { replace: true });
+  };
 
   return (
     <div className="auth-background center">

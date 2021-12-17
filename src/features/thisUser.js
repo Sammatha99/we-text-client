@@ -15,7 +15,15 @@ export const thisUserSlice = createSlice({
     login: (state, action) => {
       state.value = { ...action.payload };
     },
+    verifyEmail: (state, action) => {
+      state.value = { ...state.value, isEmailVerified: action.payload };
+    },
+    logout: (state, action) => {
+      state.value = null;
+    },
   },
 });
+
+export const { login, verifyEmail, logout } = thisUserSlice.actions;
 
 export default thisUserSlice.reducer;

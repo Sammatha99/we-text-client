@@ -123,3 +123,12 @@
   color: var(--primary-light-color);
   font-weight: var(--font-weight-bold);
 }
+/* loading  */
+.auth-form__label.loading {
+  width: 100%;
+  /* font-size: var(--font);
+  line-height: var(--font-size-6); */
+  height: 30px;
+  color: transparent;
+  overflow: hidden;
+}
