@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
 
-// TODO 1 email verify button in thisUserProfile
 function VerifyEmailRoute({ Component, isAuthenticated, isEmailVerified }) {
   const location = useLocation();
 

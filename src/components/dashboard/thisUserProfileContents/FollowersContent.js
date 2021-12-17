@@ -9,6 +9,7 @@ export default function FollowersContent() {
   const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
+    // get followers from backend (paginate)
     const getFollowers = [...thisUserDetailData.followersPopulate];
     setFollowers(getFollowers);
     return () => {};

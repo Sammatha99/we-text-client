@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import "../../style/chat.css";
 
-import { ChatComponents, utilFunction } from "../utils";
+import { ChatComponents } from "../utils";
+import { utilFunction } from "../../utils";
 
 import {
   thisUserData,

@@ -3,9 +3,9 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import "../../style/chatList.css";
 
-import { LoadingComponent, ChatCard, utilFunction } from "../utils";
+import { LoadingComponent, ChatCard } from "../utils";
 import { CreateChatModal, modalsName } from "../modals";
-import { optionsChatList } from "../../utils/constants";
+import { constants, utilFunction } from "../../utils";
 
 import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 
@@ -76,7 +76,7 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
                 onChange={handleOptionChange}
                 // value={option: reducer chatList}
               >
-                {optionsChatList.map((option) => (
+                {constants.optionsChatList.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.name}
                   </option>

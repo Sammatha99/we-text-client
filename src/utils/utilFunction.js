@@ -25,4 +25,10 @@ const formatChatroom = function (chatroom, thisUserId) {
   return chatroom;
 };
 
-export { chatRoomStatus, formatChatroom };
+const getChatroomsId = function (chatrooms) {
+  const ids = [];
+  chatrooms.forEach((chatroom) => ids.push(chatroom.id));
+  return ids;
+};
+
+export { chatRoomStatus, formatChatroom, getChatroomsId };

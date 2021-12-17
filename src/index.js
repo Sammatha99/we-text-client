@@ -12,22 +12,27 @@ import "./style/base/panel.css";
 import "./style/base/card.css";
 import "./style/base/tooltip.css";
 
-// import thisUserReducer from "./features/thisUser";
-import { thisUserReducer } from "./features";
+import {
+  thisUserReducer,
+  tokenReducer,
+  chatroomsReducer,
+  thisUserDetailReducer,
+} from "./features";
 import App from "./App";
 
 /**
  * redux: store
  * - // TODO 1 refreshtoken:lưu trong localstorage
  * REDUCER features
- * - selectedRightPanel: boolean (isOpen) ---> constants ????
+ * - openRightPanel: boolean (isOpen) ---> constants ????
  * - selectedChatroom: chatroomId
  * - selectedUser: userId
  * REDUCER chatrooms
  * - chatrooms: [chatrooms]
  * REDUCER thisUser
  * - thisUser: user
- * - accessToken: string + hsd
+ * REDUCER tokens
+ * - token {string + hsd}
  * REDUCER thisUserDetail
  * - thisUserDetail: userDetail
  *            + followers [id - string]
@@ -35,12 +40,13 @@ import App from "./App";
  *            + contacts [id - string]
  */
 
-// TODO chatCard if not found sender (lastmessage) => 'left group'
-
 // pass collection of reducers
 const store = configureStore({
   reducer: {
     thisUser: thisUserReducer,
+    token: tokenReducer,
+    chatrooms: chatroomsReducer,
+    thisUserDetail: thisUserDetailReducer,
   },
 });
 

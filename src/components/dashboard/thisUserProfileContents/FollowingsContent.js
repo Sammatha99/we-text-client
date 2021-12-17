@@ -9,6 +9,7 @@ export default function FollowingsContent() {
   const [followings, setFollowings] = useState([]);
 
   useEffect(() => {
+    // get followings from backend (paginate)
     const getFollowings = [...thisUserDetailData.followingsPopulate];
     setFollowings(getFollowings);
     return () => {};

@@ -4,12 +4,14 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { LoadingComponent, UserCard } from "../utils";
 import { thisUserDetailData } from "../../utils/fakeData";
 
-const contactsPopulate = [...thisUserDetailData.contactsPopulate];
-
 export default function Contacts() {
+  const [contacts, setContacts] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // get contacts from backend (paginate)
+    const getContacts = [...thisUserDetailData.contactsPopulate];
+    setContacts(getContacts);
     setLoading(false);
     return () => {};
   }, []);
@@ -41,7 +43,7 @@ export default function Contacts() {
         {loading ? (
           <LoadingComponent.LoadingContacts />
         ) : (
-          contactsPopulate.map((user) => <UserCard key={user.id} user={user} />)
+          contacts.map((user) => <UserCard key={user.id} user={user} />)
         )}
       </div>
     </div>

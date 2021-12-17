@@ -18,6 +18,9 @@ export const thisUserSlice = createSlice({
     verifyEmail: (state, action) => {
       state.value = { ...state.value, isEmailVerified: action.payload };
     },
+    update: (state, action) => {
+      Object.assign(state.value, action.payload);
+    },
     logout: (state, action) => {
       state.value = null;
     },

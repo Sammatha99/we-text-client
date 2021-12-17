@@ -3,9 +3,8 @@ import clsx from "clsx";
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { utilFunction } from ".";
 import { UsersSeenChatModal } from "../modals";
-import { list4 } from "../../utils/constants";
+import { utilFunction, constants } from "../../utils";
 
 import "../../style/chat.css";
 
@@ -243,7 +242,7 @@ const ChatBody = function ({ messages, chatroom }) {
   } else {
     return (
       <div className="chat-body-wrapper">
-        {list4.map((item) => (
+        {constants.list4.map((item) => (
           <MessageCard key={item} thisUserId={item % 2} />
         ))}
       </div>

@@ -3,7 +3,8 @@ import clsx from "clsx";
 import dateFormat from "dateformat";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import { utilFunction, PopupMenus } from "../utils";
+import { PopupMenus } from "../utils";
+import { utilFunction } from "../../utils";
 
 import { thisUserData } from "../../utils/fakeData";
 
@@ -39,12 +40,16 @@ export default function ChatCard({
           senderName = memberInGroup.name;
         }
       }
-    } else if (chatroom.outGroupMembers.includes(chatroom.lastMessage.sender)) {
-      for (var memberOutGroup of chatroom.outGroupMembersPopulate) {
-        if (memberOutGroup.id === chatroom.lastMessage.sender) {
-          senderName = memberOutGroup.name;
-        }
-      }
+    }
+    // else if (chatroom.outGroupMembers.includes(chatroom.lastMessage.sender)) {
+    //   for (var memberOutGroup of chatroom.outGroupMembersPopulate) {
+    //     if (memberOutGroup.id === chatroom.lastMessage.sender) {
+    //       senderName = memberOutGroup.name;
+    //     }
+    //   }
+    // }
+    else {
+      senderName = "Left group";
     }
 
     switch (chatroom.lastMessage.type) {

@@ -28,12 +28,6 @@ const optionsChatList = [
   },
 ];
 
-// const thisUserTabs = {
-//   aboutTab: "about",
-//   followingsTab: "followings",
-//   followersTab: "followers",
-// };
-
 const thisUserTabs = ["about", "followings", "followers"];
 
 const smallPanelRightType = {

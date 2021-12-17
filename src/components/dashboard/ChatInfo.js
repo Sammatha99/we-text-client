@@ -4,8 +4,9 @@ import clsx from "clsx";
 
 import "../../style/chatInfo.css";
 
-import { UserCard, LoadingComponent, utilFunction } from "../utils";
+import { UserCard, LoadingComponent } from "../utils";
 import { modalsName, AddMemberInChatModal } from "../modals";
+import { utilFunction } from "../../utils";
 
 import {
   chatRoomsData,
