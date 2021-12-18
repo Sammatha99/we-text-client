@@ -36,14 +36,18 @@ import {
   faPhoneSquareAlt,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
-import { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { constants } from "./utils";
+import { constants, storage } from "./utils";
 import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
-import React from "react";
+import { thisUserAction } from "./features";
+import { backendWithAuth } from "./api/backend";
+import { LoadingComponent } from "./components/utils";
+
+import { thisUserData } from "./utils/fakeData";
 
 library.add(
   fab,
@@ -83,6 +87,9 @@ function App() {
   // useEffect(() => {
   //   socket = io("http://localhost:3000");
   // }, []);
+
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const thisUser = useSelector((state) => state.thisUser.value);
   const isLogin = useMemo(() => !!thisUser, [thisUser]);
   const isEmailVerified = useMemo(
@@ -90,73 +97,94 @@ function App() {
     [thisUser]
   );
 
+  useEffect(() => {
+    async function loadApp() {
+      const userId = storage.userIdStorage.get();
+      if (userId != null) {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          dispatch(thisUserAction.login(thisUserData));
+        } else {
+          thisUserAction.logout();
+        }
+      }
+      setLoading(false);
+    }
+    loadApp();
+    return () => {};
+  }, [dispatch]);
+
   return (
     <>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <PrivateRoute
-                Component={<MainDashboard />}
-                isAuthenticated={isLogin}
-                isEmailVerified={isEmailVerified}
-              />
-            }
-          />
-          {constants.tabs.map((tab) => (
+      {loading ? (
+        <LoadingComponent.LoadingApp />
+      ) : (
+        <Router>
+          <Routes>
             <Route
-              key={tab.name}
-              path={`/${tab.name}`}
+              path="/"
               element={
                 <PrivateRoute
-                  Component={<MainDashboard tab={tab.name} />}
+                  Component={<MainDashboard />}
                   isAuthenticated={isLogin}
                   isEmailVerified={isEmailVerified}
                 />
               }
             />
-          ))}
-          <Route
-            path={constants.routePath.loginPath}
-            element={
-              <PublicRoute
-                isAuthenticated={isLogin}
-                Component={<AuthPages.Login />}
+            {constants.tabs.map((tab) => (
+              <Route
+                key={tab.name}
+                path={`/${tab.name}`}
+                element={
+                  <PrivateRoute
+                    Component={<MainDashboard tab={tab.name} />}
+                    isAuthenticated={isLogin}
+                    isEmailVerified={isEmailVerified}
+                  />
+                }
               />
-            }
-          />
-          <Route
-            path={constants.routePath.registerPath}
-            element={
-              <PublicRoute
-                isAuthenticated={isLogin}
-                Component={<AuthPages.Register />}
-              />
-            }
-          />
-          <Route
-            path={constants.routePath.forgotPasswordPath}
-            element={
-              <PublicRoute
-                isAuthenticated={isLogin}
-                Component={<AuthPages.ForgotPassword />}
-              />
-            }
-          />
-          <Route
-            path={constants.routePath.verifyEmailPath}
-            element={
-              <VerifyEmailRoute
-                isAuthenticated={isLogin}
-                isEmailVerified={isEmailVerified}
-                Component={<AuthPages.VerifyEmail />}
-              />
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
+            ))}
+            <Route
+              path={constants.routePath.loginPath}
+              element={
+                <PublicRoute
+                  isAuthenticated={isLogin}
+                  Component={<AuthPages.Login />}
+                />
+              }
+            />
+            <Route
+              path={constants.routePath.registerPath}
+              element={
+                <PublicRoute
+                  isAuthenticated={isLogin}
+                  Component={<AuthPages.Register />}
+                />
+              }
+            />
+            <Route
+              path={constants.routePath.forgotPasswordPath}
+              element={
+                <PublicRoute
+                  isAuthenticated={isLogin}
+                  Component={<AuthPages.ForgotPassword />}
+                />
+              }
+            />
+            <Route
+              path={constants.routePath.verifyEmailPath}
+              element={
+                <VerifyEmailRoute
+                  isAuthenticated={isLogin}
+                  isEmailVerified={isEmailVerified}
+                  Component={<AuthPages.VerifyEmail />}
+                />
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      )}
     </>
   );
 }

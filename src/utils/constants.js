@@ -46,6 +46,12 @@ const imageType = ["image/png", "image/jpeg"];
 
 const list4 = [0, 1, 2, 3];
 
+const storageType = {
+  rfToken: "refreshToken",
+  acToken: "accessToken",
+  userId: "user-id",
+};
+
 export {
   tabs,
   optionsChatList,
@@ -54,4 +60,5 @@ export {
   imageType,
   list4,
   routePath,
+  storageType,
 };

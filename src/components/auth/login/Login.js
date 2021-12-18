@@ -11,9 +11,9 @@ import { googleLogo } from "../../../assets/imgs";
 import { InputPassword } from "../../utils";
 import { schemas, constants } from "../../../utils";
 import { thisUserAction } from "../../../features";
-// import { login } from "../../../features/thisUser";
+import { storage } from "../../../utils";
 
-import { thisUserData } from "../../../utils/fakeData";
+import { thisUserData, tokens } from "../../../utils/fakeData";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,6 +28,9 @@ export default function Login() {
 
   const onSubmit = (data) => {
     // get data (user + accessToken) from backend
+    storage.userIdStorage.set(thisUserData.id);
+    storage.acTokenStorage.set(tokens.access);
+    storage.rfTokenStorage.set(tokens.refresh);
     dispatch(thisUserAction.login({ ...thisUserData }));
   };
 

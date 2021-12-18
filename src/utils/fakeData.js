@@ -1,3 +1,25 @@
+const tokens = {
+  access: {
+    token: "access-token",
+    expires: "2021-12-17T18:30:00.000Z",
+  },
+  refresh: {
+    token: "refresh-token",
+    expires: "2021-12-19T18:30:00.000Z",
+  },
+};
+
+const newTokens = {
+  access: {
+    token: "new-access-token",
+    expires: "2021-12-19T18:30:00.000Z",
+  },
+  refresh: {
+    token: "new-refresh-token",
+    expires: "2022-12-15T18:30:00.000Z",
+  },
+};
+
 const usersData = [
   {
     id: 0,
@@ -417,7 +439,17 @@ const chatInfoFilesData = [
   },
 ];
 
+const fakeDelay = async (x) => {
+  return new Promise((resolve) => {
+    setTimeout(function () {
+      resolve(x);
+    }, 5000);
+  });
+};
+
 export {
+  tokens,
+  newTokens,
   usersData,
   thisUserData,
   thisUserDetailData,
@@ -427,4 +459,5 @@ export {
   chatInfoFilesData,
   otherUserDetailData,
   otherUserData,
+  fakeDelay,
 };

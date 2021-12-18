@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/sidebar.css";
 
-import { constants } from "../../utils";
+import { constants, storage } from "../../utils";
 import { thisUserAction } from "../../features";
 
 export default function Sidebar({
@@ -44,6 +44,7 @@ export default function Sidebar({
   };
 
   const handleLogout = () => {
+    storage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };
 

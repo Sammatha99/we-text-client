@@ -31,4 +31,12 @@ const getChatroomsId = function (chatrooms) {
   return ids;
 };
 
-export { chatRoomStatus, formatChatroom, getChatroomsId };
+const dateCompare = function (d1, d2) {
+  const d1Convert = typeof d1 === "string" ? Date.parse(d1) : d1;
+  const d2Convert = typeof d2 === "string" ? Date.parse(d2) : d2;
+  if (d1Convert < d2Convert) return -1; // d1 sớm hơn d2
+  if (d1Convert === d2Convert) return 0; // d1 === d2
+  if (d1Convert > d2Convert) return 1; // d1 trễ hơn d2
+};
+
+export { chatRoomStatus, formatChatroom, getChatroomsId, dateCompare };

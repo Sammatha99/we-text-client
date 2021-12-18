@@ -36,7 +36,6 @@ export default function VerifyEmail() {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     // handle backend call
     dispatch(thisUserAction.verifyEmail(true));
   };

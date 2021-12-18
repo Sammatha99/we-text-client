@@ -53,6 +53,9 @@ const LoadingOTPVerifyEmail = () => (
   </label>
 );
 
+// TODO 1 create UI loading app
+const LoadingApp = () => <>loading App</>;
+
 export {
   LoadingContacts,
   LoadingChats,
@@ -60,4 +63,5 @@ export {
   LoadingThisUserProfileLeftPanel,
   LoadingThisUserProfileRightPanel,
   LoadingOTPVerifyEmail,
+  LoadingApp,
 };

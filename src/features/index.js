@@ -1,9 +1,6 @@
 export { default as thisUserReducer } from "./thisUser";
 export * as thisUserAction from "./thisUser";
 
-export { default as tokenReducer } from "./token";
-export * as tokenAction from "./token";
-
 export { default as featuresReducer } from "./features";
 export * as featuresAction from "./features";
 

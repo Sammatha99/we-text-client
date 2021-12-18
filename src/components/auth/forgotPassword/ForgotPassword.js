@@ -18,7 +18,6 @@ export default function ForgotPassword() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     // handle send new password - backend
     handleNavigateLogin();
   };

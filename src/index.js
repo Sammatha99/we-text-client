@@ -14,15 +14,14 @@ import "./style/base/tooltip.css";
 
 import {
   thisUserReducer,
-  tokenReducer,
   chatroomsReducer,
   thisUserDetailReducer,
 } from "./features";
 import App from "./App";
 
 /**
- * redux: store
- * - // TODO 1 refreshtoken:lưu trong localstorage
+ * - // TODO 2 connect to backend
+ * redux: store structure
  * REDUCER features
  * - openRightPanel: boolean (isOpen) ---> constants ????
  * - selectedChatroom: chatroomId
@@ -31,8 +30,6 @@ import App from "./App";
  * - chatrooms: [chatrooms]
  * REDUCER thisUser
  * - thisUser: user
- * REDUCER tokens
- * - token {string + hsd}
  * REDUCER thisUserDetail
  * - thisUserDetail: userDetail
  *            + followers [id - string]
@@ -44,7 +41,6 @@ import App from "./App";
 const store = configureStore({
   reducer: {
     thisUser: thisUserReducer,
-    token: tokenReducer,
     chatrooms: chatroomsReducer,
     thisUserDetail: thisUserDetailReducer,
   },
