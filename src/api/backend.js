@@ -1,8 +1,8 @@
 import axios from "axios";
-import url from "./constants";
 
 import { storage, utilFunction } from "../utils";
-import { newTokens, fakeDelay } from "../utils/fakeData";
+
+const url = "http://localhost:3000/v1";
 
 const backendWithoutAuth = axios.create({
   baseURL: url,
@@ -14,11 +14,10 @@ const backendWithoutAuth = axios.create({
 });
 
 const getNewAccessToken = async () => {
-  // TODO fix lai
-  // const res = await backendWithoutAuth.post("/refresh-tokens", {
-  //   refreshToken: storage.rfTokenStorage.get(),
-  // });
-  const res = { data: await fakeDelay(newTokens) };
+  const res = await backendWithoutAuth.post("/auth/refresh-tokens", {
+    refreshToken: storage.rfTokenStorage.get().token,
+  });
+  console.log("get new tokens: ", res);
   storage.acTokenStorage.set(res.data.access);
   storage.rfTokenStorage.set(res.data.refresh);
 };
@@ -35,7 +34,7 @@ const backendWithAuth = async () => {
         baseURL: url,
         timeout: 5000000,
         headers: {
-          Authorization: "Bearer Token" + acToken.token,
+          Authorization: "Bearer " + acToken.token,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         },
@@ -47,12 +46,13 @@ const backendWithAuth = async () => {
         isExpire = utilFunction.dateCompare(today, rfToken.expires);
         if (isExpire === -1) {
           // get new accesstoken
+          console.log("Access Token hết hạn, Refresh token còn hạn");
           await getNewAccessToken();
           return axios.create({
             baseURL: url,
             timeout: 5000000,
             headers: {
-              Authorization: "Bearer Token" + acToken.token,
+              Authorization: "Bearer " + acToken.token,
               "Access-Control-Allow-Origin": "*",
               "Access-Control-Allow-Methods":
                 "GET,PUT,POST,DELETE,PATCH,OPTIONS",

@@ -123,6 +123,14 @@
   color: var(--primary-light-color);
   font-weight: var(--font-weight-bold);
 }
+.auth__timer {
+  color: var(--text-light-color);
+  font-size: var(--font-size-5);
+  font-weight: var(--font-weight-light);
+  text-align: center;
+  margin: var(--spacing-3) 0;
+}
+
 /* loading  */
 .auth-form__label.loading {
   width: 100%;

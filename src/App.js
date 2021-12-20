@@ -45,9 +45,7 @@ import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
 import { thisUserAction } from "./features";
 import { backendWithAuth } from "./api/backend";
-import { LoadingComponent } from "./components/utils";
-
-import { thisUserData } from "./utils/fakeData";
+import { catchError, LoadingComponent } from "./components/utils";
 
 library.add(
   fab,
@@ -100,14 +98,21 @@ function App() {
   useEffect(() => {
     async function loadApp() {
       const userId = storage.userIdStorage.get();
-      if (userId != null) {
-        const axios = await backendWithAuth();
-        if (axios != null) {
-          dispatch(thisUserAction.login(thisUserData));
-        } else {
-          thisUserAction.logout();
+
+      try {
+        if (userId != null) {
+          const axios = await backendWithAuth();
+          if (axios != null) {
+            const res = await axios.get(`/users/${userId}`);
+            dispatch(thisUserAction.login(res.data));
+          } else {
+            thisUserAction.logout();
+          }
         }
+      } catch (err) {
+        catchError(err);
       }
+
       setLoading(false);
     }
     loadApp();

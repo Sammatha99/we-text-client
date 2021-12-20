@@ -8,6 +8,7 @@ import "../../style/sidebar.css";
 
 import { constants, storage } from "../../utils";
 import { thisUserAction } from "../../features";
+import { backendWithoutAuth } from "../../api/backend";
 
 export default function Sidebar({
   setSelectedTab,
@@ -43,7 +44,10 @@ export default function Sidebar({
     setSelectedTab(name);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await backendWithoutAuth.post("/auth/logout", {
+      refreshToken: storage.rfTokenStorage.get().token,
+    });
     storage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };

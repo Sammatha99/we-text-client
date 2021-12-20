@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../../../style/auth.css";
 
-import { LoadingComponent } from "../../utils";
-import { schemas } from "../../../utils";
+import { LoadingComponent, swal, catchError, Timer } from "../../utils";
+import { schemas, constants } from "../../../utils";
 import { thisUserAction } from "../../../features";
+import { backendWithoutAuth } from "../../../api/backend";
 
 export default function VerifyEmail() {
   const dispatch = useDispatch();
+  const thisUser = useSelector((state) => state.thisUser.value);
   const {
     register,
     handleSubmit,
@@ -21,27 +23,69 @@ export default function VerifyEmail() {
 
   const [loading, setLoading] = useState(false);
   const [sended, setSended] = useState(false);
+  const [timeOut, setTimeOut] = useState(null);
 
-  const handleResendOTP = () => {
-    setLoading(true);
+  const handleResendOTP = async () => {
     // handle resend otp
-    setTimeout(() => setLoading(false), 3000);
+    setTimeOut(null);
+    try {
+      swal.showLoadingSwal();
+      await backendWithoutAuth.post("/auth/send-verification-email", {
+        email: thisUser.email,
+        id: thisUser.id,
+      });
+      swal.closeSwal();
+      swal.showSuccessSwal("Sent successfully, please check your mailbox");
+      setTimeOut(false);
+    } catch (err) {
+      catchError(err);
+    }
+    setLoading(false);
   };
 
-  const handleSendOTP = () => {
+  const handleSendOTP = async () => {
+    // handle send otp
     setLoading(true);
-    // handle send otp to email
-    setSended(true);
-    setTimeout(() => setLoading(false), 3000);
+    try {
+      await backendWithoutAuth.post("/auth/send-verification-email", {
+        email: thisUser.email,
+        id: thisUser.id,
+      });
+      swal.showSuccessSwal("Sent successfully, please check your mailbox");
+      setSended(true);
+      setTimeOut(false);
+    } catch (err) {
+      catchError(err);
+    }
+    setLoading(false);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // handle backend call
-    dispatch(thisUserAction.verifyEmail(true));
+    try {
+      setTimeOut(null);
+      swal.showLoadingSwal();
+      await backendWithoutAuth.post("/auth/verify-email", {
+        ...data,
+        id: thisUser.id,
+      });
+      swal.closeSwal();
+      swal.showSuccessSwal("Verify email successfully");
+      dispatch(thisUserAction.verifyEmail(true));
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const FormOTP = () => (
     <>
+      {timeOut === false && (
+        <Timer
+          startTime={constants.OTPStartTime}
+          handleTimeOut={setTimeOut}
+          classes="auth__timer"
+        />
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
         <label className="auth-form__label" htmlFor="verify-email-otp">
           OTP
@@ -52,7 +96,13 @@ export default function VerifyEmail() {
           id="verify-email-otp"
           type="text"
           placeholder="Enter otp here ..."
+          disabled={timeOut} // timeOut true => hết thời gian
         />
+        {timeOut && (
+          <p className="auth__error-message">
+            OTP time out, resend to get new one{" "}
+          </p>
+        )}
         {errors.otp && (
           <p className="auth__error-message">{errors.otp.message}</p>
         )}

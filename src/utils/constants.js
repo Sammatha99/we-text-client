@@ -52,6 +52,8 @@ const storageType = {
   userId: "user-id",
 };
 
+const OTPStartTime = 60 * 5;
+
 export {
   tabs,
   optionsChatList,
@@ -61,4 +63,5 @@ export {
   list4,
   routePath,
   storageType,
+  OTPStartTime,
 };

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { loadingGif } from "../../assets/imgs";
+
 import { UserCard, ChatCard } from ".";
 import { list4 } from "../../utils/constants";
 
@@ -53,8 +55,18 @@ const LoadingOTPVerifyEmail = () => (
   </label>
 );
 
-// TODO 1 create UI loading app
-const LoadingApp = () => <>loading App</>;
+const LoadingApp = () => (
+  <div className="background center background--white">
+    <div
+      className="background__img"
+      style={{ backgroundImage: `url(${loadingGif})` }}
+    ></div>
+    <p className="background__header background__header--medium">
+      welcome to wetext
+    </p>
+    <p className="background__text">Please wait a moment</p>
+  </div>
+);
 
 export {
   LoadingContacts,

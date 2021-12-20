@@ -11,7 +11,9 @@ export default function Background() {
         src={backgroundImage}
         alt="background dashboard"
       />
-      <p className="background__header">welcome to wetext</p>
+      <p className="background__header background__header--medium">
+        welcome to wetext
+      </p>
       <p className="background__text">
         Try to search your friend through email or name
       </p>

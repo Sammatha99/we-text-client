@@ -8,12 +8,12 @@ import { useDispatch } from "react-redux";
 import { googleLogo } from "../../../assets/imgs";
 import "../../../style/auth.css";
 
-import { InputPassword } from "../../utils";
-import { schemas, constants } from "../../../utils";
+import { InputPassword, swal, catchError } from "../../utils";
+import { schemas, constants, storage } from "../../../utils";
 import { thisUserAction } from "../../../features";
-// import { login } from "../../../features/thisUser";
+import { backendWithoutAuth } from "../../../api/backend";
 
-import { thisUserData } from "../../../utils/fakeData";
+// TODO 1: forgot password
 
 export default function Register() {
   const navigate = useNavigate();
@@ -26,8 +26,20 @@ export default function Register() {
     resolver: yupResolver(schemas.registerSchema),
   });
 
-  const onSubmit = (data) => {
-    dispatch(thisUserAction.login({ ...thisUserData }));
+  // backend: register -> sendEmailVerify
+  const onSubmit = async (data) => {
+    try {
+      swal.showLoadingSwal();
+      delete data.confirmPassword;
+      const resRegister = await backendWithoutAuth.post("/auth/register", data);
+      storage.userIdStorage.set(resRegister.data.user.id);
+      storage.acTokenStorage.set(resRegister.data.tokens.access);
+      storage.rfTokenStorage.set(resRegister.data.tokens.refresh);
+      swal.closeSwal();
+      dispatch(thisUserAction.login(resRegister.data.user));
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const handleNavigateLogin = () => navigate(constants.routePath.loginPath);

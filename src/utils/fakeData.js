@@ -443,7 +443,7 @@ const fakeDelay = async (x) => {
   return new Promise((resolve) => {
     setTimeout(function () {
       resolve(x);
-    }, 5000);
+    }, 3000);
   });
 };
 

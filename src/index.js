@@ -20,7 +20,6 @@ import {
 import App from "./App";
 
 /**
- * - // TODO 2 connect to backend
  * redux: store structure
  * REDUCER features
  * - openRightPanel: boolean (isOpen) ---> constants ????

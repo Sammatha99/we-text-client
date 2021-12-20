@@ -8,12 +8,10 @@ import { useDispatch } from "react-redux";
 import "../../../style/auth.css";
 import { googleLogo } from "../../../assets/imgs";
 
-import { InputPassword } from "../../utils";
-import { schemas, constants } from "../../../utils";
+import { InputPassword, swal, catchError } from "../../utils";
+import { schemas, constants, storage } from "../../../utils";
 import { thisUserAction } from "../../../features";
-import { storage } from "../../../utils";
-
-import { thisUserData, tokens } from "../../../utils/fakeData";
+import { backendWithoutAuth } from "../../../api/backend";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,12 +24,18 @@ export default function Login() {
     resolver: yupResolver(schemas.loginSchema),
   });
 
-  const onSubmit = (data) => {
-    // get data (user + accessToken) from backend
-    storage.userIdStorage.set(thisUserData.id);
-    storage.acTokenStorage.set(tokens.access);
-    storage.rfTokenStorage.set(tokens.refresh);
-    dispatch(thisUserAction.login({ ...thisUserData }));
+  const onSubmit = async (data) => {
+    try {
+      swal.showLoadingSwal();
+      const res = await backendWithoutAuth.post("/auth/login", data);
+      storage.userIdStorage.set(res.data.user.id);
+      storage.acTokenStorage.set(res.data.tokens.access);
+      storage.rfTokenStorage.set(res.data.tokens.refresh);
+      swal.closeSwal();
+      dispatch(thisUserAction.login(res.data.user));
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const handleNavigateRegister = () =>
