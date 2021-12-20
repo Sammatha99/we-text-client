@@ -13,8 +13,6 @@ import { schemas, constants, storage } from "../../../utils";
 import { thisUserAction } from "../../../features";
 import { backendWithoutAuth } from "../../../api/backend";
 
-// TODO 1: forgot password
-
 export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

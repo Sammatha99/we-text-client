@@ -131,6 +131,14 @@
   margin: var(--spacing-3) 0;
 }
 
+.auth__btn--right {
+  width: 100%;
+}
+
+.auth__btn--right .btn {
+  margin-left: auto;
+}
+
 /* loading  */
 .auth-form__label.loading {
   width: 100%;

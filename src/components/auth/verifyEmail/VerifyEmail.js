@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../../../style/auth.css";
 
 import { LoadingComponent, swal, catchError, Timer } from "../../utils";
-import { schemas, constants } from "../../../utils";
+import { schemas, constants, storage } from "../../../utils";
 import { thisUserAction } from "../../../features";
 import { backendWithoutAuth } from "../../../api/backend";
 
@@ -77,6 +77,11 @@ export default function VerifyEmail() {
     }
   };
 
+  const handleLogout = () => {
+    storage.storage.removeAll();
+    dispatch(thisUserAction.logout());
+  };
+
   const FormOTP = () => (
     <>
       {timeOut === false && (
@@ -123,6 +128,7 @@ export default function VerifyEmail() {
     <div className="auth-background center">
       <div className="auth-wrapper auth-wrapper--small center">
         <p className="text--header text--primary">Verify email</p>
+        <p className="text--small">Email: {thisUser.email}</p>
         {loading ? (
           LoadingComponent.LoadingOTPVerifyEmail()
         ) : sended ? (
@@ -135,6 +141,12 @@ export default function VerifyEmail() {
             Send OTP
           </button>
         )}
+        <button
+          onClick={handleLogout}
+          className="btn btn--medium  auth__submit-btn"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

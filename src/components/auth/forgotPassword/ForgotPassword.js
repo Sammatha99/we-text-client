@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 import "../../../style/auth.css";
 
+import { swal, catchError } from "../../utils";
 import { schemas, constants } from "../../../utils";
+import { backendWithoutAuth } from "../../../api/backend";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -17,9 +19,19 @@ export default function ForgotPassword() {
     resolver: yupResolver(schemas.forgotPasswordSchema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // handle send new password - backend
-    handleNavigateLogin();
+    try {
+      swal.showLoadingSwal();
+      await backendWithoutAuth.post("/auth/forgot-password", data);
+      swal.closeSwal();
+      swal.showSuccessSwal(
+        "New password sent successfully, please check your mailbox"
+      );
+      handleNavigateLogin();
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const handleNavigateLogin = () => {

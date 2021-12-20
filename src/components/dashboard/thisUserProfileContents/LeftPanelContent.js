@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
 
 import { ChangeAvatarModal } from "../../modals";
-import { LoadingComponent, InputPassword } from "../../utils";
+import { LoadingComponent, InputPassword, swal, catchError } from "../../utils";
 import { schemas } from "../../../utils";
-
-import { thisUserData } from "../../../utils/fakeData";
+import { backendWithoutAuth } from "../../../api/backend";
 
 export default function LeftPanelContent() {
-  const [user, setUser] = useState(null);
   const [edit, setEdit] = useState(null);
+  const thisUser = useSelector((state) => state.thisUser.value);
   const [avatarModal, setAvatarModal] = useState(false);
 
   const {
@@ -21,7 +21,7 @@ export default function LeftPanelContent() {
     formState: { errors: nameErrors },
   } = useForm({
     resolver: yupResolver(schemas.userNameSchema),
-    defaultValues: { name: "" },
+    defaultValues: { name: thisUser.name },
   });
 
   const {
@@ -31,7 +31,7 @@ export default function LeftPanelContent() {
     formState: { errors: emailErrors },
   } = useForm({
     resolver: yupResolver(schemas.userEmailSchema),
-    defaultValues: { email: "" },
+    defaultValues: { email: thisUser.email },
   });
 
   const {
@@ -47,17 +47,6 @@ export default function LeftPanelContent() {
     },
   });
 
-  useEffect(() => {
-    const getUser = JSON.parse(JSON.stringify(thisUserData));
-    nameReset({ name: getUser.name });
-    emailReset({ email: getUser.email });
-
-    setUser(getUser);
-
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const onNameSubmit = (data) => {
     console.log(data);
     setEdit(null);
@@ -68,8 +57,17 @@ export default function LeftPanelContent() {
     setEdit(null);
   };
 
-  const onPasswordSubmit = (data) => {
-    console.log(data);
+  const onPasswordSubmit = async (data) => {
+    try {
+      swal.showLoadingSwal();
+      Object.assign(data, { id: thisUser.id });
+      await backendWithoutAuth.post("/auth/reset-password", data);
+      swal.closeSwal();
+      swal.showSuccessSwal();
+    } catch (err) {
+      catchError(err);
+    }
+    passwordReset({ password: "", newPassword: "" });
     setEdit(null);
   };
 
@@ -82,11 +80,11 @@ export default function LeftPanelContent() {
     e.preventDefault();
     switch (edit) {
       case "name":
-        nameReset({ name: user.name });
+        nameReset({ name: thisUser.name });
         setEdit(null);
         break;
       case "email":
-        emailReset({ email: user.email });
+        emailReset({ email: thisUser.email });
         setEdit(null);
         break;
       case "password":
@@ -98,11 +96,11 @@ export default function LeftPanelContent() {
     }
   };
 
-  if (user)
+  if (thisUser)
     return (
       <div className="thisUser--panel-left">
         <div className="avatar avatar--big">
-          <img src={user.avatar} alt={user.name} />
+          <img src={thisUser.avatar} alt={thisUser.name} />
           <div
             onClick={() => setAvatarModal((prev) => !prev)}
             className="thisUser__camera-icon center"
@@ -155,7 +153,7 @@ export default function LeftPanelContent() {
                 readOnly
                 className="thisUser__input text--medium text--center"
                 type="text"
-                value={`${user.name}`}
+                value={`${thisUser.name}`}
               />
             </div>
           )}
@@ -201,7 +199,7 @@ export default function LeftPanelContent() {
                 readOnly
                 className="thisUser__input"
                 type="text"
-                value={user.email}
+                value={thisUser.email}
               />
             </div>
           )}
