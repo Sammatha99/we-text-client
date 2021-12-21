@@ -40,7 +40,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { constants, storage } from "./utils";
+import { constants, localStorage } from "./utils";
 import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
 import { thisUserAction } from "./features";
@@ -97,7 +97,7 @@ function App() {
 
   useEffect(() => {
     async function loadApp() {
-      const userId = storage.userIdStorage.get();
+      const userId = localStorage.userIdStorage.get();
 
       try {
         if (userId != null) {

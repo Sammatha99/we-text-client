@@ -9,6 +9,7 @@ import { schemas } from "../../../utils";
 import { thisUserDetailData } from "../../../utils/fakeData";
 
 export default function AboutContent() {
+  // TODO 2: update user detail
   const [edit, setEdit] = useState(false);
   const [userDetail, setUserDetail] = useState({ email: "", firstname: "" });
   const {

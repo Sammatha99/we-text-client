@@ -9,7 +9,7 @@ import "../../../style/auth.css";
 import { googleLogo } from "../../../assets/imgs";
 
 import { InputPassword, swal, catchError } from "../../utils";
-import { schemas, constants, storage } from "../../../utils";
+import { schemas, constants, localStorage } from "../../../utils";
 import { thisUserAction } from "../../../features";
 import { backendWithoutAuth } from "../../../api/backend";
 
@@ -28,9 +28,9 @@ export default function Login() {
     try {
       swal.showLoadingSwal();
       const res = await backendWithoutAuth.post("/auth/login", data);
-      storage.userIdStorage.set(res.data.user.id);
-      storage.acTokenStorage.set(res.data.tokens.access);
-      storage.rfTokenStorage.set(res.data.tokens.refresh);
+      localStorage.userIdStorage.set(res.data.user.id);
+      localStorage.acTokenStorage.set(res.data.tokens.access);
+      localStorage.rfTokenStorage.set(res.data.tokens.refresh);
       swal.closeSwal();
       dispatch(thisUserAction.login(res.data.user));
     } catch (err) {

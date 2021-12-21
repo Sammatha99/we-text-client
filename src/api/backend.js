@@ -1,6 +1,8 @@
 import axios from "axios";
 
-import { storage, utilFunction } from "../utils";
+import { swal } from "../components/utils";
+
+import { localStorage, utilFunction } from "../utils";
 
 const url = "http://localhost:3000/v1";
 
@@ -15,15 +17,15 @@ const backendWithoutAuth = axios.create({
 
 const getNewAccessToken = async () => {
   const res = await backendWithoutAuth.post("/auth/refresh-tokens", {
-    refreshToken: storage.rfTokenStorage.get().token,
+    refreshToken: localStorage.rfTokenStorage.get().token,
   });
   console.log("get new tokens: ", res);
-  storage.acTokenStorage.set(res.data.access);
-  storage.rfTokenStorage.set(res.data.refresh);
+  localStorage.acTokenStorage.set(res.data.access);
+  localStorage.rfTokenStorage.set(res.data.refresh);
 };
 
 const backendWithAuth = async () => {
-  const acToken = storage.acTokenStorage.get(); // {token, expires}
+  const acToken = localStorage.acTokenStorage.get(); // {token, expires}
   const today = Date.now() + 5000;
   let isExpire;
   if (acToken.token) {
@@ -41,7 +43,7 @@ const backendWithAuth = async () => {
       });
     } else {
       // access token hết hạn
-      const rfToken = storage.rfTokenStorage.get();
+      const rfToken = localStorage.rfTokenStorage.get();
       if (rfToken.token) {
         isExpire = utilFunction.dateCompare(today, rfToken.expires);
         if (isExpire === -1) {
@@ -59,7 +61,12 @@ const backendWithAuth = async () => {
             },
           });
         } else {
-          alert("End of session, please login again");
+          // send backend logout and remove all localstorage
+          await backendWithoutAuth.post("/auth/logout", {
+            refreshToken: localStorage.rfTokenStorage.get().token,
+          });
+          localStorage.storage.removeAll();
+          swal.showWarningSwal("End of session, please login again");
         }
       }
     }

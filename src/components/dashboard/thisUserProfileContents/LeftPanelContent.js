@@ -2,16 +2,19 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { ChangeAvatarModal } from "../../modals";
 import { LoadingComponent, InputPassword, swal, catchError } from "../../utils";
 import { schemas } from "../../../utils";
-import { backendWithoutAuth } from "../../../api/backend";
+import { thisUserAction } from "../../../features";
+import { backendWithoutAuth, backendWithAuth } from "../../../api/backend";
 
 export default function LeftPanelContent() {
-  const [edit, setEdit] = useState(null);
   const thisUser = useSelector((state) => state.thisUser.value);
+  const dispatch = useDispatch();
+  const [edit, setEdit] = useState(null);
   const [avatarModal, setAvatarModal] = useState(false);
 
   const {
@@ -21,7 +24,9 @@ export default function LeftPanelContent() {
     formState: { errors: nameErrors },
   } = useForm({
     resolver: yupResolver(schemas.userNameSchema),
-    defaultValues: { name: thisUser.name },
+    defaultValues: {
+      name: thisUser.name,
+    },
   });
 
   const {
@@ -47,13 +52,42 @@ export default function LeftPanelContent() {
     },
   });
 
-  const onNameSubmit = (data) => {
-    console.log(data);
+  const onNameSubmit = async (data) => {
+    try {
+      swal.showLoadingSwal();
+      const axios = await backendWithAuth();
+      if (axios != null) {
+        await axios.patch(`/users/${thisUser.id}`, data);
+        dispatch(thisUserAction.update(data));
+        swal.closeSwal();
+        swal.showSuccessSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+        swal.closeSwal();
+      }
+    } catch (err) {
+      catchError(err);
+    }
     setEdit(null);
   };
 
-  const onEmailSubmit = (data) => {
-    console.log(data);
+  const onEmailSubmit = async (data) => {
+    // TODO 1.2: change email
+    try {
+      swal.showLoadingSwal();
+
+      const res = await backendWithoutAuth.post(`/auth/update-email`, {
+        userId: thisUser.id,
+        ...data,
+      });
+      delete res.data.role;
+      dispatch(thisUserAction.update(res.data));
+
+      swal.closeSwal();
+      swal.showSuccessSwal();
+    } catch (err) {
+      catchError(err);
+    }
     setEdit(null);
   };
 
@@ -71,8 +105,36 @@ export default function LeftPanelContent() {
     setEdit(null);
   };
 
-  const onAvatarSubmit = (avatar) => {
-    console.log(avatar);
+  const onAvatarSubmit = async (avatar) => {
+    // TODO 1.3 update avatar
+    if (avatar == null) return;
+
+    try {
+      swal.showLoadingSwal();
+
+      // upload file to firebase
+      const type = avatar.url.type.split("/").pop();
+      const avatarPath = `userAvatars/${thisUser.id}.${type}`;
+      const avatarRef = ref(getStorage(), avatarPath);
+      await uploadBytes(avatarRef, avatar.url);
+
+      // get the url after upload
+      const url = await getDownloadURL(avatarRef);
+
+      // update user in backend db
+      const axios = await backendWithAuth();
+      if (axios != null) {
+        await axios.patch(`/users/${thisUser.id}`, { avatar: url });
+        dispatch(thisUserAction.update({ avatar: url }));
+        swal.closeSwal();
+        swal.showSuccessSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+        swal.closeSwal();
+      }
+    } catch (err) {
+      catchError(err);
+    }
     setAvatarModal(false);
   };
 

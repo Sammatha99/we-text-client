@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/sidebar.css";
 
-import { constants, storage } from "../../utils";
+import { constants, localStorage } from "../../utils";
 import { thisUserAction } from "../../features";
 import { backendWithoutAuth } from "../../api/backend";
 
@@ -46,9 +46,9 @@ export default function Sidebar({
 
   const handleLogout = async () => {
     await backendWithoutAuth.post("/auth/logout", {
-      refreshToken: storage.rfTokenStorage.get().token,
+      refreshToken: localStorage.rfTokenStorage.get().token,
     });
-    storage.storage.removeAll();
+    localStorage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };
 
