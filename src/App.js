@@ -44,7 +44,7 @@ import { constants, localStorage } from "./utils";
 import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
 import { thisUserAction } from "./features";
-import { backendWithAuth } from "./api/backend";
+import { backendWithoutAuth } from "./api/backend";
 import { catchError, LoadingComponent } from "./components/utils";
 
 library.add(
@@ -101,13 +101,8 @@ function App() {
 
       try {
         if (userId != null) {
-          const axios = await backendWithAuth();
-          if (axios != null) {
-            const res = await axios.get(`/users/${userId}`);
-            dispatch(thisUserAction.login(res.data));
-          } else {
-            thisUserAction.logout();
-          }
+          const res = await backendWithoutAuth.get(`/users/${userId}`);
+          dispatch(thisUserAction.login(res.data));
         }
       } catch (err) {
         catchError(err);

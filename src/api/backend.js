@@ -25,7 +25,7 @@ const getNewAccessToken = async () => {
 };
 
 const backendWithAuth = async () => {
-  const acToken = localStorage.acTokenStorage.get(); // {token, expires}
+  let acToken = localStorage.acTokenStorage.get(); // {token, expires}
   const today = Date.now() + 5000;
   let isExpire;
   if (acToken.token) {
@@ -55,6 +55,7 @@ const backendWithAuth = async () => {
           // get new accesstoken
           console.log("Access Token hết hạn, Refresh token còn hạn");
           await getNewAccessToken();
+          acToken = localStorage.acTokenStorage.get();
           return axios.create({
             baseURL: url,
             timeout: 5000000,

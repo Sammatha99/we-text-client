@@ -29,7 +29,6 @@ export default function ThisUserProfile() {
     async function getUserDetail() {
       try {
         const res = await backendWithoutAuth.get(`/userDetails/${thisUser.id}`);
-        console.log(res.data);
         dispatch(thisUserDetailAction.set(res.data));
         setSelectedTab(0);
       } catch (err) {

@@ -3,14 +3,15 @@ import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { catchError } from "../../utils";
-import { schemas } from "../../../utils";
-import { thisUserDetailAction } from "../../../features";
+import { catchError, swal } from "../../utils";
+import { schemas, utilFunction } from "../../../utils";
+import { thisUserDetailAction, thisUserAction } from "../../../features";
 import { backendWithAuth } from "../../../api/backend";
 
 export default function AboutContent() {
+  const dispatch = useDispatch();
   const thisUserDetail = useSelector((state) => state.thisUserDetail.value);
   const [edit, setEdit] = useState(false);
   const {
@@ -33,13 +34,37 @@ export default function AboutContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     // remove undifined/null data
     const dataToSend = Object.keys(data)
       .filter((k) => data[k] != null)
       .reduce((a, k) => ({ ...a, [k]: data[k] }), {});
-    // handle backend and redux store update
-    console.log(dataToSend);
+
+    // only send if dataToSend not empty obj
+    if (!utilFunction.isEmltyObject(dataToSend)) {
+      try {
+        swal.showLoadingSwal();
+
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserDetail.id}`, dataToSend);
+          dispatch(thisUserDetailAction.update(dataToSend));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+
+        swal.closeSwal();
+        swal.showSuccessSwal();
+      } catch (err) {
+        catchError(err);
+        const getUserDetail = {
+          phoneNumber: thisUserDetail.phoneNumber,
+          address: thisUserDetail.address,
+          description: thisUserDetail.description,
+        };
+        reset(getUserDetail);
+      }
+    }
     setEdit(false);
   };
 

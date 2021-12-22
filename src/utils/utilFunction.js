@@ -39,4 +39,15 @@ const dateCompare = function (d1, d2) {
   if (d1Convert > d2Convert) return 1; // d1 trễ hơn d2
 };
 
-export { chatRoomStatus, formatChatroom, getChatroomsId, dateCompare };
+const isEmltyObject = (obj) =>
+  obj &&
+  Object.keys(obj).length === 0 &&
+  Object.getPrototypeOf(obj) === Object.prototype;
+
+export {
+  chatRoomStatus,
+  formatChatroom,
+  getChatroomsId,
+  dateCompare,
+  isEmltyObject,
+};

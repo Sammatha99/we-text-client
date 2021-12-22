@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // const thisUserDetailInit = {
+//   id: "",
 //   description: "",
 //   address: "",
 //   phoneNumber: "",
