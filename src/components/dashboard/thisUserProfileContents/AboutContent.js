@@ -3,15 +3,16 @@ import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
 
+import { catchError } from "../../utils";
 import { schemas } from "../../../utils";
-
-import { thisUserDetailData } from "../../../utils/fakeData";
+import { thisUserDetailAction } from "../../../features";
+import { backendWithAuth } from "../../../api/backend";
 
 export default function AboutContent() {
-  // TODO 2: update user detail
+  const thisUserDetail = useSelector((state) => state.thisUserDetail.value);
   const [edit, setEdit] = useState(false);
-  const [userDetail, setUserDetail] = useState({ email: "", firstname: "" });
   const {
     register,
     handleSubmit,
@@ -19,22 +20,26 @@ export default function AboutContent() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemas.userDetailSchema),
-    defaultValues: userDetail,
+    defaultValues: {},
   });
 
   useEffect(() => {
     const getUserDetail = {
-      phoneNumber: thisUserDetailData.phoneNumber || "",
-      address: thisUserDetailData.address || "",
-      description: thisUserDetailData.description || "",
+      phoneNumber: thisUserDetail.phoneNumber,
+      address: thisUserDetail.address,
+      description: thisUserDetail.description,
     };
-    setUserDetail(getUserDetail);
     reset(getUserDetail);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reset]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    setUserDetail(data);
+    // remove undifined/null data
+    const dataToSend = Object.keys(data)
+      .filter((k) => data[k] != null)
+      .reduce((a, k) => ({ ...a, [k]: data[k] }), {});
+    // handle backend and redux store update
+    console.log(dataToSend);
     setEdit(false);
   };
 
@@ -45,7 +50,12 @@ export default function AboutContent() {
 
   const handleCancelBtnClick = (e) => {
     e.preventDefault();
-    reset(userDetail);
+    const getUserDetail = {
+      phoneNumber: thisUserDetail.phoneNumber,
+      address: thisUserDetail.address,
+      description: thisUserDetail.description,
+    };
+    reset(getUserDetail);
     setEdit(false);
   };
 
@@ -70,10 +80,10 @@ export default function AboutContent() {
             placeholder="description ..."
             disabled={!edit}
           />
-          {errors.description && (
-            <p className="auth__error-message">{errors.description.message}</p>
-          )}
         </div>
+        {errors.description && (
+          <p className="auth__error-message">{errors.description.message}</p>
+        )}
         <div className="thisUser__input-wrap">
           <div className="thisUser__input-icon">
             <Icon icon="phone-square-alt" />
@@ -86,10 +96,10 @@ export default function AboutContent() {
             placeholder="phone number ..."
             disabled={!edit}
           />
-          {errors.phoneNumber && (
-            <p className="auth__error-message">{errors.phoneNumber.message}</p>
-          )}
         </div>
+        {errors.phoneNumber && (
+          <p className="auth__error-message">{errors.phoneNumber.message}</p>
+        )}
         <div className="thisUser__input-wrap">
           <div className="thisUser__input-icon">
             <Icon icon="map-marker-alt" />
@@ -103,10 +113,10 @@ export default function AboutContent() {
             placeholder="address ..."
             disabled={!edit}
           />
-          {errors.address && (
-            <p className="auth__error-message">{errors.address.message}</p>
-          )}
         </div>
+        {errors.address && (
+          <p className="auth__error-message">{errors.address.message}</p>
+        )}
         <div className="thisUser__btns-wrap">
           <button
             className="btn btn--medium thisUser__btn--edit"

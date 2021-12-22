@@ -32,6 +32,7 @@ const backendWithAuth = async () => {
     isExpire = utilFunction.dateCompare(today, acToken.expires);
     if (isExpire === -1) {
       // access token còn hạn
+      console.log("access còn hạn");
       return axios.create({
         baseURL: url,
         timeout: 5000000,
@@ -43,10 +44,14 @@ const backendWithAuth = async () => {
       });
     } else {
       // access token hết hạn
+      console.log("access hết hạn");
+
       const rfToken = localStorage.rfTokenStorage.get();
       if (rfToken.token) {
         isExpire = utilFunction.dateCompare(today, rfToken.expires);
         if (isExpire === -1) {
+          console.log("refresh còn hạn");
+
           // get new accesstoken
           console.log("Access Token hết hạn, Refresh token còn hạn");
           await getNewAccessToken();
@@ -61,6 +66,8 @@ const backendWithAuth = async () => {
             },
           });
         } else {
+          console.log("logout ?");
+
           // send backend logout and remove all localstorage
           await backendWithoutAuth.post("/auth/logout", {
             refreshToken: localStorage.rfTokenStorage.get().token,

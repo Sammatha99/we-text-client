@@ -6,6 +6,7 @@ const initFeatures = {
   selectedUser: null,
 };
 
+// TODO 2
 export const featuresSlice = createSlice({
   name: "features",
   initialState: { value: initFeatures },

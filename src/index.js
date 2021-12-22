@@ -15,6 +15,7 @@ import "./style/base/tooltip.css";
 import {
   thisUserReducer,
   chatroomsReducer,
+  featuresReducer,
   thisUserDetailReducer,
 } from "./features";
 import App from "./App";
@@ -31,6 +32,7 @@ import App from "./App";
  * - thisUser: user
  * REDUCER thisUserDetail
  * - thisUserDetail: userDetail
+ *            + about: {}
  *            + followers [id - string]
  *            + followings [id - string]
  *            + contacts [id - string]
@@ -41,6 +43,7 @@ const store = configureStore({
   reducer: {
     thisUser: thisUserReducer,
     chatrooms: chatroomsReducer,
+    features: featuresReducer,
     thisUserDetail: thisUserDetailReducer,
   },
 });

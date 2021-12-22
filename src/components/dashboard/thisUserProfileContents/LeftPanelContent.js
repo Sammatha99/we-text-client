@@ -72,7 +72,6 @@ export default function LeftPanelContent() {
   };
 
   const onEmailSubmit = async (data) => {
-    // TODO 1.2: change email
     try {
       swal.showLoadingSwal();
 
@@ -106,7 +105,6 @@ export default function LeftPanelContent() {
   };
 
   const onAvatarSubmit = async (avatar) => {
-    // TODO 1.3 update avatar
     if (avatar == null) return;
 
     try {

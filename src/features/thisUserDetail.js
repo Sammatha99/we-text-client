@@ -9,6 +9,8 @@ import { createSlice } from "@reduxjs/toolkit";
 //   contacts: ['ids'],
 // };
 
+// TODO 1 : delete this
+
 export const thisUserDetailSlice = createSlice({
   name: "thisUserDetail",
   initialState: { value: null },

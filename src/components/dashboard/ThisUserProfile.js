@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
+import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/thisUserProfile.css";
 
-import { LoadingComponent } from "../utils";
+import { catchError, LoadingComponent } from "../utils";
 import {
   AboutContent,
   FollowingsContent,
@@ -11,22 +12,35 @@ import {
   LeftPanelContent,
 } from "./thisUserProfileContents";
 import { constants } from "../../utils";
-import { thisUserDetailData } from "../../utils/fakeData";
+import { thisUserDetailAction } from "../../features";
+import { backendWithoutAuth } from "../../api/backend";
 
 export default function ThisUserProfile() {
-  const [userDetail, setUserDetail] = useState(null);
+  const dispatch = useDispatch();
+  const thisUser = useSelector((state) => state.thisUser.value);
+  const thisUserDetail = useSelector((state) => state.thisUserDetail.value);
+  const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(null);
 
   const activeLine = useRef();
   const activeTab = useRef();
 
   useEffect(() => {
-    const getUserDetail = JSON.parse(JSON.stringify(thisUserDetailData));
-    setUserDetail(getUserDetail);
-    setSelectedTab(0);
+    async function getUserDetail() {
+      try {
+        const res = await backendWithoutAuth.get(`/userDetails/${thisUser.id}`);
+        console.log(res.data);
+        dispatch(thisUserDetailAction.set(res.data));
+        setSelectedTab(0);
+      } catch (err) {
+        catchError(err);
+      }
+      setLoading(false);
+    }
+    getUserDetail();
 
     return () => {};
-  }, []);
+  }, [dispatch, thisUser.id]);
 
   useEffect(() => {
     const active = activeTab.current;
@@ -94,9 +108,14 @@ export default function ThisUserProfile() {
   return (
     <div className="thisUserProfile content">
       {LeftPanelContent()}
-      {userDetail == null
-        ? LoadingComponent.LoadingThisUserProfileRightPanel()
-        : ThisUserProfilePanelRight()}
+      {loading ? (
+        LoadingComponent.LoadingThisUserProfileRightPanel()
+      ) : thisUserDetail == null ? (
+        // TODO : error page thisUserDetail
+        <>Error ? plz reload</>
+      ) : (
+        ThisUserProfilePanelRight()
+      )}
     </div>
   );
 }
