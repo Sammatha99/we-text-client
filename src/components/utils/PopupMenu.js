@@ -50,35 +50,27 @@ const PopupMenuChatPersonalCard = (chatId, userId) => {
 
 const PopupMenuUserCard = (
   userId,
-  contacts,
+  isInContacts,
   handleContact,
-  followings,
-  handleFollow
+  isInFollowings,
+  handleFollow,
+  handleSeeProfile
 ) => {
-  const handleSeeProfile = (e) => {
+  const _handleSeeProfile = (e) => {
     e.stopPropagation();
-    // see profile
-    console.log(userId);
-  };
-
-  const getInContacts = () => {
-    return contacts.includes(userId);
-  };
-
-  const getInFollowings = () => {
-    return followings.includes(userId);
+    handleSeeProfile();
   };
 
   return (
     <div className="popupMenu">
-      <div onClick={handleSeeProfile} className="popupMenu__item">
+      <div onClick={_handleSeeProfile} className="popupMenu__item">
         See profile
       </div>
       <div onClick={handleContact} className="popupMenu__item">
-        {getInContacts() ? "Delete" : "Add"} contact
+        {isInContacts ? "Delete" : "Add"} contact
       </div>
       <div onClick={handleFollow} className="popupMenu__item">
-        {getInFollowings() ? "Unfollow" : "Add follow"}
+        {isInFollowings ? "Unfollow" : "Add follow"}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/thisUserProfile.css";
 
-import { catchError, LoadingComponent } from "../utils";
+import { catchError, LoadingComponent, ErrorComponent } from "../utils";
 import {
   AboutContent,
   FollowingsContent,
@@ -14,6 +14,8 @@ import {
 import { constants } from "../../utils";
 import { thisUserDetailAction } from "../../features";
 import { backendWithoutAuth } from "../../api/backend";
+
+import { ThisUserProfileStoreProvider } from "../../contextStore/thisUserProfile";
 
 export default function ThisUserProfile() {
   const dispatch = useDispatch();
@@ -83,38 +85,37 @@ export default function ThisUserProfile() {
 
   const ThisUserProfilePanelRight = () => {
     return (
-      <div className="thisUser--panel-right">
-        <div className="thisUser__tabs">
-          {constants.thisUserTabs.map((item, index) => (
-            <div
-              key={index}
-              ref={index === selectedTab ? activeTab : null}
-              onClick={() => handleClickTab(index)}
-              className={clsx("thisUser__tab", {
-                "thisUser__tab--active": index === selectedTab,
-              })}
-            >
-              {item}
-            </div>
-          ))}
-          <div ref={activeLine} className="thisUser__active-line"></div>
+      <ThisUserProfileStoreProvider>
+        <div className="thisUser--panel-right">
+          <div className="thisUser__tabs">
+            {constants.thisUserTabs.map((item, index) => (
+              <div
+                key={index}
+                ref={index === selectedTab ? activeTab : null}
+                onClick={() => handleClickTab(index)}
+                className={clsx("thisUser__tab", {
+                  "thisUser__tab--active": index === selectedTab,
+                })}
+              >
+                {item}
+              </div>
+            ))}
+            <div ref={activeLine} className="thisUser__active-line"></div>
+          </div>
+          {OpenTab()}
         </div>
-        {OpenTab()}
-      </div>
+      </ThisUserProfileStoreProvider>
     );
   };
 
   return (
     <div className="thisUserProfile content">
       {LeftPanelContent()}
-      {loading ? (
-        LoadingComponent.LoadingThisUserProfileRightPanel()
-      ) : thisUserDetail == null ? (
-        // TODO : error page thisUserDetail
-        <>Error ? plz reload</>
-      ) : (
-        ThisUserProfilePanelRight()
-      )}
+      {loading
+        ? LoadingComponent.LoadingThisUserProfileRightPanel()
+        : thisUserDetail == null
+        ? ErrorComponent.ThisUserProfileErrorPage()
+        : ThisUserProfilePanelRight()}
     </div>
   );
 }

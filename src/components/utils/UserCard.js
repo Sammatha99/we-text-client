@@ -1,42 +1,101 @@
 import React, { useState } from "react";
 import clsx from "clsx";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { PopupMenus } from "../utils";
 
-import { thisUserDetailData } from "../../utils/fakeData";
+import { catchError } from "./";
+import { thisUserAction, thisUserDetailAction } from "../../features";
+import { backendWithAuth } from "../../api/backend";
 
 export default function UserCard({ user, classes }) {
+  const dispatch = useDispatch();
   const [status, setSatus] = useState(user && user.status);
 
-  // get from store redux
-  const [thisUserContacts, setThisUserContacts] = useState(
-    JSON.parse(JSON.stringify(thisUserDetailData.contacts))
+  const thisUserId = useSelector((state) => state.thisUser.value.id);
+  const thisUserContacts = useSelector(
+    (state) => state.thisUserDetail.value.contacts
   );
-  const [thisUserFollowings, setThisUserFollowings] = useState(
-    JSON.parse(JSON.stringify(thisUserDetailData.followings))
+  const thisUserFollowings = useSelector(
+    (state) => state.thisUserDetail.value.followings
   );
 
-  const handleContact = () => {
+  const handleContact = async () => {
+    // SOCKET: thông báo cho other user
     // nếu đang trong contact => remove khỏi contact, else add  => update store redux
     if (thisUserContacts.includes(user.id)) {
-      setThisUserContacts((prev) =>
-        prev.filter((contact) => contact !== user.id)
-      );
+      // có trong contacts => remove khỏi contacts => update redux store
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/delete-contact`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.deleteContact(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
     } else {
-      setThisUserContacts((prev) => [...prev, user.id]);
+      // không có trong contacts => add vào contacts => update redux store
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/add-contact`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.addContact(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
     }
   };
 
-  const handleFollow = () => {
-    // nếu đang trong followings => remove khỏi followings, else add  => update store redux (populate and ids)
+  const handleFollow = async () => {
+    // SOCKET: thông báo cho other user
+    // nếu đang trong followings => remove khỏi followings, else add  => update store redux
     if (thisUserFollowings.includes(user.id)) {
-      setThisUserFollowings((prev) =>
-        prev.filter((follow) => follow !== user.id)
-      );
+      // có trong followings => remove khỏi followings => update redux store
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/delete-following`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.deleteFollowing(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
     } else {
-      setThisUserFollowings((prev) => [...prev, user.id]);
+      // không có trong followings => add vào followings => update redux store
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/add-following`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.addFollowing(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
     }
+  };
+
+  const handleSeeProfile = () => {
+    // handle see profile other user
+    // TODO 3.1 see profile
   };
 
   const { PopupMenu, triggerProps, handleClickPopupMenu } =
@@ -45,10 +104,11 @@ export default function UserCard({ user, classes }) {
   const PopupMenuUserCard = () => {
     return PopupMenus.PopupMenuUserCard(
       user.id,
-      thisUserContacts,
+      thisUserContacts.includes(user.id),
       handleContact,
-      thisUserFollowings,
-      handleFollow
+      thisUserFollowings.includes(user.id),
+      handleFollow,
+      handleSeeProfile
     );
   };
 

@@ -10,8 +10,6 @@ import { createSlice } from "@reduxjs/toolkit";
 //   contacts: ['ids'],
 // };
 
-// TODO 1 : delete this
-
 export const thisUserDetailSlice = createSlice({
   name: "thisUserDetail",
   initialState: { value: null },
@@ -28,7 +26,7 @@ export const thisUserDetailSlice = createSlice({
     },
     deleteContact: (state, action) => {
       state.value.contacts = state.value.contacts.filter(
-        (id) => id != action.payload
+        (id) => id !== action.payload
       );
     },
     addFollowing: (state, action) => {
@@ -37,7 +35,7 @@ export const thisUserDetailSlice = createSlice({
     },
     deleteFollowing: (state, action) => {
       state.value.followings = state.value.followings.filter(
-        (id) => id != action.payload
+        (id) => id !== action.payload
       );
     },
     addFollower: (state, action) => {
@@ -46,7 +44,7 @@ export const thisUserDetailSlice = createSlice({
     },
     deleteFollower: (state, action) => {
       state.value.followers = state.value.followers.filter(
-        (id) => id != action.payload
+        (id) => id !== action.payload
       );
     },
   },
