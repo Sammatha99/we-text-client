@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector } from "react-redux";
 
-import { UserCard, LoadingComponent, catchError } from "../../utils";
+import {
+  UserCard,
+  LoadingComponent,
+  catchError,
+  InputSearch,
+} from "../../utils";
 import { backendWithoutAuth } from "../../../api/backend";
 
 import { useStore, actions } from "../../../contextStore/thisUserProfile";
@@ -76,18 +80,14 @@ export default function FollowersContent() {
     );
   };
 
+  const handleSearchFollowers = (str) => {
+    // backend
+    console.log(str, ": search users in followers");
+  };
+
   return (
     <div>
-      <div className="input-icon  input-icon--search">
-        <input className="input-icon__input" placeholder="Search here" />
-        <div className="input-icon__icon--right">
-          <Icon className="input-icon__icon--link" icon="search" />
-          <Icon
-            className="input-icon__icon--link input-icon__icon--clear"
-            icon="times-circle"
-          />
-        </div>
-      </div>
+      <InputSearch handleSearch={handleSearchFollowers} />
       {UsersContent()}
     </div>
   );

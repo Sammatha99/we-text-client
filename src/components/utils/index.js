@@ -9,3 +9,4 @@ export * as swal from "./swal";
 export { default as catchError } from "./catchError";
 export { default as Timer } from "./Timer";
 export * as ErrorComponent from "./ErrorScreen";
+export { default as InputSearch } from "./InputSearch";

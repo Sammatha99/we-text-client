@@ -1,28 +1,29 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import "../../style/modals.css";
 
 import { modalsName } from ".";
-import { InputSearch, LoadingComponent, UserCardCheckbox } from "../utils";
+import { LoadingComponent, UserCardCheckbox, InputSearch } from "../utils";
 
-import { thisUserDetailData } from "../../utils/fakeData";
+import { usersData } from "../../utils/fakeData";
 
-export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
+export default function CreateContact() {
   const modalCheckboxRef = useRef();
-  const [loading, setLoading] = useState(true);
-  const [contacts, setContacts] = useState([]);
+  const inputRef = useRef();
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
-  useEffect(() => {
-    // không lấy những đứa đã có trong members list r
-    const getContacts = [...thisUserDetailData.contactsPopulate].filter(
-      (contact) => !membersId.includes(contact.id)
-    );
-    setContacts(getContacts);
+  const handleSearchUsers = (search) => {
+    setLoading(true);
+    // TODO 2 search user
+    console.log(search);
+    // call backend get data, is in backend have this feature ?
+
+    setUsers(usersData);
     setLoading(false);
-    return () => {};
-  }, [membersId]);
+  };
 
   const handleCheckbox = (user, isChecked) => {
     if (isChecked) {
@@ -39,13 +40,9 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   };
 
   const handleSubmit = () => {
-    // truyền về cho trang chat info add member vào
-    handleSubmitAdd(selectedUsers);
+    // tạo chat và route vào chat mới
+    console.log(selectedUsers);
     modalCheckboxRef.current.checked = false;
-  };
-
-  const handleSearchUsers = (str) => {
-    console.log(str, ": search users in contacts");
   };
 
   return (
@@ -53,22 +50,22 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
       <input
         ref={modalCheckboxRef}
         type="checkbox"
-        id={modalsName.addMemberInchat}
+        id={modalsName.createContactModal}
         hidden
       />
       <label
-        htmlFor={modalsName.addMemberInchat}
-        id={`${modalsName.addMemberInchat}__label`}
+        htmlFor={modalsName.createContactModal}
+        id={`${modalsName.createContactModal}__label`}
         className="modal-overlay center"
       ></label>
       <div
         className="modal-wrapper"
-        id={`${modalsName.addMemberInchat}__modal`}
+        id={`${modalsName.createContactModal}__modal`}
       >
         <div className="modal__header">
-          Add members
+          Create contacts
           <label
-            htmlFor={modalsName.addMemberInchat}
+            htmlFor={modalsName.createContactModal}
             className="modal__close-icon"
           >
             <Icon icon="times" />
@@ -76,11 +73,12 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
         </div>
         <div className="modal__body">
           <InputSearch handleSearch={handleSearchUsers} />
+
           {loading ? (
             <LoadingComponent.LoadingContacts classes="userCard--white" />
           ) : (
             <div className="modal__body__list">
-              {contacts.map((user) => (
+              {users.map((user) => (
                 <UserCardCheckbox
                   isChecked={selectedUsers.includes(user.id)}
                   key={user.id}
@@ -97,7 +95,7 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
             onClick={handleSubmit}
             className="btn btn--primary btn--medium"
           >
-            Add
+            Create
           </button>
         </div>
       </div>

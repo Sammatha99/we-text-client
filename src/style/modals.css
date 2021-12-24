@@ -155,3 +155,14 @@
   margin-left: var(--spacing-2);
   margin-top: 0 !important;
 }
+
+/* create contact modal  */
+#create-contact-modal__modal,
+#create-contact-modal__label {
+  display: none;
+}
+
+#create-contact-modal:checked ~ #create-contact-modal__modal,
+#create-contact-modal:checked ~ #create-contact-modal__label {
+  display: flex;
+}

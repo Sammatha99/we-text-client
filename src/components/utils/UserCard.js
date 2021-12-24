@@ -20,10 +20,11 @@ export default function UserCard({ user, classes }) {
 
   const thisUserId = useSelector((state) => state.thisUser.value.id);
   const thisUserContacts = useSelector(
-    (state) => state.thisUserDetail.value.contacts
+    (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
   );
   const thisUserFollowings = useSelector(
-    (state) => state.thisUserDetail.value.followings
+    (state) =>
+      state.thisUserDetail.value && state.thisUserDetail.value.followings
   );
 
   const handleContact = async () => {

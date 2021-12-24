@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 
-export default function UserCardCheckbox({ user, classes, handleCheckbox }) {
+export default function UserCardCheckbox({
+  user,
+  classes,
+  handleCheckbox,
+  isChecked,
+}) {
   const [status, setSatus] = useState(user && user.status);
 
   const handleCheckboxClick = (e) => {
@@ -26,6 +31,7 @@ export default function UserCardCheckbox({ user, classes, handleCheckbox }) {
           <p className="userCard__name">{user.name}</p>
         </div>
         <input
+          checked={isChecked}
           id={`${user.id}_userCardCheckbox`}
           type="checkbox"
           onChange={handleCheckboxClick}

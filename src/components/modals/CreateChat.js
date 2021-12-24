@@ -4,7 +4,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import "../../style/modals.css";
 
 import { modalsName } from ".";
-import { LoadingComponent, UserCardCheckbox } from "../utils";
+import { InputSearch, LoadingComponent, UserCardCheckbox } from "../utils";
 
 import { thisUserDetailData } from "../../utils/fakeData";
 
@@ -41,6 +41,10 @@ export default function CreateChatModal() {
     modalCheckboxRef.current.checked = false;
   };
 
+  const handleSearchContacts = (str) => {
+    console.log(str, ": search users in contacts");
+  };
+
   return (
     <div>
       <input
@@ -68,22 +72,14 @@ export default function CreateChatModal() {
           </label>
         </div>
         <div className="modal__body">
-          <div className="input-icon  input-icon--search">
-            <input className="input-icon__input" placeholder="Search here" />
-            <div className="input-icon__icon--right">
-              <Icon className="input-icon__icon--link" icon="search" />
-              <Icon
-                className="input-icon__icon--link input-icon__icon--clear"
-                icon="times-circle"
-              />
-            </div>
-          </div>
+          <InputSearch handleSearch={handleSearchContacts} />
           {loading ? (
             <LoadingComponent.LoadingContacts classes="userCard--white" />
           ) : (
             <div className="modal__body__list">
               {contacts.map((user) => (
                 <UserCardCheckbox
+                  isChecked={selectedContacts.includes(user.id)}
                   key={user.id}
                   user={user}
                   classes="userCard--white"
