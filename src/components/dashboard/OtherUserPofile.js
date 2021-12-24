@@ -1,54 +1,171 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import clsx from "clsx";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../../style/otherUserProfile.css";
 
-import { UserCard, LoadingComponent } from "../utils";
-
+import { UserCard, LoadingComponent, catchError } from "../utils";
 import {
-  otherUserData,
-  otherUserDetailData,
-  thisUserDetailData,
-} from "../../utils/fakeData";
+  featuresAction,
+  thisUserDetailAction,
+  thisUserAction,
+} from "../../features";
+import { backendWithoutAuth, backendWithAuth } from "../../api/backend";
+
+import { usersData } from "../../utils/fakeData";
 
 export default function OtherUserPofile() {
+  const dispatch = useDispatch();
+  const thisUserId = useSelector((state) => state.thisUser.value.id);
+  const thisUserContacts = useSelector(
+    (state) => state.thisUserDetail.value.contacts
+  );
+  const thisUserFollowings = useSelector(
+    (state) => state.thisUserDetail.value.followings
+  );
+  const userId = useSelector((state) => state.features.value.selectedUser);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userDetail, setUserDetail] = useState(null);
-  const [follow, setFollow] = useState(false);
-  const [contact, setContact] = useState(false);
+  const [followings, setFollowings] = useState([]);
+  const [contacts, setContacts] = useState([]);
+
+  // get is if thisUser is following or have UserId in contacts list
+  const contact = useMemo(() => {
+    return thisUserContacts.includes(userId);
+  }, [thisUserContacts, userId]);
+  const follow = useMemo(() => {
+    return thisUserFollowings.includes(userId);
+  }, [thisUserFollowings, userId]);
 
   useEffect(() => {
-    const getUser = JSON.parse(JSON.stringify(otherUserData));
-    const getUserDetail = JSON.parse(JSON.stringify(otherUserDetailData));
-    const getFollow = thisUserDetailData.followings.findIndex(
-      (id) => id === getUser.id
-    );
-    const getContact = thisUserDetailData.contacts.findIndex(
-      (id) => id === getUser.id
-    );
-    setUser(getUser);
-    setUserDetail(getUserDetail);
-    setFollow(getFollow !== -1);
-    setContact(getContact !== -1);
+    async function loadOtherUserInfo() {
+      try {
+        // get user info
+        const resGetUser = await backendWithoutAuth.get(`/users/${userId}`);
+        setUser(resGetUser.data);
 
-    setLoading(false);
+        // get user detail
+        const resGetUserDetail = await backendWithoutAuth.get(
+          `/userDetails/${userId}`
+        );
+
+        setUserDetail(resGetUserDetail.data);
+        loadFollowings(resGetUserDetail.data);
+        loadContacts(resGetUserDetail.data);
+      } catch (err) {
+        catchError(err);
+      }
+
+      setLoading(false);
+    }
+
+    loadOtherUserInfo();
+
     return () => {};
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
+
+  const handleAddContact = async () => {
+    if (!thisUserContacts.includes(user.id)) {
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/add-contact`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.addContact(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
+    }
+  };
+
+  const handleRemoveContact = async () => {
+    if (thisUserContacts.includes(user.id)) {
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/delete-contact`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.deleteContact(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
+    }
+  };
+
+  const handleAddFollowing = async () => {
+    if (!thisUserFollowings.includes(user.id)) {
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/add-following`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.addFollowing(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
+    }
+  };
+
+  const handleRemoveFollowing = async () => {
+    if (thisUserFollowings.includes(user.id)) {
+      try {
+        const axios = await backendWithAuth();
+        if (axios != null) {
+          await axios.patch(`/userDetails/${thisUserId}/delete-following`, {
+            userId: user.id,
+          });
+          dispatch(thisUserDetailAction.deleteFollowing(user.id));
+        } else {
+          dispatch(thisUserAction.logout());
+        }
+      } catch (err) {
+        catchError(err);
+      }
+    }
+  };
 
   const ButtonsDiv = () => {
     return (
       <div className="otherUser-btns">
         {follow ? (
-          <button className="btn btn--primary btn--medium">Unfollow</button>
+          <button
+            onClick={handleRemoveFollowing}
+            className="btn btn--primary btn--medium"
+          >
+            Unfollow
+          </button>
         ) : (
-          <button className="btn btn--medium">Follow</button>
+          <button onClick={handleAddFollowing} className="btn btn--medium">
+            Follow
+          </button>
         )}
         {contact ? (
-          <button className="btn btn--primary btn--medium">Uncontact</button>
+          <button
+            onClick={handleRemoveContact}
+            className="btn btn--primary btn--medium"
+          >
+            Uncontact
+          </button>
         ) : (
-          <button className="btn btn--medium">Add contact</button>
+          <button onClick={handleAddContact} className="btn btn--medium">
+            Add contact
+          </button>
         )}
       </div>
     );
@@ -101,13 +218,13 @@ export default function OtherUserPofile() {
               htmlFor="otherUserAbout__checkbox"
               className="otherUserAbout__checkbox--close"
             >
-              <Icon icon="chevron-down" />
+              <Icon icon="chevron-up" />
             </label>
             <label
               htmlFor="otherUserAbout__checkbox"
               className="otherUserAbout__checkbox--open"
             >
-              <Icon icon="chevron-up" />
+              <Icon icon="chevron-down" />
             </label>
           </div>
         </label>
@@ -129,6 +246,37 @@ export default function OtherUserPofile() {
     );
   };
 
+  const addUserToList = async (ids, set) => {
+    try {
+      const users = [];
+      for (var id of ids) {
+        const res = await backendWithoutAuth.get(`/users/${id}`);
+        users.push(res.data);
+      }
+      set((prev) => [...prev, ...users]);
+    } catch (err) {
+      catchError(err);
+    }
+  };
+
+  const loadFollowings = (paramUserDetail = userDetail) => {
+    const currentLength = followings.length;
+    const followingsIdToLoad = paramUserDetail.followings.slice(
+      currentLength,
+      currentLength + 10
+    );
+    addUserToList(followingsIdToLoad, setFollowings);
+  };
+
+  const loadContacts = (paramUserDetail = userDetail) => {
+    const currentLength = contacts.length;
+    const contactsIdToLoad = paramUserDetail.contacts.slice(
+      currentLength,
+      currentLength + 10
+    );
+    addUserToList(contactsIdToLoad, setContacts);
+  };
+
   const OtherUserFollowings = () => {
     return (
       <>
@@ -143,20 +291,36 @@ export default function OtherUserPofile() {
               htmlFor="otherUserFollowings__checkbox"
               className="otherUserFollowings__checkbox--close"
             >
-              <Icon icon="chevron-down" />
+              <Icon icon="chevron-up" />
             </label>
             <label
               htmlFor="otherUserFollowings__checkbox"
               className="otherUserFollowings__checkbox--open"
             >
-              <Icon icon="chevron-up" />
+              <Icon icon="chevron-down" />
             </label>
           </div>
         </label>
         <div className="otherUserFollowings__content">
-          {userDetail.followingsPopulate.map((user) => (
-            <UserCard key={user.id} user={user} classes="userCard--white" />
-          ))}
+          <div id="otherUserFollowings__content">
+            <InfiniteScroll
+              scrollableTarget="otherUserFollowings__content"
+              dataLength={followings.length}
+              next={loadFollowings}
+              hasMore={followings.length < userDetail.followings.length}
+              loader={
+                <LoadingComponent.LoadingContacts classes="userCard--white" />
+              }
+            >
+              {followings.map((following) => (
+                <UserCard
+                  user={following}
+                  key={following.id}
+                  classes={"userCard--white"}
+                />
+              ))}
+            </InfiniteScroll>
+          </div>
         </div>
       </>
     );
@@ -176,30 +340,53 @@ export default function OtherUserPofile() {
               htmlFor="otherUserContacts__checkbox"
               className="otherUserContacts__checkbox--close"
             >
-              <Icon icon="chevron-down" />
+              <Icon icon="chevron-up" />
             </label>
             <label
               htmlFor="otherUserContacts__checkbox"
               className="otherUserContacts__checkbox--open"
             >
-              <Icon icon="chevron-up" />
+              <Icon icon="chevron-down" />
             </label>
           </div>
         </label>
         <div className="otherUserContacts__content">
-          {userDetail.contactsPopulate.map((user) => (
-            <UserCard key={user.id} user={user} classes="userCard--white" />
-          ))}
+          <div id="otherUserContacts__content">
+            <InfiniteScroll
+              scrollableTarget="otherUserContacts__content"
+              dataLength={contacts.length}
+              next={loadContacts}
+              hasMore={contacts.length < userDetail.contacts.length}
+              loader={
+                <LoadingComponent.LoadingContacts classes="userCard--white" />
+              }
+            >
+              {contacts.map((contact) => (
+                <UserCard
+                  user={contact}
+                  key={contact.id}
+                  classes={"userCard--white"}
+                />
+              ))}
+            </InfiniteScroll>
+          </div>
         </div>
       </>
     );
+  };
+
+  const handleCloseOtherUser = () => {
+    dispatch(featuresAction.setSelectedUser(null));
   };
 
   return (
     <div className="smallPanel content  smallPanel--white smallPanel--right">
       <div className="smallPanel-header">
         User profile
-        <div className="chat-header-options-wrapper smallPanel-header__icon">
+        <div
+          onClick={handleCloseOtherUser}
+          className="chat-header-options-wrapper smallPanel-header__icon"
+        >
           <Icon icon="times" />
         </div>
       </div>

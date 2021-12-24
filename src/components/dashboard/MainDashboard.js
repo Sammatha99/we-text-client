@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 import "../../style/dashboard.css";
 import {
@@ -14,7 +15,7 @@ import {
 import { tabs } from "../../utils/constants";
 
 export default function MainDashboard({ tab }) {
-  // const [selectedTab, setSelectedTab] = useState(() => tab || tabs[0].name);
+  const features = useSelector((state) => state.features.value);
   const [selectedTab, setSelectedTab] = useState(() => tab || null);
   const [selectedChatroom, setSelectedChatroom] = useState(null);
 
@@ -52,14 +53,15 @@ export default function MainDashboard({ tab }) {
         />
 
         {TabOpen()}
+        {features.openRightPanel &&
+          ((features.selectedUser != null && <OtherUserPofile />) ||
+            (features.selectedChatroom != null && (
+              <ChatInfo id={selectedChatroom} />
+            )))}
 
         {selectedChatroom != null && (
           <Chat selectedChatroom={selectedChatroom} />
         )}
-
-        {/* {smallPanelRight && selectedChatroom != null && <ChatInfo id={selectedChatroom} />} */}
-
-        {/*{selectedUser && <OtherUserPofile />} */}
       </div>
     </>
   );

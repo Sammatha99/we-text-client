@@ -6,8 +6,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { PopupMenus } from "../utils";
 
 import { catchError } from "./";
-import { thisUserAction, thisUserDetailAction } from "../../features";
+import {
+  thisUserAction,
+  thisUserDetailAction,
+  featuresAction,
+} from "../../features";
 import { backendWithAuth } from "../../api/backend";
+import features from "../../features/features";
 
 export default function UserCard({ user, classes }) {
   const dispatch = useDispatch();
@@ -94,8 +99,9 @@ export default function UserCard({ user, classes }) {
   };
 
   const handleSeeProfile = () => {
-    // handle see profile other user
-    // TODO 3.1 see profile
+    handleClickPopupMenu();
+    dispatch(featuresAction.setOpenRightPanel(true));
+    dispatch(featuresAction.setSelectedUser(user.id));
   };
 
   const { PopupMenu, triggerProps, handleClickPopupMenu } =

@@ -107,6 +107,12 @@
   transition: opacity 0.3s ease-out;
 }
 
+#otherUserFollowings__content,
+#otherUserContacts__content {
+  height: 500px;
+  overflow: auto;
+}
+
 #otherUserFollowings__checkbox:checked ~ .otherUserFollowings__content {
   height: auto;
   opacity: 1;
