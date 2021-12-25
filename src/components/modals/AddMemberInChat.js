@@ -13,6 +13,7 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  // TODO 1.3 add member to chat infinite scroll
 
   useEffect(() => {
     // không lấy những đứa đã có trong members list r

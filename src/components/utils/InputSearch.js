@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-export default function InputSearch({ handleSearch, classes }) {
+export default function InputSearch({ handleSearch, handleClear, classes }) {
   const [str, setStr] = useState("");
 
   const onChange = (e) => {
@@ -19,9 +19,11 @@ export default function InputSearch({ handleSearch, classes }) {
     }
   };
 
-  const handleClear = () => {
+  const _handleClear = () => {
     setStr("");
     console.log(str, " :clear");
+    // TODO truyền vào ???
+    handleClear && handleClear();
   };
 
   const _handleSearch = () => {
@@ -42,7 +44,7 @@ export default function InputSearch({ handleSearch, classes }) {
         <span onClick={_handleSearch}>
           <Icon className="input-icon__icon--link" icon="search" />
         </span>
-        <span hidden={str === ""} onClick={handleClear}>
+        <span hidden={str === ""} onClick={_handleClear}>
           <Icon
             className="input-icon__icon--link input-icon__icon--clear"
             icon="times-circle"

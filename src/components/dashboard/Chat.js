@@ -22,6 +22,7 @@ import {
 export default function Chat({ selectedChatroom }) {
   const [chatroom, setChatroom] = useState(null);
   const [messages, setMessages] = useState(null);
+  // TODO 1.6 messages list infinite scroll
 
   useEffect(() => {
     if (selectedChatroom != null) {

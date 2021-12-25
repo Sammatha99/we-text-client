@@ -16,6 +16,7 @@ export default function Contacts() {
   const dispatch = useDispatch();
   const [contacts, setContacts] = useState(null);
   const [loading, setLoading] = useState(true);
+  // TODO 1.1 contacts list infinite scroll
 
   useEffect(() => {
     // get contacts from backend (paginate)

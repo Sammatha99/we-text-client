@@ -21,6 +21,7 @@ import { chatRoomsData, thisUserData } from "../../utils/fakeData";
 export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
   const [chatrooms, setChatrooms] = useState(null);
   const [loading, setLoading] = useState(true);
+  // TODO 1.5 chat list infinite scroll
 
   useEffect(() => {
     /**

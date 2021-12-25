@@ -65,6 +65,7 @@
 
 .avatar--double-img img {
   width: 65%;
+  height: auto;
 }
 
 .avatar--double-img img:nth-child(1) {

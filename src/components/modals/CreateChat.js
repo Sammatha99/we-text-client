@@ -13,6 +13,7 @@ export default function CreateChatModal() {
   const [loading, setLoading] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
+  // TODO 1.4 create chat infinite scroll
 
   useEffect(() => {
     const getContacts = [...thisUserDetailData.contactsPopulate];

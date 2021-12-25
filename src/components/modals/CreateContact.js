@@ -1,28 +1,77 @@
 import React, { useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 import "../../style/modals.css";
 
 import { modalsName } from ".";
-import { LoadingComponent, UserCardCheckbox, InputSearch } from "../utils";
+import {
+  LoadingComponent,
+  UserCardCheckbox,
+  InputSearch,
+  catchError,
+} from "../utils";
+import { constants } from "../../utils";
+import { backendWithoutAuth } from "../../api/backend";
 
-import { usersData } from "../../utils/fakeData";
-
+const paginateInit = { ...constants.paginateInit };
 export default function CreateContact() {
   const modalCheckboxRef = useRef();
-  const inputRef = useRef();
+  const userId = useSelector((state) => state.thisUser.value.id);
+  const contacts = useSelector(
+    (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
+  );
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [paginate, setPaginate] = useState({ ...paginateInit });
+
+  const cleanUpModal = (e) => {
+    e.preventDefault();
+    setPaginate(paginateInit);
+    setUsers([]);
+    setSelectedUsers([]);
+    modalCheckboxRef.current.checked = false;
+  };
+
+  const loadMoreUser = async (search = paginate.search, nextPage) => {
+    console.log("loadMoreUser");
+    console.log(search, nextPage);
+    setLoading(true);
+    try {
+      const res = await backendWithoutAuth.get(
+        `/users?search=${search}&page=${nextPage}`
+      );
+      console.log(res.data);
+      setUsers((prev) => [...prev, ...res.data.results]);
+      setPaginate((prev) => ({
+        ...prev,
+        totalPages: res.data.totalPages,
+        totalResults: res.data.totalResults,
+      }));
+    } catch (err) {
+      catchError(err);
+    }
+    setLoading(false);
+  };
+
+  const loadUser = (search) => {
+    console.log("loadUser");
+    const nextPage = paginate.page + 1;
+    setPaginate((prev) => ({ ...prev, page: nextPage }));
+    loadMoreUser(search, nextPage);
+  };
 
   const handleSearchUsers = (search) => {
-    setLoading(true);
-    // TODO 2 search user
-    console.log(search);
-    // call backend get data, is in backend have this feature ?
+    console.log("handleSearchUsers");
+    setPaginate((prev) => ({ ...prev, search: search }));
+    loadUser(search);
+  };
 
-    setUsers(usersData);
-    setLoading(false);
+  const handleClearUsers = () => {
+    setPaginate(paginateInit);
+    setUsers([]);
   };
 
   const handleCheckbox = (user, isChecked) => {
@@ -42,7 +91,7 @@ export default function CreateContact() {
   const handleSubmit = () => {
     // tạo chat và route vào chat mới
     console.log(selectedUsers);
-    modalCheckboxRef.current.checked = false;
+    cleanUpModal();
   };
 
   return (
@@ -54,7 +103,7 @@ export default function CreateContact() {
         hidden
       />
       <label
-        htmlFor={modalsName.createContactModal}
+        onClick={cleanUpModal}
         id={`${modalsName.createContactModal}__label`}
         className="modal-overlay center"
       ></label>
@@ -64,29 +113,49 @@ export default function CreateContact() {
       >
         <div className="modal__header">
           Create contacts
-          <label
-            htmlFor={modalsName.createContactModal}
-            className="modal__close-icon"
-          >
+          <label onClick={cleanUpModal} className="modal__close-icon">
             <Icon icon="times" />
           </label>
         </div>
         <div className="modal__body">
-          <InputSearch handleSearch={handleSearchUsers} />
+          <InputSearch
+            handleSearch={handleSearchUsers}
+            handleClear={handleClearUsers}
+          />
 
           {loading ? (
             <LoadingComponent.LoadingContacts classes="userCard--white" />
           ) : (
-            <div className="modal__body__list">
-              {users.map((user) => (
-                <UserCardCheckbox
-                  isChecked={selectedUsers.includes(user.id)}
-                  key={user.id}
-                  user={user}
-                  classes="userCard--white"
-                  handleCheckbox={handleCheckbox}
-                />
-              ))}
+            <div
+              id="modal__body__list--create-contact"
+              className="modal__body__list"
+            >
+              {paginate.search !== "" && (
+                <InfiniteScroll
+                  scrollableTarget="modal__body__list--create-contact"
+                  dataLength={paginate.totalResults}
+                  next={loadUser}
+                  hasMore={paginate.page < paginate.totalPages}
+                  loader={
+                    <LoadingComponent.LoadingContacts classes="userCard--white" />
+                  }
+                >
+                  {users.map(
+                    (user) =>
+                      // hiện user chưa có trong contacts và khác mình (userId)
+                      !contacts.includes(user.id) &&
+                      user.id !== userId && (
+                        <UserCardCheckbox
+                          isChecked={selectedUsers.includes(user.id)}
+                          key={user.id}
+                          user={user}
+                          classes="userCard--white"
+                          handleCheckbox={handleCheckbox}
+                        />
+                      )
+                  )}
+                </InfiniteScroll>
+              )}
             </div>
           )}
         </div>
