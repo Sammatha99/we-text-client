@@ -28,6 +28,9 @@ export default function InputSearch({ handleSearch, handleClear, classes }) {
 
   const _handleSearch = () => {
     if (str.trim() !== "") handleSearch(str);
+    else {
+      handleClear && handleClear();
+    }
   };
 
   return (

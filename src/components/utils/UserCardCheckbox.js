@@ -6,6 +6,7 @@ export default function UserCardCheckbox({
   classes,
   handleCheckbox,
   isChecked,
+  disabled = false,
 }) {
   const [status, setSatus] = useState(user && user.status);
 
@@ -15,7 +16,11 @@ export default function UserCardCheckbox({
 
   if (user)
     return (
-      <label className={clsx("userCard userCard--checkbox", classes)}>
+      <label
+        className={clsx("userCard userCard--checkbox", classes, {
+          "useCard--checkbox--disabled": disabled,
+        })}
+      >
         <div
           className={clsx("avatar", "avatar--small", "center", {
             "user-active-dots": status,
@@ -31,6 +36,7 @@ export default function UserCardCheckbox({
           <p className="userCard__name">{user.name}</p>
         </div>
         <input
+          disabled={disabled}
           checked={isChecked}
           id={`${user.id}_userCardCheckbox`}
           type="checkbox"

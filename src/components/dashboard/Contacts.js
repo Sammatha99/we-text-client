@@ -1,51 +1,124 @@
 import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 
-import { LoadingComponent, UserCard, catchError, InputSearch } from "../utils";
 import { CreateContactModal, modalsName } from "../modals";
-
+import { LoadingComponent, UserCard, catchError, InputSearch } from "../utils";
 import { backendWithoutAuth } from "../../api/backend";
 import { thisUserDetailAction } from "../../features";
+import { constants } from "../../utils";
 
-import { thisUserDetailData } from "../../utils/fakeData";
+const paginateInit = { ...constants.paginateInit };
 
 export default function Contacts() {
   const userId = useSelector((state) => state.thisUser.value.id);
-  const thisUserDetail = useSelector((state) => state.thisUserDetail.value);
+  const thisUserDetailContacts = useSelector(
+    (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
+  );
   const dispatch = useDispatch();
-  const [contacts, setContacts] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // TODO 1.1 contacts list infinite scroll
+  // const [loading, setLoading] = useState(true);
+  const [contacts, setContacts] = useState([]);
+  const [paginate, setPaginate] = useState(null);
 
   useEffect(() => {
-    // get contacts from backend (paginate)
+    if (paginate) {
+      const getContacts = contacts.filter((contact) =>
+        thisUserDetailContacts.includes(contact.id)
+      );
+      console.log(getContacts);
+
+      // trường hợp xóa contacts 
+      if (getContacts.length < 6 && thisUserDetailContacts.length >= 6) {
+        handleClear();
+      }
+
+      // trường hợp thêm contact
+      if (
+        thisUserDetailContacts.length > paginate.totalResults &&
+        contacts.length >= paginate.totalResults
+      ) {
+        handleClear();
+      }
+    }
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [thisUserDetailContacts]);
+
+  useEffect(() => {
     async function getUserDetail() {
       try {
         const res = await backendWithoutAuth.get(`/userDetails/${userId}`);
         dispatch(thisUserDetailAction.set(res.data));
-        const getContacts = [...thisUserDetailData.contactsPopulate];
-        setContacts(getContacts);
+        handleClear();
       } catch (err) {
         catchError(err);
       }
-      setLoading(false);
     }
-    if (thisUserDetail == null) {
+
+    if (thisUserDetailContacts == null) {
       getUserDetail();
     } else {
-      const getContacts = [...thisUserDetailData.contactsPopulate];
-      setContacts(getContacts);
-      setLoading(false);
+      handleClear();
     }
 
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, userId]);
+  }, [userId]);
 
-  const handleSearchContact = (str) => {
-    console.log(str, ": search users in contacts");
-    // create utilFunctions.searchUserInContacts
+  const loadMoreUser = async (
+    search = paginate.search,
+    page = paginate.page
+  ) => {
+    try {
+      console.group("SEARCH");
+      const url = `/users?${
+        search !== "" ? `search=${search}` : ""
+      }&page=${page}&userId=${userId}`;
+      console.log(url);
+
+      const res = await backendWithoutAuth.get(url);
+      console.log(res);
+      setContacts((prev) => [...prev, ...res.data.results]);
+      setPaginate((prev) => ({
+        search: search,
+        page: prev.page + 1,
+        totalPages: res.data.totalPages,
+        totalResults: res.data.totalResults,
+      }));
+    } catch (err) {
+      catchError(err);
+    }
+    console.groupEnd();
+  };
+
+  const handleSearchContact = (search) => {
+    setPaginate({ ...paginateInit, search: search });
+    setContacts([]);
+    loadMoreUser(search, 1);
+  };
+
+  const handleClear = () => {
+    handleSearchContact("");
+  };
+
+  const SearchListContacts = () => {
+    return (
+      <InfiniteScroll
+        scrollableTarget="smallPanel-content__contacts"
+        dataLength={contacts.length}
+        next={loadMoreUser}
+        hasMore={contacts.length < paginate.totalResults}
+        loader={<LoadingComponent.LoadingContacts />}
+      >
+        {contacts.map(
+          (user) =>
+            thisUserDetailContacts.includes(user.id) && (
+              <UserCard key={user.id} user={user} />
+            )
+        )}
+      </InfiniteScroll>
+    );
   };
 
   return (
@@ -65,16 +138,14 @@ export default function Contacts() {
             </label>
           </div>
           <InputSearch
+          
             classes={"input-icon--dark"}
             handleSearch={handleSearchContact}
+            handleClear={handleClear}
           />
         </div>
-        <div className="smallPanel-content">
-          {loading ? (
-            <LoadingComponent.LoadingContacts />
-          ) : (
-            contacts.map((user) => <UserCard key={user.id} user={user} />)
-          )}
+        <div id="smallPanel-content__contacts" className="smallPanel-content">
+          {paginate && <SearchListContacts />}
         </div>
       </div>
       <CreateContactModal />

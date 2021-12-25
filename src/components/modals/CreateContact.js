@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/modals.css";
 
@@ -9,68 +9,66 @@ import { modalsName } from ".";
 import {
   LoadingComponent,
   UserCardCheckbox,
+  UserCard,
   InputSearch,
   catchError,
+  swal,
 } from "../utils";
 import { constants } from "../../utils";
-import { backendWithoutAuth } from "../../api/backend";
+import { thisUserAction, thisUserDetailAction } from "../../features";
+import { backendWithoutAuth, backendWithAuth } from "../../api/backend";
 
 const paginateInit = { ...constants.paginateInit };
+
+// TODO fix logic
 export default function CreateContact() {
   const modalCheckboxRef = useRef();
+  const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
   const contacts = useSelector(
     (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
   );
-  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [paginate, setPaginate] = useState({ ...paginateInit });
+  const [paginate, setPaginate] = useState(null);
 
   const cleanUpModal = (e) => {
-    e.preventDefault();
-    setPaginate(paginateInit);
+    e && e.preventDefault();
+    setPaginate(null);
     setUsers([]);
     setSelectedUsers([]);
     modalCheckboxRef.current.checked = false;
   };
 
-  const loadMoreUser = async (search = paginate.search, nextPage) => {
-    console.log("loadMoreUser");
-    console.log(search, nextPage);
-    setLoading(true);
+  const loadMoreUser = async (
+    search = paginate.search,
+    page = paginate.page
+  ) => {
     try {
       const res = await backendWithoutAuth.get(
-        `/users?search=${search}&page=${nextPage}`
+        `/users?search=${search}&page=${page}`
       );
-      console.log(res.data);
+
       setUsers((prev) => [...prev, ...res.data.results]);
       setPaginate((prev) => ({
-        ...prev,
+        search: search,
+        page: prev.page + 1,
         totalPages: res.data.totalPages,
         totalResults: res.data.totalResults,
       }));
     } catch (err) {
       catchError(err);
     }
-    setLoading(false);
-  };
-
-  const loadUser = (search) => {
-    console.log("loadUser");
-    const nextPage = paginate.page + 1;
-    setPaginate((prev) => ({ ...prev, page: nextPage }));
-    loadMoreUser(search, nextPage);
   };
 
   const handleSearchUsers = (search) => {
-    console.log("handleSearchUsers");
-    setPaginate((prev) => ({ ...prev, search: search }));
-    loadUser(search);
+    setPaginate({ ...paginateInit, search: search });
+    setUsers([]);
+    loadMoreUser(search, 1);
   };
 
   const handleClearUsers = () => {
-    setPaginate(paginateInit);
+    setPaginate(null);
     setUsers([]);
   };
 
@@ -88,9 +86,28 @@ export default function CreateContact() {
     }
   };
 
-  const handleSubmit = () => {
-    // tạo chat và route vào chat mới
-    console.log(selectedUsers);
+  const handleSubmit = async () => {
+    swal.showLoadingSwal();
+    try {
+      const axios = await backendWithAuth();
+      if (axios != null) {
+        const newContacts = [];
+        for (var user of selectedUsers) {
+          await axios.patch(`/userDetails/${userId}/add-contact`, {
+            userId: user,
+          });
+          newContacts.push(user);
+        }
+        dispatch(thisUserDetailAction.addListContacts(newContacts));
+        swal.closeSwal();
+        swal.showSuccessSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+      }
+    } catch (err) {
+      swal.closeSwal();
+      catchError(err);
+    }
     cleanUpModal();
   };
 
@@ -123,41 +140,40 @@ export default function CreateContact() {
             handleClear={handleClearUsers}
           />
 
-          {loading ? (
-            <LoadingComponent.LoadingContacts classes="userCard--white" />
-          ) : (
-            <div
-              id="modal__body__list--create-contact"
-              className="modal__body__list"
-            >
-              {paginate.search !== "" && (
-                <InfiniteScroll
-                  scrollableTarget="modal__body__list--create-contact"
-                  dataLength={paginate.totalResults}
-                  next={loadUser}
-                  hasMore={paginate.page < paginate.totalPages}
-                  loader={
-                    <LoadingComponent.LoadingContacts classes="userCard--white" />
-                  }
-                >
-                  {users.map(
-                    (user) =>
-                      // hiện user chưa có trong contacts và khác mình (userId)
-                      !contacts.includes(user.id) &&
-                      user.id !== userId && (
-                        <UserCardCheckbox
-                          isChecked={selectedUsers.includes(user.id)}
-                          key={user.id}
-                          user={user}
-                          classes="userCard--white"
-                          handleCheckbox={handleCheckbox}
-                        />
-                      )
-                  )}
-                </InfiniteScroll>
-              )}
-            </div>
-          )}
+          <div
+            id="modal__body__list--create-contact"
+            className="modal__body__list"
+          >
+            {paginate && (
+              <InfiniteScroll
+                scrollableTarget="modal__body__list--create-contact"
+                dataLength={users.length}
+                next={loadMoreUser}
+                hasMore={users.length < paginate.totalResults}
+                loader={
+                  <LoadingComponent.LoadingContacts classes="userCard--white" />
+                }
+              >
+                {users.map(
+                  (user) =>
+                    // hiện user chưa có trong contacts và khác mình (userId)
+                    user.id !== userId && (
+                      <UserCardCheckbox
+                        disabled={contacts.includes(user.id)}
+                        isChecked={
+                          contacts.includes(user.id) ||
+                          selectedUsers.includes(user.id)
+                        }
+                        key={user.id}
+                        user={user}
+                        classes="userCard--white"
+                        handleCheckbox={handleCheckbox}
+                      />
+                    )
+                )}
+              </InfiniteScroll>
+            )}
+          </div>
         </div>
         <div className="modal__footer">
           <button

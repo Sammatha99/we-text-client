@@ -47,6 +47,15 @@ export const thisUserDetailSlice = createSlice({
         (id) => id !== action.payload
       );
     },
+    addListContacts: (state, action) => {
+      const ids = [];
+      action.payload.forEach((id) => {
+        if (!state.value.contacts.includes(id)) {
+          ids.push(id);
+        }
+      });
+      state.value.contacts = [...state.value.contacts, ...ids];
+    },
   },
 });
 
@@ -59,6 +68,7 @@ export const {
   deleteFollowing,
   addFollower,
   deleteFollower,
+  addListContacts,
 } = thisUserDetailSlice.actions;
 
 export default thisUserDetailSlice.reducer;

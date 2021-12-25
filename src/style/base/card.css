@@ -141,10 +141,18 @@
   transform: scale(1);
 }
 
-/* 
-.userCard__options-wrapper--checkbox:checked ~ .checkmark {
-  color: red;
-} */
+.useCard--checkbox--disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.useCard--checkbox--disabled input[type="checkbox"] {
+  cursor: default;
+}
+
+.useCard--checkbox--disabled input[type="checkbox"]:hover {
+  opacity: 1;
+}
 
 /* loading  */
 .loading.userCard__name {

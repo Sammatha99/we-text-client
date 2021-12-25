@@ -125,7 +125,7 @@
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper {
   width: var(--avatar-x-small);
   height: var(--avatar-x-small);
-  padding: 2px;
+  padding: 1px;
 }
 
 #checkbox-sidebar:not(:checked) ~ .sidebar .sidebar__avatar-wrapper img {
