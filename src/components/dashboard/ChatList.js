@@ -3,7 +3,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import "../../style/chatList.css";
 
-import { LoadingComponent, ChatCard } from "../utils";
+import { LoadingComponent, ChatCard, InputSearch } from "../utils";
 import { CreateChatModal, modalsName } from "../modals";
 import { constants, utilFunction } from "../../utils";
 
@@ -46,22 +46,8 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
     // call backend chatList : option
   };
 
-  const handleSearchChatrooms = () => {
-    // reducer chatList : searchStr + option
-  };
-
-  const handleSearchKeyDown = (e) => {
-    // Get the code of pressed key
-    const keyCode = e.which || e.keyCode;
-
-    // 13 represents the Enter key
-    if (keyCode === 13) {
-      handleSearchChatrooms();
-    }
-  };
-
-  const handleClearSearch = () => {
-    // reducer chatList: clear searchStr
+  const handleSearchChat = (str) => {
+    console.log(str, ": search Chatroom");
   };
 
   return (
@@ -91,25 +77,10 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
               Create new chat
             </label>
           </div>
-          <div className="input-icon input-icon--dark input-icon--search">
-            <input
-              className="input-icon__input"
-              placeholder="Search here"
-              onKeyDown={handleSearchKeyDown}
-            />
-            <div className="input-icon__icon--right">
-              <Icon
-                className="input-icon__icon--link"
-                icon="search"
-                onClick={handleSearchChatrooms}
-              />
-              <Icon
-                className="input-icon__icon--link input-icon__icon--clear"
-                icon="times-circle"
-                onClick={handleClearSearch}
-              />
-            </div>
-          </div>
+          <InputSearch
+            classes={"input-icon--dark"}
+            handleSearch={handleSearchChat}
+          />
         </div>
         <div className="smallPanel-content">
           {loading ? (
