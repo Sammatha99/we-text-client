@@ -18,6 +18,7 @@ export default function FollowersContent() {
   const thisUserDetailFollowers = useSelector(
     (state) => state.thisUserDetail.value.followers
   );
+  const [searchFollowers, setSearchFollowers] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function FollowersContent() {
   }, []);
 
   const loadFollowers = async () => {
-    setLoading(true);
+    // setLoading(true);
     const currentLength = thisUserProfileState.followers.length;
     const followersIdToLoad = thisUserDetailFollowers.slice(
       currentLength,
@@ -52,7 +53,7 @@ export default function FollowersContent() {
       catchError(err);
     }
     thisUserProfileDispatch(actions.addFollowers(followersPopulateToLoad));
-    setLoading(false);
+    // setLoading(false);
   };
 
   const UsersContent = () => {
@@ -66,6 +67,7 @@ export default function FollowersContent() {
             thisUserDetailFollowers.length
           }
           height={400}
+          loader={<LoadingComponent.LoadingThisUserProfileRightPanel />}
         >
           {thisUserProfileState.followers.map((follower) => (
             <UserCard
@@ -74,7 +76,7 @@ export default function FollowersContent() {
               classes={"userCard--white"}
             />
           ))}
-          {loading && LoadingComponent.LoadingThisUserProfileRightPanel()}
+          {/* {loading && LoadingComponent.LoadingThisUserProfileRightPanel()} */}
         </InfiniteScroll>
       </div>
     );

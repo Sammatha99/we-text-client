@@ -22,6 +22,10 @@
   align-items: center;
 }
 
+.userCard--disabled {
+  opacity: 0.5;
+}
+
 .chatCard:hover:not(.chatCard--active) {
   opacity: 0.6;
 }

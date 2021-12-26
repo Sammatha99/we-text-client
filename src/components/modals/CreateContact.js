@@ -42,7 +42,7 @@ export default function CreateContact() {
 
   const loadMoreUser = async (
     search = paginate.search,
-    page = paginate.page
+    page = paginate.page + 1
   ) => {
     try {
       const res = await backendWithoutAuth.get(

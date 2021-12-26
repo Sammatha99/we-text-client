@@ -54,7 +54,7 @@ const storageType = {
 
 const OTPStartTime = 60 * 5;
 
-const paginateInit = { search: "", page: 1, totalPages: 0, totalResults: 0 };
+const paginateInit = { search: "", page: 0, totalPages: 0, totalResults: 0 };
 
 export {
   tabs,

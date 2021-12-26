@@ -12,7 +12,6 @@ import {
   featuresAction,
 } from "../../features";
 import { backendWithAuth } from "../../api/backend";
-import features from "../../features/features";
 
 export default function UserCard({ user, classes }) {
   const dispatch = useDispatch();

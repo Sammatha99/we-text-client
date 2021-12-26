@@ -17,33 +17,34 @@ export default function Contacts() {
     (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
   );
   const dispatch = useDispatch();
-  // const [loading, setLoading] = useState(true);
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState({ populate: [], ids: [] });
   const [paginate, setPaginate] = useState(null);
 
   useEffect(() => {
-    if (paginate) {
-      const getContacts = contacts.filter((contact) =>
-        thisUserDetailContacts.includes(contact.id)
-      );
-      console.log(getContacts);
-
-      // trường hợp xóa contacts 
-      if (getContacts.length < 6 && thisUserDetailContacts.length >= 6) {
-        handleClear();
-      }
-
+    console.log(
+      "????",
+      paginate,
+      contacts.populate.length,
+      thisUserDetailContacts && thisUserDetailContacts.length
+    );
+    if (paginate && thisUserDetailContacts) {
       // trường hợp thêm contact
       if (
-        thisUserDetailContacts.length > paginate.totalResults &&
-        contacts.length >= paginate.totalResults
+        paginate.totalPages === paginate.page &&
+        paginate.page !== 0 &&
+        contacts.populate.length < thisUserDetailContacts.length
       ) {
-        handleClear();
+        //  tự kiến userId mới thêm vào, gọi backend get user by id
+        // thêm thủ công user mới vào contacts => setContacts
+        const missingContactIds = thisUserDetailContacts.filter(
+          (id) => !contacts.ids.includes(id)
+        );
+        loadMissingUserByIds(missingContactIds);
       }
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thisUserDetailContacts]);
+  }, [contacts, thisUserDetailContacts]);
 
   useEffect(() => {
     async function getUserDetail() {
@@ -66,35 +67,60 @@ export default function Contacts() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
+  const setContactsUsers = (users) => {
+    setContacts((prev) => {
+      const results = [...prev.populate];
+      const contactsId = [...prev.ids];
+      users.forEach((user) => {
+        if (!contactsId.includes(user.id)) {
+          results.push(user);
+          contactsId.push(user.id);
+        }
+      });
+      return { populate: results, ids: contactsId };
+    });
+  };
+
+  const loadMissingUserByIds = async (ids) => {
+    const missingUsers = [];
+    try {
+      for (const id of ids) {
+        const res = await backendWithoutAuth.get(`/users/${id}`);
+        missingUsers.push(res.data);
+      }
+    } catch (err) {
+      catchError(err);
+    }
+    setContactsUsers(missingUsers);
+  };
+
   const loadMoreUser = async (
     search = paginate.search,
-    page = paginate.page
+    page = paginate.page + 1
   ) => {
     try {
-      console.group("SEARCH");
       const url = `/users?${
         search !== "" ? `search=${search}` : ""
       }&page=${page}&userId=${userId}`;
-      console.log(url);
 
       const res = await backendWithoutAuth.get(url);
-      console.log(res);
-      setContacts((prev) => [...prev, ...res.data.results]);
+
       setPaginate((prev) => ({
         search: search,
         page: prev.page + 1,
         totalPages: res.data.totalPages,
         totalResults: res.data.totalResults,
       }));
+
+      setContactsUsers(res.data.results);
     } catch (err) {
       catchError(err);
     }
-    console.groupEnd();
   };
 
   const handleSearchContact = (search) => {
     setPaginate({ ...paginateInit, search: search });
-    setContacts([]);
+    setContacts({ populate: [], ids: [] });
     loadMoreUser(search, 1);
   };
 
@@ -106,17 +132,22 @@ export default function Contacts() {
     return (
       <InfiniteScroll
         scrollableTarget="smallPanel-content__contacts"
-        dataLength={contacts.length}
+        dataLength={contacts.populate.length}
         next={loadMoreUser}
-        hasMore={contacts.length < paginate.totalResults}
+        hasMore={paginate.page < paginate.totalPages}
         loader={<LoadingComponent.LoadingContacts />}
       >
-        {contacts.map(
-          (user) =>
-            thisUserDetailContacts.includes(user.id) && (
-              <UserCard key={user.id} user={user} />
-            )
-        )}
+        {contacts.populate.map((user) => (
+          <UserCard
+            key={user.id}
+            user={user}
+            classes={
+              !thisUserDetailContacts.includes(user.id)
+                ? "userCard--disabled"
+                : ""
+            }
+          />
+        ))}
       </InfiniteScroll>
     );
   };
@@ -138,7 +169,6 @@ export default function Contacts() {
             </label>
           </div>
           <InputSearch
-          
             classes={"input-icon--dark"}
             handleSearch={handleSearchContact}
             handleClear={handleClear}

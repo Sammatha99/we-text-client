@@ -39,6 +39,12 @@ const dateCompare = function (d1, d2) {
   if (d1Convert > d2Convert) return 1; // d1 trễ hơn d2
 };
 
+const getIds = function (array) {
+  const ids = [];
+  array.forEach((a) => ids.push(a.id));
+  return ids;
+};
+
 const isEmltyObject = (obj) =>
   obj &&
   Object.keys(obj).length === 0 &&
@@ -50,4 +56,5 @@ export {
   getChatroomsId,
   dateCompare,
   isEmltyObject,
+  getIds,
 };
