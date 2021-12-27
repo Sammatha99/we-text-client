@@ -5,7 +5,7 @@ import { loadingGif } from "../../assets/imgs";
 import { UserCard, ChatCard } from ".";
 import { list4 } from "../../utils/constants";
 
-const LoadingContacts = ({ classes }) => {
+const LoadingContacts = ({ classes } = {}) => {
   return list4.map((index) => <UserCard classes={classes} key={index} />);
 };
 
