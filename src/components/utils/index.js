@@ -10,3 +10,4 @@ export { default as catchError } from "./catchError";
 export { default as Timer } from "./Timer";
 export * as ErrorComponent from "./ErrorScreen";
 export { default as InputSearch } from "./InputSearch";
+export * as EndNoDataComponent from "./EndNoData";

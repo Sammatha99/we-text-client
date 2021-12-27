@@ -3,7 +3,13 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 
 import { CreateContactModal, modalsName } from "../modals";
-import { LoadingComponent, UserCard, catchError, InputSearch } from "../utils";
+import {
+  LoadingComponent,
+  UserCard,
+  catchError,
+  InputSearch,
+  EndNoDataComponent,
+} from "../utils";
 import { backendWithoutAuth } from "../../api/backend";
 import { thisUserDetailAction } from "../../features";
 import { constants, Paginate } from "../../utils";
@@ -15,7 +21,7 @@ export default function Contacts() {
   );
   const dispatch = useDispatch();
 
-  const children = function (o) {
+  const children = (o) => {
     return (
       <UserCard
         key={o.id}
@@ -29,7 +35,6 @@ export default function Contacts() {
 
   const { ComponentScroll, handleSearch } = Paginate(
     children,
-    LoadingComponent.LoadingContacts,
     userId,
     constants.searchType.CONTACTS,
     thisUserDetailContacts
@@ -87,7 +92,11 @@ export default function Contacts() {
           />
         </div>
         <div id="smallPanel-content__contacts" className="smallPanel-content">
-          <ComponentScroll target={"smallPanel-content__contacts"} />
+          <ComponentScroll
+            target={"smallPanel-content__contacts"}
+            loader={LoadingComponent.LoadingContacts}
+            endMessage={EndNoDataComponent.EndNoDataDark}
+          />
         </div>
       </div>
       <CreateContactModal />

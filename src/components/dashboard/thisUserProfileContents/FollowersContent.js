@@ -7,19 +7,41 @@ import {
   LoadingComponent,
   catchError,
   InputSearch,
+  EndNoDataComponent,
 } from "../../utils";
+import { constants, Paginate } from "../../../utils";
 import { backendWithoutAuth } from "../../../api/backend";
-
 import { useStore, actions } from "../../../contextStore/thisUserProfile";
 
 export default function FollowersContent() {
   const [thisUserProfileState, thisUserProfileDispatch] = useStore();
-
+  const userId = useSelector((state) => state.thisUser.value.id);
   const thisUserDetailFollowers = useSelector(
     (state) => state.thisUserDetail.value.followers
   );
-  const [searchFollowers, setSearchFollowers] = useState(null);
-  const [loading, setLoading] = useState(false);
+
+  const [isSearch, setIsSearch] = useState(false);
+
+  const children = (o) => {
+    return (
+      <UserCard
+        user={o}
+        key={o.id}
+        classes={
+          !thisUserDetailFollowers.includes(o.id)
+            ? "userCard--disabled userCard--white"
+            : "userCard--white"
+        }
+      />
+    );
+  };
+
+  const { ComponentScroll, handleSearch, handleClearState } = Paginate(
+    children,
+    userId,
+    constants.searchType.FOLLOWERS,
+    thisUserDetailFollowers
+  );
 
   useEffect(() => {
     if (
@@ -37,7 +59,6 @@ export default function FollowersContent() {
   }, []);
 
   const loadFollowers = async () => {
-    // setLoading(true);
     const currentLength = thisUserProfileState.followers.length;
     const followersIdToLoad = thisUserDetailFollowers.slice(
       currentLength,
@@ -53,12 +74,11 @@ export default function FollowersContent() {
       catchError(err);
     }
     thisUserProfileDispatch(actions.addFollowers(followersPopulateToLoad));
-    // setLoading(false);
   };
 
   const UsersContent = () => {
-    return (
-      <div>
+    if (!isSearch) {
+      return (
         <InfiniteScroll
           dataLength={thisUserProfileState.followers.length}
           next={loadFollowers}
@@ -69,27 +89,38 @@ export default function FollowersContent() {
           height={400}
           loader={<LoadingComponent.LoadingThisUserProfileRightPanel />}
         >
-          {thisUserProfileState.followers.map((follower) => (
-            <UserCard
-              user={follower}
-              key={follower.id}
-              classes={"userCard--white"}
-            />
-          ))}
-          {/* {loading && LoadingComponent.LoadingThisUserProfileRightPanel()} */}
+          {thisUserProfileState.followers.map((follower) => children(follower))}
         </InfiniteScroll>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <ComponentScroll
+            height={400}
+            loader={LoadingComponent.LoadingThisUserProfileRightPanel}
+            endMessage={EndNoDataComponent.EndNoDataLight}
+          />
+        </div>
+      );
+    }
   };
 
   const handleSearchFollowers = (str) => {
-    // backend
-    console.log(str, ": search users in followers");
+    setIsSearch(true);
+    handleSearch(str);
+  };
+
+  const handleClear = () => {
+    handleClearState();
+    setIsSearch(false);
   };
 
   return (
     <div>
-      <InputSearch handleSearch={handleSearchFollowers} />
+      <InputSearch
+        handleSearch={handleSearchFollowers}
+        handleClear={handleClear}
+      />
       {UsersContent()}
     </div>
   );

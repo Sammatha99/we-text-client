@@ -113,7 +113,8 @@ function App() {
     }
     loadApp();
     return () => {};
-  }, [dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const updateUserArrayRelationship = async (userId) => {
   //   const ids = [

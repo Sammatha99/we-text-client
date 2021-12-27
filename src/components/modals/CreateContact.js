@@ -11,6 +11,7 @@ import {
   InputSearch,
   catchError,
   swal,
+  EndNoDataComponent,
 } from "../utils";
 import { Paginate } from "../../utils";
 import { thisUserAction, thisUserDetailAction } from "../../features";
@@ -47,7 +48,8 @@ export default function CreateContact() {
 
   const { ComponentScroll, handleSearch, handleClearState } = Paginate(
     children,
-    getLoadingComponent
+    getLoadingComponent,
+    EndNoDataComponent.EndNodataSmallLight
   );
 
   const cleanUpModal = (e) => {

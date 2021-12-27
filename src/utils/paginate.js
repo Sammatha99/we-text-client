@@ -8,7 +8,7 @@ import { backendWithoutAuth } from "../api/backend";
 
 const paginateUserSearch = { ...constants.paginateInit };
 
-const Paginate = (children, LoadingComponent, userId, type, reduxIds) => {
+const Paginate = (children, userId, type, reduxIds) => {
   const [paginate, setPaginate] = useState(null);
   const [users, setUsers] = useState({ populate: [], ids: [] });
 
@@ -18,6 +18,7 @@ const Paginate = (children, LoadingComponent, userId, type, reduxIds) => {
       if (
         paginate.totalPages === paginate.page &&
         paginate.page !== 0 &&
+        Paginate.search === "" &&
         users.populate.length < reduxIds.length
       ) {
         //  tự kiến userId mới thêm vào, gọi backend get user by id
@@ -40,7 +41,6 @@ const Paginate = (children, LoadingComponent, userId, type, reduxIds) => {
           ids.push(user.id);
         }
       });
-      console.log(results);
       return { populate: results, ids: ids };
     });
   };
@@ -66,7 +66,7 @@ const Paginate = (children, LoadingComponent, userId, type, reduxIds) => {
 
   const handleClearState = () => {
     setPaginate(null);
-    setUsers([]);
+    setUsers({ populate: [], ids: [] });
   };
 
   const loadMore = async (search = paginate.search, page = paginate.page) => {
@@ -92,14 +92,23 @@ const Paginate = (children, LoadingComponent, userId, type, reduxIds) => {
     }
   };
 
-  const ComponentScroll = ({ target = null }) =>
+  const ComponentScroll = ({
+    target = null,
+    height = null,
+    endMessage = null,
+    loader = null,
+  }) =>
     paginate ? (
       <InfiniteScroll
-        scrollableTarget={target}
+        // scrollableTarget={target}
+        // loader={loader ? loader() : <></>}
+        {...(target && { scrollableTarget: target })}
+        {...(height && { height })}
+        {...(loader && { loader: loader() })}
+        {...(endMessage && { endMessage: endMessage() })}
         dataLength={users.populate.length}
         next={loadMore}
         hasMore={paginate.page < paginate.totalPages}
-        loader={LoadingComponent ? LoadingComponent() : <></>}
       >
         {users.populate.map((user) => children(user))}
       </InfiniteScroll>
