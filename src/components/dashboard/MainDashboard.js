@@ -17,17 +17,11 @@ import { tabs } from "../../utils/constants";
 export default function MainDashboard({ tab }) {
   const features = useSelector((state) => state.features.value);
   const [selectedTab, setSelectedTab] = useState(() => tab || null);
-  const [selectedChatroom, setSelectedChatroom] = useState(null);
 
   const TabOpen = () => {
     switch (selectedTab) {
       case tabs[0].name:
-        return (
-          <ChatList
-            selectedChatroom={selectedChatroom}
-            setSelectedChatroom={setSelectedChatroom}
-          />
-        );
+        return <ChatList />;
       case tabs[1].name:
         return <Contacts />;
       case tabs[2].name:
@@ -46,22 +40,15 @@ export default function MainDashboard({ tab }) {
           id="checkbox-sidebar"
           style={{ display: "none" }}
         />
-        <Sidebar
-          setSelectedTab={setSelectedTab}
-          setSelectedChatroom={setSelectedChatroom}
-          selectedTab={selectedTab}
-        />
+        <Sidebar setSelectedTab={setSelectedTab} selectedTab={selectedTab} />
 
         {TabOpen()}
+
+        {features.selectedChatroom != null && <Chat />}
+
         {features.openRightPanel &&
           ((features.selectedUser != null && <OtherUserPofile />) ||
-            (features.selectedChatroom != null && (
-              <ChatInfo id={selectedChatroom} />
-            )))}
-
-        {selectedChatroom != null && (
-          <Chat selectedChatroom={selectedChatroom} />
-        )}
+            (features.selectedChatroom != null && <ChatInfo />))}
       </div>
     </>
   );

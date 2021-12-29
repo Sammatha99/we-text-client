@@ -38,3 +38,13 @@
 .text--center {
   text-align: center;
 }
+
+.no-data {
+  color: var(--text-x-light-color);
+  font-style: italic;
+}
+
+.no-data--dark {
+  color: var(--background-color);
+  font-style: italic;
+}

@@ -17,7 +17,7 @@ import { constants, Paginate } from "../../utils";
 export default function Contacts() {
   const userId = useSelector((state) => state.thisUser.value.id);
   const thisUserDetailContacts = useSelector(
-    (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
+    (state) =>state.thisUserDetail.value?.contacts
   );
   const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ export default function Contacts() {
     );
   };
 
-  const { ComponentScroll, handleSearch } = Paginate(
+  const { ComponentScroll, handleSearch } = Paginate.Users(
     children,
     userId,
     constants.searchType.CONTACTS,

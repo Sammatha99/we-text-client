@@ -17,13 +17,12 @@ import { Paginate } from "../../utils";
 import { thisUserAction, thisUserDetailAction } from "../../features";
 import { backendWithAuth } from "../../api/backend";
 
-// TODO fix logic
 export default function CreateContact() {
   const modalCheckboxRef = useRef();
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
-  const contacts = useSelector(
-    (state) => state.thisUserDetail.value && state.thisUserDetail.value.contacts
+  const thisUserContacts = useSelector(
+    (state) => state.thisUserDetail.value?.contacts
   );
   const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -31,8 +30,10 @@ export default function CreateContact() {
     return (
       o.id !== userId && (
         <UserCardCheckbox
-          disabled={contacts.includes(o.id)}
-          isChecked={contacts.includes(o.id) || selectedUsers.includes(o.id)}
+          disabled={thisUserContacts.includes(o.id)}
+          isChecked={
+            thisUserContacts.includes(o.id) || selectedUsers.includes(o.id)
+          }
           key={o.id}
           user={o}
           classes="userCard--white"
@@ -46,11 +47,8 @@ export default function CreateContact() {
     <LoadingComponent.LoadingContacts classes="userCard--white" />
   );
 
-  const { ComponentScroll, handleSearch, handleClearState } = Paginate(
-    children,
-    getLoadingComponent,
-    EndNoDataComponent.EndNodataSmallLight
-  );
+  const { ComponentScroll, handleSearch, handleClearState } =
+    Paginate.Users(children);
 
   const cleanUpModal = (e) => {
     e && e.preventDefault();
@@ -134,12 +132,16 @@ export default function CreateContact() {
             handleSearch={handleSearchUsers}
             handleClear={handleClearUsers}
           />
-
           <div
             id="modal__body__list--create-contact"
             className="modal__body__list"
           >
-            <ComponentScroll target={"modal__body__list--create-contact"} />
+            <ComponentScroll
+              scrollThreshold={0.7}
+              target={"modal__body__list--create-contact"}
+              loader={getLoadingComponent}
+              endMessage={EndNoDataComponent.EndNoDataLight}
+            />
           </div>
         </div>
         <div className="modal__footer">

@@ -1,29 +1,69 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/modals.css";
 
 import { modalsName } from ".";
-import { InputSearch, LoadingComponent, UserCardCheckbox } from "../utils";
+import {
+  InputSearch,
+  LoadingComponent,
+  UserCardCheckbox,
+  EndNoDataComponent,
+  catchError,
+  swal,
+} from "../utils";
+import { constants, Paginate } from "../../utils";
 
-import { thisUserDetailData } from "../../utils/fakeData";
+import { thisUserAction } from "../../features";
+import { backendWithAuth } from "../../api/backend";
 
 export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   const modalCheckboxRef = useRef();
-  const [loading, setLoading] = useState(true);
-  const [contacts, setContacts] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  // TODO 1.3 add member to chat infinite scroll
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.thisUser.value.id);
 
-  useEffect(() => {
-    // không lấy những đứa đã có trong members list r
-    const getContacts = [...thisUserDetailData.contactsPopulate].filter(
-      (contact) => !membersId.includes(contact.id)
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const children = function (o) {
+    return (
+      o.id !== userId && (
+        <UserCardCheckbox
+          disable={membersId.includes(o.id)}
+          isChecked={membersId.includes(o.id) || selectedUsers.includes(o.id)}
+          key={o.id}
+          user={o}
+          classes="userCard--white"
+          handleCheckbox={handleCheckbox}
+        />
+      )
     );
-    setContacts(getContacts);
-    setLoading(false);
-    return () => {};
-  }, [membersId]);
+  };
+
+  const getLoadingComponent = () => (
+    <LoadingComponent.LoadingContacts classes="userCard--white" />
+  );
+
+  const { ComponentScroll, handleSearch, handleClearState } = Paginate.Users(
+    children,
+    userId,
+    constants.searchType.CONTACTS
+  );
+
+  const cleanUpModal = (e) => {
+    e && e.preventDefault();
+    handleClearState();
+    setSelectedUsers([]);
+    modalCheckboxRef.current.checked = false;
+  };
+
+  const handleSearchUsers = (search) => {
+    handleSearch(search);
+  };
+
+  const handleClearUsers = () => {
+    handleClearState();
+  };
 
   const handleCheckbox = (user, isChecked) => {
     if (isChecked) {
@@ -42,11 +82,7 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   const handleSubmit = () => {
     // truyền về cho trang chat info add member vào
     handleSubmitAdd(selectedUsers);
-    modalCheckboxRef.current.checked = false;
-  };
-
-  const handleSearchUsers = (str) => {
-    console.log(str, ": search users in contacts");
+    cleanUpModal();
   };
 
   return (
@@ -58,7 +94,7 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
         hidden
       />
       <label
-        htmlFor={modalsName.addMemberInchat}
+        onClick={cleanUpModal}
         id={`${modalsName.addMemberInchat}__label`}
         className="modal-overlay center"
       ></label>
@@ -68,30 +104,24 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
       >
         <div className="modal__header">
           Add members
-          <label
-            htmlFor={modalsName.addMemberInchat}
-            className="modal__close-icon"
-          >
+          <label onClick={cleanUpModal} className="modal__close-icon">
             <Icon icon="times" />
           </label>
         </div>
         <div className="modal__body">
           <InputSearch handleSearch={handleSearchUsers} />
-          {loading ? (
-            <LoadingComponent.LoadingContacts classes="userCard--white" />
-          ) : (
-            <div className="modal__body__list">
-              {contacts.map((user) => (
-                <UserCardCheckbox
-                  isChecked={selectedUsers.includes(user.id)}
-                  key={user.id}
-                  user={user}
-                  classes="userCard--white"
-                  handleCheckbox={handleCheckbox}
-                />
-              ))}
-            </div>
-          )}
+
+          <div
+            id="modal__body__list--add-members-chat"
+            className="modal__body__list"
+          >
+            <ComponentScroll
+              scrollThreshold={0.7}
+              target={"modal__body__list--add-members-chat"}
+              loader={getLoadingComponent}
+              endMessage={EndNoDataComponent.EndNoDataLight}
+            />
+          </div>
         </div>
         <div className="modal__footer">
           <button

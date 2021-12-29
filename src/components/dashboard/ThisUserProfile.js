@@ -29,18 +29,23 @@ export default function ThisUserProfile() {
 
   useEffect(() => {
     async function getUserDetail() {
-      try {
-        const res = await backendWithoutAuth.get(`/userDetails/${thisUser.id}`);
-        dispatch(thisUserDetailAction.set(res.data));
-        setSelectedTab(0);
-      } catch (err) {
-        catchError(err);
+      if (thisUserDetail == null) {
+        try {
+          const res = await backendWithoutAuth.get(
+            `/userDetails/${thisUser.id}`
+          );
+          dispatch(thisUserDetailAction.set(res.data));
+        } catch (err) {
+          catchError(err);
+        }
       }
+      setSelectedTab(0);
       setLoading(false);
     }
     getUserDetail();
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, thisUser.id]);
 
   useEffect(() => {

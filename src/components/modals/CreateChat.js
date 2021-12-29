@@ -1,49 +1,88 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/modals.css";
 
 import { modalsName } from ".";
-import { InputSearch, LoadingComponent, UserCardCheckbox } from "../utils";
+import {
+  InputSearch,
+  LoadingComponent,
+  UserCardCheckbox,
+  catchError,
+  swal,
+  EndNoDataComponent,
+} from "../utils";
+import { constants, Paginate } from "../../utils";
 
-import { thisUserDetailData } from "../../utils/fakeData";
+import { thisUserAction } from "../../features";
+import { backendWithAuth } from "../../api/backend";
+
+// TODO 2.1 create chat
 
 export default function CreateChatModal() {
   const modalCheckboxRef = useRef();
-  const [loading, setLoading] = useState(true);
-  const [contacts, setContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
-  // TODO 1.4 create chat infinite scroll
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.thisUser.value.id);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
-  useEffect(() => {
-    const getContacts = [...thisUserDetailData.contactsPopulate];
-    setContacts(getContacts);
-    setLoading(false);
-    return () => {};
-  }, []);
+  const children = function (o) {
+    return (
+      o.id !== userId && (
+        <UserCardCheckbox
+          isChecked={selectedUsers.includes(o.id)}
+          key={o.id}
+          user={o}
+          classes="userCard--white"
+          handleCheckbox={handleCheckbox}
+        />
+      )
+    );
+  };
+
+  const getLoadingComponent = () => (
+    <LoadingComponent.LoadingContacts classes="userCard--white" />
+  );
+
+  const { ComponentScroll, handleSearch, handleClearState } = Paginate.Users(
+    children,
+    userId,
+    constants.searchType.CONTACTS
+  );
+
+  const cleanUpModal = (e) => {
+    e && e.preventDefault();
+    handleClearState();
+    setSelectedUsers([]);
+    modalCheckboxRef.current.checked = false;
+  };
+
+  const handleSearchUsers = (search) => {
+    handleSearch(search);
+  };
+
+  const handleClearUsers = () => {
+    handleClearState();
+  };
 
   const handleCheckbox = (user, isChecked) => {
     if (isChecked) {
-      setSelectedContacts((prev) => {
+      setSelectedUsers((prev) => {
         if (!prev.includes(user.id)) {
           return [...prev, user.id];
         }
       });
     } else {
-      setSelectedContacts((prev) => {
+      setSelectedUsers((prev) => {
         return prev.filter((id) => id !== user.id);
       });
     }
   };
 
   const handleSubmit = () => {
-    // tạo chat và route vào chat mới
-    console.log(selectedContacts);
-    modalCheckboxRef.current.checked = false;
-  };
-
-  const handleSearchContacts = (str) => {
-    console.log(str, ": search users in contacts");
+    // TODO 3 backend tạo chat và route vào chat mới
+    console.log(selectedUsers);
+    cleanUpModal();
   };
 
   return (
@@ -55,7 +94,7 @@ export default function CreateChatModal() {
         hidden
       />
       <label
-        htmlFor={modalsName.createChatModal}
+        onClick={cleanUpModal}
         id={`${modalsName.createChatModal}__label`}
         className="modal-overlay center"
       ></label>
@@ -65,30 +104,27 @@ export default function CreateChatModal() {
       >
         <div className="modal__header">
           Create chat
-          <label
-            htmlFor={modalsName.createChatModal}
-            className="modal__close-icon"
-          >
+          <label onClick={cleanUpModal} className="modal__close-icon">
             <Icon icon="times" />
           </label>
         </div>
         <div className="modal__body">
-          <InputSearch handleSearch={handleSearchContacts} />
-          {loading ? (
-            <LoadingComponent.LoadingContacts classes="userCard--white" />
-          ) : (
-            <div className="modal__body__list">
-              {contacts.map((user) => (
-                <UserCardCheckbox
-                  isChecked={selectedContacts.includes(user.id)}
-                  key={user.id}
-                  user={user}
-                  classes="userCard--white"
-                  handleCheckbox={handleCheckbox}
-                />
-              ))}
-            </div>
-          )}
+          <InputSearch
+            handleSearch={handleSearchUsers}
+            handleClear={handleClearUsers}
+          />
+
+          <div
+            id="modal__body__list--create-chat"
+            className="modal__body__list"
+          >
+            <ComponentScroll
+              scrollThreshold={0.7}
+              target={"modal__body__list--create-chat"}
+              loader={getLoadingComponent}
+              endMessage={EndNoDataComponent.EndNoDataLight}
+            />
+          </div>
         </div>
         <div className="modal__footer">
           <button

@@ -1,46 +1,84 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import "../../style/chatList.css";
 
-import { LoadingComponent, ChatCard, InputSearch } from "../utils";
+import {
+  LoadingComponent,
+  ChatCard,
+  InputSearch,
+  EndNoDataComponent,
+  catchError,
+} from "../utils";
 import { CreateChatModal, modalsName } from "../modals";
-import { constants, utilFunction } from "../../utils";
+import { constants, utilFunction, Paginate } from "../../utils";
+import { backendWithAuth } from "../../api/backend";
+import { chatroomsAction, thisUserAction } from "../../features";
 
-import { chatRoomsData, thisUserData } from "../../utils/fakeData";
+export default function ChatList() {
+  const userId = useSelector((state) => state.thisUser.value.id);
+  const selectedChatroom = useSelector(
+    (state) => state.features.value?.selectedChatroom
+  );
+  const chatrooms = useSelector((state) => state.chatrooms.value?.chatrooms);
+  const paginate = useSelector((state) => state.chatrooms.value?.paginate);
+  const dispatch = useDispatch();
+  const [isSearch, setIsSearch] = useState(false);
 
-/**
- * reducer chatList:
- * - searchStr
- * - options: idStr
- * get từ redux store:
- * - chatrooms
- * - selectedChatroom
- */
+  const children = (o) => {
+    return (
+      <ChatCard
+        key={o.id}
+        chatroom={o}
+        isSelected={selectedChatroom === o.id}
+      />
+    );
+  };
 
-export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
-  const [chatrooms, setChatrooms] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // TODO 1.5 chat list infinite scroll
+  const { handleSearch, handleClearState, ComponentScroll } =
+    Paginate.Chatrooms(children, userId);
 
   useEffect(() => {
-    /**
-     * // gọi data chatrooms từ backend
-     * update store redux:
-     * - chatrooms
-     */
-    const getChatRooms = JSON.parse(JSON.stringify(chatRoomsData));
-
-    getChatRooms.forEach((chatroom) => {
-      chatroom = utilFunction.formatChatroom(chatroom, thisUserData.id);
-      return chatroom;
-    });
-
-    setChatrooms(getChatRooms);
-
-    setLoading(false);
+    if (paginate == null) {
+      loadMore(1);
+    }
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const loadMore = async (page = paginate.page) => {
+    try {
+      const axios = await backendWithAuth();
+
+      if (axios != null) {
+        const url = `/chatrooms?userId=${userId}&page=${page}`;
+
+        const res = await axios.get(url);
+
+        //format chatrooms
+        res.data.results.forEach((chatroom) => {
+          chatroom = utilFunction.formatChatroom(chatroom, userId);
+          return chatroom;
+        });
+
+        // dispatch set chatrooms & paginate
+        dispatch(
+          chatroomsAction.set({
+            chatrooms: res.data.results,
+            page: page + 1,
+            totalPages: res.data.totalPages,
+            totalResults: res.data.totalResults,
+          })
+        );
+      } else {
+        dispatch(thisUserAction.logout());
+      }
+    } catch (err) {
+      catchError(err);
+    }
+  };
 
   const handleOptionChange = (e) => {
     console.log(e.target.value);
@@ -48,7 +86,40 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
   };
 
   const handleSearchChat = (str) => {
-    console.log(str, ": search Chatroom");
+    setIsSearch(true);
+    handleSearch(str);
+  };
+
+  const handleClear = () => {
+    handleClearState();
+    setIsSearch(false);
+  };
+
+  const ChatroomsContent = () => {
+    if (paginate) {
+      if (!isSearch) {
+        return (
+          <InfiniteScroll
+            target="smallPanel-content__chatlist"
+            dataLength={chatrooms.length}
+            next={loadMore}
+            loader={<LoadingComponent.LoadingChats />}
+            hasMore={chatrooms.length < paginate.totalResults.length}
+          >
+            {chatrooms.map((o) => children(o))}
+            {!paginate && <LoadingComponent.LoadingChats />}
+          </InfiniteScroll>
+        );
+      } else {
+        return (
+          <ComponentScroll
+            target={"smallPanel-content__chatlist"}
+            loader={LoadingComponent.LoadingChats}
+            endMessage={EndNoDataComponent.EndNoDataLight}
+          />
+        );
+      }
+    } else return <LoadingComponent.LoadingChats />;
   };
 
   return (
@@ -81,21 +152,11 @@ export default function ChatList({ setSelectedChatroom, selectedChatroom }) {
           <InputSearch
             classes={"input-icon--dark"}
             handleSearch={handleSearchChat}
+            handleClear={handleClear}
           />
         </div>
-        <div className="smallPanel-content">
-          {loading ? (
-            <LoadingComponent.LoadingChats />
-          ) : (
-            chatrooms.map((chatroom) => (
-              <ChatCard
-                isSelected={selectedChatroom === chatroom.id}
-                key={chatroom.id}
-                chatroom={chatroom}
-                setSelectedChatroom={setSelectedChatroom}
-              />
-            ))
-          )}
+        <div id="smallPanel-content__chatlist" className="smallPanel-content">
+          {ChatroomsContent()}
         </div>
       </div>
       <CreateChatModal />

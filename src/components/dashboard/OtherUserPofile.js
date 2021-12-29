@@ -14,8 +14,6 @@ import {
 } from "../../features";
 import { backendWithoutAuth, backendWithAuth } from "../../api/backend";
 
-import { usersData } from "../../utils/fakeData";
-
 export default function OtherUserPofile() {
   const dispatch = useDispatch();
   const thisUserId = useSelector((state) => state.thisUser.value.id);

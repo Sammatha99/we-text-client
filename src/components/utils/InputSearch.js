@@ -21,7 +21,6 @@ export default function InputSearch({ handleSearch, handleClear, classes }) {
 
   const _handleClear = () => {
     setStr("");
-    // TODO truyền vào ???
     handleClear && handleClear();
   };
 

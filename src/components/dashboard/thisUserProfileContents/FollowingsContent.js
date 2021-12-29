@@ -36,7 +36,7 @@ export default function FollowingsContent() {
     );
   };
 
-  const { ComponentScroll, handleSearch, handleClearState } = Paginate(
+  const { ComponentScroll, handleSearch, handleClearState } = Paginate.Users(
     children,
     userId,
     constants.searchType.FOLLOWINGS,

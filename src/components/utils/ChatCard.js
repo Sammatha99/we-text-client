@@ -1,23 +1,18 @@
 import React from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
+import { useDispatch } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { PopupMenus } from "../utils";
 import { utilFunction } from "../../utils";
 
+import { featuresAction, chatroomsAction } from "../../features";
+
 import { thisUserData } from "../../utils/fakeData";
 
-/**
- * từ store redux:
- * - updateSelectedChatroom
- */
-
-export default function ChatCard({
-  setSelectedChatroom,
-  chatroom,
-  isSelected,
-}) {
+export default function ChatCard({ chatroom, isSelected }) {
+  const dispatch = useDispatch();
   const { PopupMenu, triggerProps, handleClickPopupMenu } =
     PopupMenus.PopupMenu();
 
@@ -27,56 +22,54 @@ export default function ChatCard({
       : PopupMenus.PopupMenuChatPersonalCard(chatroom.id, chatroom.members[0]);
 
   const lastMessage = () => {
-    var senderName = "";
+    if (chatroom.lastMessage) {
+      var senderName = "";
 
-    // lấy tên sender name: chính bạn, ng còn lại của personal chat, trong nhóm, rời nhóm
-    if (thisUserData.id === chatroom.lastMessage.sender) {
-      senderName = "you";
-    } else if (!chatroom.isGroupChat) {
-      senderName = chatroom.membersPopulate[0].name;
-    } else if (chatroom.members.includes(chatroom.lastMessage.sender)) {
-      for (var memberInGroup of chatroom.membersPopulate) {
-        if (memberInGroup.id === chatroom.lastMessage.sender) {
-          senderName = memberInGroup.name;
+      // lấy tên sender name: chính bạn, ng còn lại của personal chat, trong nhóm, rời nhóm
+      if (thisUserData.id === chatroom.lastMessagePopulate.sender) {
+        senderName = "you";
+      } else if (!chatroom.isGroupChat) {
+        senderName = chatroom.membersPopulate[0].name;
+      } else if (
+        chatroom.members.includes(chatroom.lastMessagePopulate.sender)
+      ) {
+        for (var memberInGroup of chatroom.membersPopulate) {
+          if (memberInGroup.id === chatroom.lastMessagePopulate.sender) {
+            senderName = memberInGroup.name;
+          }
         }
+      } else {
+        senderName = "Left group";
+      }
+
+      switch (chatroom.lastMessagePopulate.type) {
+        case "text":
+          if (!chatroom.isGroupChat) {
+            return chatroom.lastMessagePopulate.text;
+          }
+          return `${senderName}: ${chatroom.lastMessagePopulate.text}`;
+        case "notify":
+          return `${senderName} ${chatroom.lastMessagePopulate.text}`;
+        case "image":
+          return `${senderName} sent an image`;
+        case "video":
+          return `${senderName} sent a video`;
+        case "file":
+          return `${senderName} sent a file`;
+        case "record":
+          return `${senderName} sent a record`;
+        default:
+          return "No Messages";
       }
     }
-    // else if (chatroom.outGroupMembers.includes(chatroom.lastMessage.sender)) {
-    //   for (var memberOutGroup of chatroom.outGroupMembersPopulate) {
-    //     if (memberOutGroup.id === chatroom.lastMessage.sender) {
-    //       senderName = memberOutGroup.name;
-    //     }
-    //   }
-    // }
-    else {
-      senderName = "Left group";
-    }
-
-    switch (chatroom.lastMessage.type) {
-      case "text":
-        if (!chatroom.isGroupChat) {
-          return chatroom.lastMessage.text;
-        }
-        return `${senderName}: ${chatroom.lastMessage.text}`;
-      case "notify":
-        return `${senderName} ${chatroom.lastMessage.text}`;
-      case "image":
-        return `${senderName} sent an image`;
-      case "video":
-        return `${senderName} sent a video`;
-      case "file":
-        return `${senderName} sent a file`;
-      case "record":
-        return `${senderName} sent a record`;
-      default:
-        return "";
-    }
+    return "No messages";
   };
 
   const handleClick = (e) => {
     if (!isSelected && !e.target.closest(".chatCard__options-wrapper")) {
-      // store redux: update selectedChatroom
-      setSelectedChatroom(chatroom.id);
+      // TODO 2.2 store redux: update selectedChatroom (chatrooms)
+      /* dispatch(featuresAction.setSelectedChatroom(chatroom.id));
+       dispatch(chatroomsAction.setSelectedChatroom(chatroom)); */
     }
   };
 
@@ -122,7 +115,7 @@ export default function ChatCard({
           <p className="chatCard__last-message">{lastMessage()}</p>
         </div>
         <p className="chatCard__time">
-          {dateFormat(chatroom.lastMessage.time)}
+          {chatroom.time && dateFormat(chatroom.time)}
         </p>
       </div>
     );

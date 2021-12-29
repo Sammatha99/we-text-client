@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initFeatures = {
   openRightPanel: false,
-  selectedChatroom: null,
-  selectedUser: null,
+  selectedChatroom: null, //id: string
+  selectedUser: null, //id: string
 };
 
 // TODO 3

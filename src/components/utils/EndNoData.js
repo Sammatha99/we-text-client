@@ -1,24 +1,24 @@
+import clsx from "clsx";
+
+const EndNoData = ({ theme, style }) => {
+  return (
+    <div
+      className={clsx("no-data", {
+        theme: `no-data--${theme}`,
+        style: `no-data--${style}`,
+      })}
+    >
+      No more data
+    </div>
+  );
+};
+
 const EndNoDataLight = () => {
-  // TODO 1: do light and dark theme
-  return <p>end</p>;
+  return <EndNoData theme={"light"} />;
 };
 
 const EndNoDataDark = () => {
-  // TODO 1: do light and dark theme
-  return <p>end</p>;
+  return <EndNoData theme={"dark"} />;
 };
 
-const EndNodataSmallLight = () => {
-  return <p>end</p>;
-};
-
-const EndNodataSmallDark = () => {
-  return <p>end</p>;
-};
-
-export {
-  EndNoDataLight,
-  EndNoDataDark,
-  EndNodataSmallDark,
-  EndNodataSmallLight,
-};
+export { EndNoDataLight, EndNoDataDark };

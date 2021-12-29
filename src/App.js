@@ -43,8 +43,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { constants, localStorage } from "./utils";
 import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
-import { thisUserAction } from "./features";
-import {  backendWithoutAuth } from "./api/backend";
+import { thisUserAction, thisUserDetailAction } from "./features";
+import { backendWithoutAuth } from "./api/backend";
 import { catchError, LoadingComponent } from "./components/utils";
 
 library.add(
@@ -101,9 +101,12 @@ function App() {
 
       try {
         if (userId != null) {
-          const res = await backendWithoutAuth.get(`/users/${userId}`);
-          // await updateUserArrayRelationship(userId);
-          dispatch(thisUserAction.login(res.data));
+          const resUser = await backendWithoutAuth.get(`/users/${userId}`);
+          dispatch(thisUserAction.login(resUser.data));
+          const resUserDetail = await backendWithoutAuth.get(
+            `/userDetails/${userId}`
+          );
+          dispatch(thisUserDetailAction.set(resUserDetail.data));
         }
       } catch (err) {
         catchError(err);
@@ -113,7 +116,7 @@ function App() {
     }
     loadApp();
     return () => {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const updateUserArrayRelationship = async (userId) => {

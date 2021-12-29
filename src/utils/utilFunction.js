@@ -25,9 +25,9 @@ const formatChatroom = function (chatroom, thisUserId) {
   return chatroom;
 };
 
-const getChatroomsId = function (chatrooms) {
+const getIds = function (os) {
   const ids = [];
-  chatrooms.forEach((chatroom) => ids.push(chatroom.id));
+  os.forEach((o) => ids.push(o.id));
   return ids;
 };
 
@@ -39,22 +39,31 @@ const dateCompare = function (d1, d2) {
   if (d1Convert > d2Convert) return 1; // d1 trễ hơn d2
 };
 
-const getIds = function (array) {
-  const ids = [];
-  array.forEach((a) => ids.push(a.id));
-  return ids;
-};
-
 const isEmltyObject = (obj) =>
   obj &&
   Object.keys(obj).length === 0 &&
   Object.getPrototypeOf(obj) === Object.prototype;
 
+const swapItems = (array, from, to) => {
+  if (to === from) return array;
+
+  var target = array[from];
+  var increment = to < from ? -1 : 1;
+
+  for (var k = from; k !== to; k += increment) {
+    array[k] = array[k + increment];
+  }
+
+  array[to] = target;
+
+  return array;
+};
+
 export {
   chatRoomStatus,
   formatChatroom,
-  getChatroomsId,
+  getIds,
   dateCompare,
   isEmltyObject,
-  getIds,
+  swapItems,
 };

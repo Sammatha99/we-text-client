@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import "../../style/chat.css";
 
@@ -7,10 +8,10 @@ import { utilFunction } from "../../utils";
 
 import {
   thisUserData,
-  chatRoomsData,
   messagesChatgroupData,
   messagesPersonalData,
 } from "../../utils/fakeData";
+import { notFoundImage } from "../../assets/imgs";
 
 /**
  * tạo reducer dùng riêng cho chat
@@ -20,22 +21,20 @@ import {
  */
 
 export default function Chat({ selectedChatroom }) {
-  const [chatroom, setChatroom] = useState(null);
-  const [messages, setMessages] = useState(null);
+  const chatroom = useSelector(
+    (state) => state.chatrooms.value.selectedChatroom
+  );
+  const [messages, setMessages] = useState([]);
   // TODO 1.6 messages list infinite scroll
 
   useEffect(() => {
+    // TODO 2.3 chat screen
     if (selectedChatroom != null) {
       //selectedChatroom đc lấy từ store redux tổng
-      let getChatroom = JSON.parse(
-        JSON.stringify(chatRoomsData[selectedChatroom])
-      );
-
-      getChatroom = utilFunction.formatChatroom(getChatroom, thisUserData.id);
 
       // get messages from Backend
       let getMessages;
-      if (getChatroom.isGroupChat) {
+      if (chatroom.isGroupChat) {
         getMessages = JSON.parse(JSON.stringify(messagesChatgroupData));
       } else {
         getMessages = JSON.parse(JSON.stringify(messagesPersonalData));
@@ -43,14 +42,20 @@ export default function Chat({ selectedChatroom }) {
 
       // get sender for each message
       getMessages.forEach((message) => {
-        if (getChatroom.members.includes(message.sender)) {
-          message.sender = getChatroom.membersPopulate.find(
+        if (chatroom.members.includes(message.sender)) {
+          message.sender = chatroom.membersPopulate.find(
+            (member) => member.id === message.sender
+          );
+        } else if (chatroom.outGroupMembers.includes(message.sender)) {
+          message.sender = chatroom.outGroupMembersPopulate.find(
             (member) => member.id === message.sender
           );
         } else {
-          message.sender = getChatroom.outGroupMembersPopulate.find(
-            (member) => member.id === message.sender
-          );
+          message.sender = {
+            name: "not found",
+            avatar: notFoundImage,
+            id: null,
+          };
         }
       });
 
@@ -59,11 +64,12 @@ export default function Chat({ selectedChatroom }) {
 
       setMessages(getMessages);
 
-      setChatroom(getChatroom);
+      // setChatroom(getChatroom);
     }
 
     return () => {};
-  }, [selectedChatroom]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

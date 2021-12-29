@@ -64,7 +64,7 @@ const MessageCard = function ({ thisUserId, message, isGroupChat }) {
       case "image":
         return (
           <div className="messageCard--image messageCard--text">
-            {/* TODO 2 click open zoom image  */}
+            {/* TODO click open zoom image  */}
             <img src={text} alt={text} />
           </div>
         );
@@ -271,11 +271,11 @@ const ChatInput = function ({ thisUser }) {
   };
 
   const handleFileClick = () => {
-    // TODO 6 open file to choose
+    // TODO open file to choose
   };
 
   const handleRecordClick = () => {
-    // TODO 7 open record
+    // TODO open record
   };
 
   const handleEmojiClick = () => {
