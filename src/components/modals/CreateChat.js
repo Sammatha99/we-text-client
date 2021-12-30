@@ -13,10 +13,15 @@ import {
   swal,
   EndNoDataComponent,
 } from "../utils";
-import { constants, Paginate } from "../../utils";
+import { constants, Paginate, utilFunction } from "../../utils";
 
-import { thisUserAction } from "../../features";
+import {
+  chatroomsAction,
+  featuresAction,
+  thisUserAction,
+} from "../../features";
 import { backendWithAuth } from "../../api/backend";
+import axios from "axios";
 
 // TODO 2.1 create chat
 
@@ -79,9 +84,35 @@ export default function CreateChatModal() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // TODO 3 backend tạo chat và route vào chat mới
-    console.log(selectedUsers);
+    swal.showLoadingSwal();
+    try {
+      const dataToSend = {
+        members: [...selectedUsers, userId],
+        isGroupChat: selectedUsers.length > 1,
+      };
+      const axios = await backendWithAuth();
+      if (axios) {
+        swal.closeSwal();
+        const res = await axios.post("/chatrooms", dataToSend);
+        if (!res.data.isExist) {
+          // chưa tồn tại
+          const formatChatroom = utilFunction.formatChatroom(res.data, userId);
+          dispatch(chatroomsAction.unshiftChatroom(formatChatroom));
+        }
+
+        dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
+
+        // dispatch selected chatroom: feature
+        dispatch(featuresAction.setSelectedChatroom(res.data.id));
+        swal.showSuccessSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+      }
+    } catch (err) {
+      catchError(err);
+    }
     cleanUpModal();
   };
 

@@ -9,14 +9,14 @@ const chatRoomStatus = function (chatroom) {
 };
 
 const formatChatroom = function (chatroom, thisUserId) {
-  const otherMembersPopulate = chatroom.membersPopulate.filter(
+  chatroom.membersPopulate = chatroom.membersPopulate.filter(
     (member) => member.id !== thisUserId
   );
 
   // kiếm name cho chatroom
   if (!chatroom.name) {
     const names = [];
-    otherMembersPopulate.forEach((member) => {
+    chatroom.membersPopulate.forEach((member) => {
       names.push(member.name);
     });
     chatroom.name = names.join(", ");

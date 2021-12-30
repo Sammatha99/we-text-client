@@ -61,6 +61,7 @@
   padding: var(--spacing-4);
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 
 .modal__body .input-icon {
@@ -108,9 +109,9 @@
 .modal__body__list {
   width: 100%;
   flex-grow: 1;
-  height: 0;
+  /* height: 0; */
   margin-top: var(--spacing-2);
-  overflow-y: auto;
+  overflow: auto;
 }
 
 /* modal add members chat  */

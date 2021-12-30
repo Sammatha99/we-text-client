@@ -16,7 +16,14 @@ import { utilFunction } from "../utils";
 
 export const chatroomsSlice = createSlice({
   name: "chatrooms",
-  initialState: { value: { chatrooms: [], paginate: null } },
+  initialState: {
+    value: {
+      chatrooms: [],
+      chatroomsId: [],
+      selectedChatroom: null,
+      paginate: null,
+    },
+  },
   reducers: {
     // action: {chatrooms: [chatroom], page, totalPages, totalResults}
     set: (state, action) => {
@@ -29,11 +36,14 @@ export const chatroomsSlice = createSlice({
           totalResults: action.payload.totalResults,
           totalPages: action.payload.totalPages,
         },
+        selectedChatroom: null,
       };
     },
-    // action.payload: chatroom
-    setSelectedChatroom: (state, action) => {
-      state.value.selectedChatroom = action.payload;
+    // action.payload: id:string
+    setSelectedChatroomById: (state, action) => {
+      state.value.selectedChatroom = state.value.chatrooms.find(
+        (chatroom) => chatroom.id === action.payload
+      );
     },
     // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
     unshiftChatroom: (state, action) => {
@@ -89,7 +99,7 @@ export const {
   set,
   unshiftChatroom,
   updateChatroom,
-  setSelectedChatroom,
+  setSelectedChatroomById,
   addNew,
   clearChatrooms,
 } = chatroomsSlice.actions;

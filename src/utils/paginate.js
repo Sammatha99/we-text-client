@@ -42,7 +42,6 @@ const Users = (children, userId, type, reduxIds) => {
           ids.push(user.id);
         }
       });
-      console.log(results);
       return { populate: results, ids: ids };
     });
   };
@@ -78,7 +77,6 @@ const Users = (children, userId, type, reduxIds) => {
       }${type ? `&type=${type}` : ""}`;
 
       const res = await backendWithoutAuth.get(url);
-      console.log(res.data);
 
       setPaginate((prev) => ({
         search: search,
@@ -103,10 +101,11 @@ const Users = (children, userId, type, reduxIds) => {
     paginate ? (
       <>
         <InfiniteScroll
-          {...(scrollThreshold && { scrollThreshold })}
+          {...(scrollThreshold && { scrollThreshold: scrollThreshold })}
           {...(target && { scrollableTarget: target })}
           {...(height && { height })}
           {...(endMessage && { endMessage: endMessage() })}
+          {...(loader && { loader: loader() })}
           dataLength={users.populate.length}
           next={loadMore}
           hasMore={paginate.page < paginate.totalPages}

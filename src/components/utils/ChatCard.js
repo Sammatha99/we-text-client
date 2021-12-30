@@ -36,6 +36,7 @@ export default function ChatCard({ chatroom, isSelected }) {
         for (var memberInGroup of chatroom.membersPopulate) {
           if (memberInGroup.id === chatroom.lastMessagePopulate.sender) {
             senderName = memberInGroup.name;
+            break;
           }
         }
       } else {
