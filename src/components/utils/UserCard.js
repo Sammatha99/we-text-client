@@ -13,7 +13,7 @@ import {
 } from "../../features";
 import { backendWithAuth } from "../../api/backend";
 
-export default function UserCard({ user, classes }) {
+const UserCard = ({ user, classes }) => {
   const dispatch = useDispatch();
   const [status, setSatus] = useState(user && user.status);
 
@@ -99,7 +99,6 @@ export default function UserCard({ user, classes }) {
 
   const handleSeeProfile = () => {
     handleClickPopupMenu();
-    dispatch(featuresAction.setOpenRightPanel(true));
     dispatch(featuresAction.setSelectedUser(user.id));
   };
 
@@ -108,7 +107,6 @@ export default function UserCard({ user, classes }) {
 
   const PopupMenuUserCard = () => {
     return PopupMenus.PopupMenuUserCard(
-      user.id,
       thisUserContacts.includes(user.id),
       handleContact,
       thisUserFollowings.includes(user.id),
@@ -153,4 +151,24 @@ export default function UserCard({ user, classes }) {
         </div>
       </div>
     );
-}
+};
+
+const ThisUserCard = ({ classes }) => {
+  const user = useSelector((state) => state.thisUser.value);
+  return (
+    <div className={clsx("userCard", classes)}>
+      <div
+        className={clsx("avatar", "avatar--small", "center", {
+          "user-active-dots": user.status,
+        })}
+      >
+        <img className="avatar" src={user.avatar} alt={`${user.name} avatar`} />
+      </div>
+      <div className="userCard__content">
+        <p className="userCard__name">{user.name}</p>
+      </div>
+    </div>
+  );
+};
+
+export { ThisUserCard, UserCard };

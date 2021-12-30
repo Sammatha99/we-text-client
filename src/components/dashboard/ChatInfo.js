@@ -1,45 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../../style/chatInfo.css";
 
-import { UserCard, LoadingComponent } from "../utils";
+import { UserCard, ThisUserCard } from "../utils";
 import { modalsName, AddMemberInChatModal } from "../modals";
 import { utilFunction } from "../../utils";
 
-import {
-  chatRoomsData,
-  thisUserData,
-  chatInfoFilesData,
-} from "../../utils/fakeData";
+import { chatInfoFilesData } from "../../utils/fakeData";
+import { featuresAction } from "../../features";
 
-export default function ChatInfo({ id }) {
-  const [loading, setLoading] = useState(true);
-  const [chatroom, setChatroom] = useState(null);
+export default function ChatInfo() {
+  const dispatch = useDispatch();
+  const thisUser = useSelector((state) => state.thisUser.value);
+  const chatroom = useSelector(
+    (state) => state.chatrooms.value?.selectedChatroom
+  );
+  // const [loading, setLoading] = useState(true);
   const [files, setFiles] = useState(null);
 
   useEffect(() => {
-    // get chatroom from backend
-    const getIndex = chatRoomsData.findIndex((chatroom) => chatroom.id === id);
-    const getChatroom = JSON.parse(JSON.stringify(chatRoomsData[getIndex]));
-
-    Object.assign(
-      getChatroom,
-      utilFunction.formatChatroom(getChatroom, thisUserData.id)
-    );
-
-    // get share file from backend
+    // TODO 1 get share file from backend
     const getFiles = JSON.parse(JSON.stringify(chatInfoFilesData));
 
-    setChatroom(getChatroom);
     setFiles(getFiles);
-    setLoading(false);
+    // setLoading(false);
     return () => {};
-  }, [id]);
+  }, []);
 
   const handleSubmitAdd = (newMembers) => {
     console.log(newMembers);
+  };
+
+  const handleCloseChatInfo = () => {
+    dispatch(featuresAction.setSelectedChatroom(null));
   };
 
   const ChatInfoMenus = () => {
@@ -92,6 +88,7 @@ export default function ChatInfo({ id }) {
           {chatroom.membersPopulate.map((user) => (
             <UserCard key={user.id} user={user} classes="userCard--white" />
           ))}
+          <ThisUserCard classes="userCard--white" />
         </div>
       </>
     );
@@ -100,63 +97,67 @@ export default function ChatInfo({ id }) {
   return (
     <>
       <div className="smallPanel content smallPanel--white smallPanel--right">
-        <div className="smallPanel-header">Chat info</div>
+        <div className="smallPanel-header">
+          Chat info
+          <div
+            onClick={handleCloseChatInfo}
+            className="chat-header-options-wrapper smallPanel-header__icon"
+          >
+            <Icon icon="times" />
+          </div>
+        </div>
         <div className="smallPanel-content">
-          {loading ? (
-            LoadingComponent.LoadingRightPanel()
-          ) : (
-            <>
-              <div className="chatInfo-header-wrapper center">
-                <div
-                  className={clsx("avatar", "avatar--medium", "center", {
-                    "user-active-dots": utilFunction.chatRoomStatus(chatroom),
-                    "avatar--double-img": chatroom.isGroupChat,
-                  })}
-                >
-                  <img
-                    className="avatar"
-                    src={chatroom.membersPopulate[0].avatar}
-                    alt={`${chatroom.membersPopulate[0].name} avatar`}
-                  />
-                  {chatroom.isGroupChat && (
-                    <img
-                      className="avatar"
-                      src={chatroom.membersPopulate[1].avatar}
-                      alt={`${chatroom.membersPopulate[1].name} avatar`}
-                    />
-                  )}
-                </div>
-                <div className="text--medium-2 text--center chatInfo__room-name">
-                  {chatroom.name}
-                </div>
-                {!chatroom.isGroupChat && (
-                  <button className="btn btn--primary btn--medium chatInfo__btn">
-                    See profile
-                  </button>
-                )}
-              </div>
+          <div className="chatInfo-header-wrapper center">
+            <div
+              className={clsx("avatar", "avatar--medium", "center", {
+                "user-active-dots": utilFunction.chatRoomStatus(chatroom),
+                "avatar--double-img": chatroom.isGroupChat,
+              })}
+            >
+              <img
+                className="avatar"
+                src={chatroom.membersPopulate[0].avatar}
+                alt={`${chatroom.membersPopulate[0].name} avatar`}
+              />
+              {chatroom.isGroupChat && (
+                <img
+                  className="avatar"
+                  src={chatroom.membersPopulate[1].avatar}
+                  alt={`${chatroom.membersPopulate[1].name} avatar`}
+                />
+              )}
+            </div>
+            <div className="text--medium-2 text--center chatInfo__room-name">
+              {chatroom.name}
+            </div>
+            {!chatroom.isGroupChat && (
+              <button className="btn btn--primary btn--medium chatInfo__btn">
+                See profile
+              </button>
+            )}
+          </div>
 
-              {ChatInfoMenus()}
-              {chatroom.isGroupChat && membersInfo()}
-              <div>
-                <p className="smallPanel-menu-item text--center">Share files</p>
-                <div className="chatInfo-share-files">
-                  {files.map((file, index) => (
-                    <div key={index} className="chatInfo-files-item">
-                      {file.type === "image" ? (
-                        // TODO zoom image
-                        <img src={file.text} alt="img" />
-                      ) : (
-                        <video controls>
-                          <source src={file.text} type="video/mp4" />
-                        </video>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+          {ChatInfoMenus()}
+          {chatroom.isGroupChat && membersInfo()}
+
+          <div>
+            <p className="smallPanel-menu-item text--center">Share files</p>
+            <div className="chatInfo-share-files">
+              {files &&
+                files.map((file, index) => (
+                  <div key={index} className="chatInfo-files-item">
+                    {file.type === "image" ? (
+                      // TODO zoom image
+                      <img src={file.text} alt="img" />
+                    ) : (
+                      <video controls>
+                        <source src={file.text} type="video/mp4" />
+                      </video>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
         </div>
       </div>
       {chatroom != null && (

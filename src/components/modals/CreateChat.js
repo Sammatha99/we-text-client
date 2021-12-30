@@ -15,15 +15,8 @@ import {
 } from "../utils";
 import { constants, Paginate, utilFunction } from "../../utils";
 
-import {
-  chatroomsAction,
-  featuresAction,
-  thisUserAction,
-} from "../../features";
+import { chatroomsAction, thisUserAction } from "../../features";
 import { backendWithAuth } from "../../api/backend";
-import axios from "axios";
-
-// TODO 2.1 create chat
 
 export default function CreateChatModal() {
   const modalCheckboxRef = useRef();
@@ -85,7 +78,6 @@ export default function CreateChatModal() {
   };
 
   const handleSubmit = async () => {
-    // TODO 3 backend tạo chat và route vào chat mới
     swal.showLoadingSwal();
     try {
       const dataToSend = {
@@ -104,8 +96,6 @@ export default function CreateChatModal() {
 
         dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
 
-        // dispatch selected chatroom: feature
-        dispatch(featuresAction.setSelectedChatroom(res.data.id));
         swal.showSuccessSwal();
       } else {
         dispatch(thisUserAction.logout());

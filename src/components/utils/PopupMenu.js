@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useLayer, Arrow } from "react-laag";
 
 import "../../style/base/popupMenu.css";
+import { featuresAction } from "../../features";
 
 const PopupMenuChatGroupCard = (chatId) => {
   const handleOutGroup = (e) => {
@@ -27,9 +29,10 @@ const PopupMenuChatGroupCard = (chatId) => {
 };
 
 const PopupMenuChatPersonalCard = (chatId, userId) => {
+  const dispatch = useDispatch();
   const handleSeeProfile = (e) => {
     e.stopPropagation();
-    // see profile
+    dispatch(featuresAction.setSelectedUser(userId));
   };
 
   const handleDeleteChat = (e) => {
@@ -49,7 +52,6 @@ const PopupMenuChatPersonalCard = (chatId, userId) => {
 };
 
 const PopupMenuUserCard = (
-  userId,
   isInContacts,
   handleContact,
   isInFollowings,

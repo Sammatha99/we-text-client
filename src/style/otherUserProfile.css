@@ -109,7 +109,6 @@
 
 #otherUserFollowings__content,
 #otherUserContacts__content {
-  height: 500px;
   overflow: auto;
 }
 

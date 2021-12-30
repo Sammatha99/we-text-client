@@ -1,10 +1,12 @@
 import { useState } from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { UsersSeenChatModal } from "../modals";
 import { utilFunction, constants } from "../../utils";
+import { chatroomsAction, featuresAction } from "../../features";
 
 import "../../style/chat.css";
 
@@ -56,7 +58,10 @@ const UsersSeenComponent = ({ usersSeen }) => {
   }
 };
 
-const MessageCard = function ({ thisUserId, message, isGroupChat }) {
+const MessageCard = function ({ message, isGroupChat }) {
+  const thisUserId =
+    useSelector((state) => state.thisUser.value.id) === message.sender.id;
+
   const MessageContent = (type, text) => {
     switch (type) {
       case "text":
@@ -143,20 +148,24 @@ const MessageCard = function ({ thisUserId, message, isGroupChat }) {
   }
 };
 
-const ChatHeader = function ({ chatroom }) {
-  //chatroom lấy trong store selectedChatroom
+const ChatHeader = function () {
+  const dispatch = useDispatch();
+  const chatroom = useSelector(
+    (state) => state.chatrooms.value.selectedChatroom
+  );
+
   const handleCloseChat = () => {
-    /**
-     * close chat:
-     * - smallPanelRight === 'chatInfo' && (null)
-     * - selectedChat = null
-     */
+    // close chat: chatrooms, features
+    dispatch(chatroomsAction.setSelectedChatroomById(null));
+    dispatch(featuresAction.setSelectedChatroom(null));
   };
 
   const handleOptionsChat = () => {
     /**
      * smallPanelRight === null ? ('chatInfo') : (null)
      */
+    // dispatch(featuresAction.setOpenRightPanel(true));
+    dispatch(featuresAction.toggleSelectedChatroom());
   };
 
   if (chatroom) {
@@ -209,7 +218,10 @@ const ChatHeader = function ({ chatroom }) {
   }
 };
 
-const ChatBody = function ({ messages, chatroom }) {
+const ChatBody = function ({ messages }) {
+  const chatroom = useSelector(
+    (state) => state.chatrooms.value.selectedChatroom
+  );
   /**
    * lấy messages từ store reducer của chat
    * lấy chatroom từ store redux tổng
@@ -226,7 +238,6 @@ const ChatBody = function ({ messages, chatroom }) {
             >
               <MessageCard
                 isGroupChat={chatroom.isGroupChat}
-                // key={message.id}
                 message={message}
                 thisUserId={message.sender.id === thisUserData.id}
               />
@@ -250,11 +261,12 @@ const ChatBody = function ({ messages, chatroom }) {
   }
 };
 
-const ChatInput = function ({ thisUser }) {
+const ChatInput = function () {
   /**
    * thisUser lấy từ redux store tổng
    * input lấy từ reducer chat
    */
+  const thisUser = useSelector((state) => state.thisUser.value);
 
   const handleChatInputKeyDown = (e) => {
     // Get the code of pressed key

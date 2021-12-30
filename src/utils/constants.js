@@ -68,6 +68,11 @@ const searchType = {
   CONTACTS: "contacts",
 };
 
+const rightPanelType = {
+  USERINFO: "user",
+  CHATINFO: "chat",
+};
+
 export {
   tabs,
   optionsChatList,
@@ -80,4 +85,5 @@ export {
   OTPStartTime,
   paginateInit,
   searchType,
+  rightPanelType,
 };

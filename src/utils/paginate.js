@@ -202,11 +202,6 @@ const Chatrooms = (children, userId) => {
     }
   };
 
-  const Loader = (loader) => {
-    console.log("loading");
-    return loader();
-  };
-
   const ComponentScroll = ({
     target = null,
     height = null,

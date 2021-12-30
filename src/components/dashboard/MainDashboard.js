@@ -16,6 +16,9 @@ import { tabs } from "../../utils/constants";
 
 export default function MainDashboard({ tab }) {
   const features = useSelector((state) => state.features.value);
+  const selectedChatroom = useSelector(
+    (state) => state.chatrooms.value?.selectedChatroom
+  );
   const [selectedTab, setSelectedTab] = useState(() => tab || null);
 
   const TabOpen = () => {
@@ -44,11 +47,13 @@ export default function MainDashboard({ tab }) {
 
         {TabOpen()}
 
-        {features.selectedChatroom != null && <Chat />}
+        {selectedChatroom != null && <Chat />}
 
-        {features.openRightPanel &&
+        {/* {features.openRightPanel &&
           ((features.selectedUser != null && <OtherUserPofile />) ||
-            (features.selectedChatroom != null && <ChatInfo />))}
+            (features.selectedChatroom != null && <ChatInfo />))} */}
+        {(features.selectedUser != null && <OtherUserPofile />) ||
+          (features.selectedChatroom != null && <ChatInfo />)}
       </div>
     </>
   );

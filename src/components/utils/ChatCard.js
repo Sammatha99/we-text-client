@@ -7,7 +7,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { PopupMenus } from "../utils";
 import { utilFunction } from "../../utils";
 
-import { featuresAction, chatroomsAction } from "../../features";
+import { chatroomsAction } from "../../features";
 
 import { thisUserData } from "../../utils/fakeData";
 
@@ -19,7 +19,10 @@ export default function ChatCard({ chatroom, isSelected }) {
   const PopupMenuChatCard = () =>
     chatroom.isGroupChat
       ? PopupMenus.PopupMenuChatGroupCard(chatroom.id)
-      : PopupMenus.PopupMenuChatPersonalCard(chatroom.id, chatroom.members[0]);
+      : PopupMenus.PopupMenuChatPersonalCard(
+          chatroom.id,
+          chatroom.membersPopulate[0].id
+        );
 
   const lastMessage = () => {
     if (chatroom.lastMessage) {
@@ -68,9 +71,7 @@ export default function ChatCard({ chatroom, isSelected }) {
 
   const handleClick = (e) => {
     if (!isSelected && !e.target.closest(".chatCard__options-wrapper")) {
-      // TODO 2.2 store redux: update selectedChatroom (chatrooms)
-      /* dispatch(featuresAction.setSelectedChatroom(chatroom.id));
-       dispatch(chatroomsAction.setSelectedChatroom(chatroom)); */
+      dispatch(chatroomsAction.setSelectedChatroomById(chatroom.id));
     }
   };
 

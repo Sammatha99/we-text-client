@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 import "../../style/chat.css";
 
 import { ChatComponents } from "../utils";
-import { utilFunction } from "../../utils";
 
 import {
-  thisUserData,
+  // thisUserData,
   messagesChatgroupData,
   messagesPersonalData,
 } from "../../utils/fakeData";
@@ -74,9 +73,9 @@ export default function Chat({ selectedChatroom }) {
   return (
     <>
       <div className="bigPanelMiddle content">
-        <ChatComponents.ChatHeader chatroom={chatroom} />
-        <ChatComponents.ChatBody messages={messages} chatroom={chatroom} />
-        <ChatComponents.ChatInput thisUser={thisUserData} />
+        <ChatComponents.ChatHeader />
+        <ChatComponents.ChatBody messages={messages} />
+        <ChatComponents.ChatInput />
       </div>
     </>
   );

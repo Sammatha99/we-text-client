@@ -6,7 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "../../style/otherUserProfile.css";
 
-import { UserCard, LoadingComponent, catchError } from "../utils";
+import {
+  UserCard,
+  LoadingComponent,
+  catchError,
+  EndNoDataComponent,
+} from "../utils";
 import {
   featuresAction,
   thisUserDetailAction,
@@ -300,7 +305,12 @@ export default function OtherUserPofile() {
           </div>
         </label>
         <div className="otherUserFollowings__content">
-          <div id="otherUserFollowings__content">
+          <div
+            id="otherUserFollowings__content"
+            style={{
+              ...(userDetail.followings.length > 10 && { height: "500px" }),
+            }}
+          >
             <InfiniteScroll
               scrollableTarget="otherUserFollowings__content"
               dataLength={followings.length}
@@ -309,6 +319,7 @@ export default function OtherUserPofile() {
               loader={
                 <LoadingComponent.LoadingContacts classes="userCard--white" />
               }
+              endMessage={EndNoDataComponent.EndNoDataLight()}
             >
               {followings.map((following) => (
                 <UserCard
@@ -349,7 +360,12 @@ export default function OtherUserPofile() {
           </div>
         </label>
         <div className="otherUserContacts__content">
-          <div id="otherUserContacts__content">
+          <div
+            id="otherUserContacts__content"
+            style={{
+              ...(userDetail.contacts.length > 10 && { height: "500px" }),
+            }}
+          >
             <InfiniteScroll
               scrollableTarget="otherUserContacts__content"
               dataLength={contacts.length}
