@@ -61,10 +61,6 @@ export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
     handleSearch(search);
   };
 
-  const handleClearUsers = () => {
-    handleClearState();
-  };
-
   const handleCheckbox = (user, isChecked) => {
     if (isChecked) {
       setSelectedUsers((prev) => {

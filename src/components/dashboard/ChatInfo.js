@@ -11,17 +11,23 @@ import {
   ThisUserCard,
   catchError,
   LoadingComponent,
-  EndNoDataComponent,
+  swal,
 } from "../utils";
 import { modalsName, AddMemberInChatModal } from "../modals";
 import { utilFunction } from "../../utils";
 
-import { featuresAction, thisUserAction, filesAction } from "../../features";
+import {
+  featuresAction,
+  thisUserAction,
+  filesAction,
+  chatroomsAction,
+} from "../../features";
 
 import { backendWithAuth } from "../../api/backend";
 
 export default function ChatInfo() {
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.thisUser.value.id);
   const chatroom = useSelector(
     (state) => state.chatrooms.value?.selectedChatroom
   );
@@ -29,7 +35,6 @@ export default function ChatInfo() {
 
   useEffect(() => {
     if (files.paginate == null || files.chatroomId !== chatroom.id) {
-      // TODO 1 get share file from backend
       /**
        * get files from backend if redux.paginate == null or
        * redux.files.chatroomId != selectedChatroomId
@@ -80,8 +85,26 @@ export default function ChatInfo() {
     console.groupEnd();
   };
 
-  const handleSubmitAdd = (newMembers) => {
+  const handleSubmitAdd = async (newMembers) => {
     console.log(newMembers);
+    swal.showLoadingSwal();
+    try {
+      const axios = await backendWithAuth();
+      if (axios) {
+        const res = await axios.patch(`/chatrooms/${chatroom.id}/add-member`, {
+          usersId: newMembers,
+        });
+        Object.assign(res.data, utilFunction.formatChatroom(res.data, userId));
+        dispatch(chatroomsAction.updateChatroom(res.data));
+        swal.closeSwal();
+        swal.showSuccessSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+        swal.closeSwal();
+      }
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const handleCloseChatInfo = () => {
@@ -107,6 +130,7 @@ export default function ChatInfo() {
     );
   };
 
+  // TODO thêm thành viên
   const membersInfo = () => {
     return (
       <>
@@ -177,6 +201,7 @@ export default function ChatInfo() {
                 />
               )}
             </div>
+            {/* TODO chat change group name  */}
             <div className="text--medium-2 text--center chatInfo__room-name">
               {chatroom.name}
             </div>
@@ -190,7 +215,6 @@ export default function ChatInfo() {
           {ChatInfoMenus()}
           {chatroom.isGroupChat && membersInfo()}
 
-          {/* <div> */}
           <p className="smallPanel-menu-item text--center">Share files</p>
 
           {files.paginate ? (
