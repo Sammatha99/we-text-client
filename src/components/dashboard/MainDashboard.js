@@ -49,9 +49,6 @@ export default function MainDashboard({ tab }) {
 
         {selectedChatroom != null && <Chat />}
 
-        {/* {features.openRightPanel &&
-          ((features.selectedUser != null && <OtherUserPofile />) ||
-            (features.selectedChatroom != null && <ChatInfo />))} */}
         {(features.selectedUser != null && <OtherUserPofile />) ||
           (features.selectedChatroom != null && <ChatInfo />)}
       </div>

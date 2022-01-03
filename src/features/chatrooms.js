@@ -77,7 +77,7 @@ export const chatroomsSlice = createSlice({
         }
       }
     },
-    // action.payload = {chatrooms: [newChatrooms], page, totalPages, totalResults}
+    // action.payload = {chatrooms: [newChatrooms], paginate:{ page, totalPages, totalResults}}
     addNew: (state, action) => {
       for (const newChatroom of action.payload.chatrooms) {
         if (!state.value.chatroomsId.includes(newChatroom.id)) {
@@ -85,9 +85,7 @@ export const chatroomsSlice = createSlice({
           state.value.chatroomsId.push(newChatroom.id);
         }
       }
-      state.value.paginate.page = action.payload.page;
-      state.value.paginate.totalResults = action.payload.totalResults;
-      state.value.paginate.totalPages = action.payload.totalPages;
+      state.value.paginate = action.payload.paginate;
     },
     clearChatrooms: (state, action) => {
       state.value = null;

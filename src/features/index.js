@@ -9,3 +9,6 @@ export * as chatroomsAction from "./chatrooms";
 
 export { default as thisUserDetailReducer } from "./thisUserDetail";
 export * as thisUserDetailAction from "./thisUserDetail";
+
+export { default as filesReducer } from "./files";
+export * as filesAction from "./files";

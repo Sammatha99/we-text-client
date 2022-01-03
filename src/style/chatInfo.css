@@ -112,3 +112,8 @@
   .chatInfo-menu__close-members {
   display: none;
 }
+
+/* loading  */
+.chatInfo-files-item.loading {
+  overflow: hidden;
+}

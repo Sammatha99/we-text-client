@@ -26,9 +26,9 @@
 
 .smallPanel-content {
   flex-grow: 1;
+  height: 100%;
   padding: var(--spacing-2) var(--spacing-3);
-
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .smallPanel--white {

@@ -68,6 +68,19 @@ const LoadingApp = () => (
   </div>
 );
 
+const LoadingFileItems = () => {
+  return (
+    <>
+      <div className="chatInfo-files-item loading"></div>
+      <div className="chatInfo-files-item loading"></div>
+      <div className="chatInfo-files-item loading"></div>
+      <div className="chatInfo-files-item loading"></div>
+      <div className="chatInfo-files-item loading"></div>
+      <div className="chatInfo-files-item loading"></div>
+    </>
+  );
+};
+
 export {
   LoadingContacts,
   LoadingChats,
@@ -76,4 +89,5 @@ export {
   LoadingThisUserProfileRightPanel,
   LoadingOTPVerifyEmail,
   LoadingApp,
+  LoadingFileItems,
 };

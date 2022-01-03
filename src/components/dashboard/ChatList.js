@@ -65,11 +65,13 @@ export default function ChatList() {
 
         // dispatch set chatrooms & paginate
         dispatch(
-          chatroomsAction.set({
+          chatroomsAction.addNew({
             chatrooms: res.data.results,
-            page: page + 1,
-            totalPages: res.data.totalPages,
-            totalResults: res.data.totalResults,
+            paginate: {
+              page: page + 1,
+              totalPages: res.data.totalPages,
+              totalResults: res.data.totalResults,
+            },
           })
         );
       } else {
@@ -105,6 +107,7 @@ export default function ChatList() {
             next={loadMore}
             loader={<LoadingComponent.LoadingChats />}
             hasMore={chatrooms.length < paginate.totalResults.length}
+            endMessage={<EndNoDataComponent.EndNoDataLight />}
           >
             {chatrooms.map((o) => children(o))}
             {!paginate && <LoadingComponent.LoadingChats />}

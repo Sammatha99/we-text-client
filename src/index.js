@@ -17,6 +17,7 @@ import {
   chatroomsReducer,
   featuresReducer,
   thisUserDetailReducer,
+  filesReducer,
 } from "./features";
 import App from "./App";
 
@@ -45,6 +46,7 @@ const store = configureStore({
     chatrooms: chatroomsReducer,
     features: featuresReducer,
     thisUserDetail: thisUserDetailReducer,
+    files: filesReducer,
   },
 });
 

@@ -6,18 +6,10 @@ import "../../style/chat.css";
 import { ChatComponents } from "../utils";
 
 import {
-  // thisUserData,
   messagesChatgroupData,
   messagesPersonalData,
 } from "../../utils/fakeData";
 import { notFoundImage } from "../../assets/imgs";
-
-/**
- * tạo reducer dùng riêng cho chat
- * - messages
- * - input: object {inputStr, type}
- * selectedChatroom đc lấy từ store redux tổng
- */
 
 export default function Chat({ selectedChatroom }) {
   const chatroom = useSelector(
