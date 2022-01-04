@@ -1,14 +1,75 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLayer, Arrow } from "react-laag";
 
 import "../../style/base/popupMenu.css";
-import { featuresAction } from "../../features";
+import { swal, catchError } from ".";
+import { utilFunction } from "../../utils";
+import {
+  featuresAction,
+  chatroomsAction,
+  thisUserAction,
+} from "../../features";
+import { backendWithAuth } from "../../api/backend";
 
 const PopupMenuChatGroupCard = (chatId) => {
-  const handleOutGroup = (e) => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.thisUser.value.id);
+  const selectedChatroomId = useSelector(
+    (state) => state.features.value.selectedChatroom
+  );
+  const currentPage =
+    useSelector((state) => state.chatrooms.value.paginate.page) - 1;
+
+  const LoadingMissingChatroom = async (axios) => {
+    const url = `/chatrooms?userId=${userId}&page=${currentPage}`;
+
+    const res = await axios.get(url);
+
+    //format chatrooms
+    res.data.results.forEach((chatroom) => {
+      chatroom = utilFunction.formatChatroom(chatroom, userId);
+      return chatroom;
+    });
+
+    console.log("data: ", res.data);
+    console.log("page: ", currentPage);
+
+    // dispatch set chatrooms & paginate
+    dispatch(
+      chatroomsAction.addNew({
+        chatrooms: res.data.results,
+        paginate: {
+          // page: currentPage + 1,
+          totalPages: res.data.totalPages,
+          totalResults: res.data.totalResults,
+        },
+      })
+    );
+  };
+
+  const handleOutGroup = async (e) => {
     e.stopPropagation();
-    // outgroup click
+    // delete in redux: chatrooms, features
+    try {
+      swal.showLoadingSwal();
+      const axios = await backendWithAuth();
+      if (axios) {
+        await axios.patch(`/chatrooms/${chatId}/delete-member`, { userId });
+
+        if (selectedChatroomId === chatId) {
+          dispatch(featuresAction.setSelectedChatroom(null));
+        }
+        dispatch(chatroomsAction.deleteChatroom(chatId));
+        await LoadingMissingChatroom(axios);
+        swal.closeSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+        swal.closeSwal();
+      }
+    } catch (err) {
+      catchError(err);
+    }
   };
 
   const handleDeleteChat = (e) => {

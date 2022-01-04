@@ -65,6 +65,9 @@ export default function ChatList() {
           return chatroom;
         });
 
+        console.log("data: ", res.data);
+        console.log("page: ", page);
+
         // dispatch set chatrooms & paginate
         dispatch(
           chatroomsAction.addNew({
@@ -104,11 +107,11 @@ export default function ChatList() {
       if (!isSearch) {
         return (
           <InfiniteScroll
-            target="smallPanel-content__chatlist"
+            scrollableTarget="smallPanel-content__chatlist"
             dataLength={chatrooms.length}
             next={loadMore}
             loader={<LoadingComponent.LoadingChats />}
-            hasMore={chatrooms.length < paginate.totalResults.length}
+            hasMore={chatrooms.length < paginate.totalResults}
             endMessage={<EndNoDataComponent.EndNoDataLight />}
           >
             {chatrooms.map((o) => children(o))}

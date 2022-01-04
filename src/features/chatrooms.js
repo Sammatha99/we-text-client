@@ -65,6 +65,22 @@ export const chatroomsSlice = createSlice({
         );
       }
     },
+    // action.payload = id: string
+    deleteChatroom: (state, action) => {
+      if (state.value.chatroomsId.includes(action.payload)) {
+        state.value.chatrooms = state.value.chatrooms.filter(
+          (chatroom) => chatroom.id !== action.payload
+        );
+        state.value.chatroomsId = state.value.chatroomsId.filter(
+          (chatroomId) => chatroomId !== action.payload
+        );
+        state.value.paginate.totalResults =
+          state.value.paginate.totalResults - 1;
+        if (state.value.selectedChatroom?.id === action.payload) {
+          state.value.selectedChatroom = null;
+        }
+      }
+    },
     // action.payload = chatroom
     updateChatroom: (state, action) => {
       const chatroomIndex = state.value.chatrooms.findIndex(
@@ -85,7 +101,8 @@ export const chatroomsSlice = createSlice({
           state.value.chatroomsId.push(newChatroom.id);
         }
       }
-      state.value.paginate = action.payload.paginate;
+      if (state.value.paginate == null) state.value.paginate = {};
+      Object.assign(state.value.paginate, action.payload.paginate);
     },
     clearChatrooms: (state, action) => {
       state.value = null;
@@ -100,6 +117,7 @@ export const {
   setSelectedChatroomById,
   addNew,
   clearChatrooms,
+  deleteChatroom,
 } = chatroomsSlice.actions;
 
 export default chatroomsSlice.reducer;
