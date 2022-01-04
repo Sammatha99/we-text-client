@@ -30,6 +30,7 @@ const PopupMenuChatGroupCard = (chatId) => {
 
 const PopupMenuChatPersonalCard = (chatId, userId) => {
   const dispatch = useDispatch();
+
   const handleSeeProfile = (e) => {
     e.stopPropagation();
     dispatch(featuresAction.setSelectedUser(userId));
@@ -39,6 +40,7 @@ const PopupMenuChatPersonalCard = (chatId, userId) => {
     e.stopPropagation();
     // delete chat
   };
+
   return (
     <div className="popupMenu">
       <div onClick={handleSeeProfile} className="popupMenu__item">
@@ -112,7 +114,7 @@ const PopupMenu = function () {
             ...layerProps.style,
           }}
         >
-          {Children()}
+          <Children />
           <Arrow {...arrowProps} />
         </div>
       )

@@ -15,6 +15,7 @@ export default function InputSearch({ handleSearch, handleClear, classes }) {
 
     // 13 represents the Enter key
     if (keyCode === 13) {
+      e.preventDefault();
       _handleSearch();
     }
   };

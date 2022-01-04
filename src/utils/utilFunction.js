@@ -14,7 +14,7 @@ const formatChatroom = function (chatroom, thisUserId) {
   );
 
   // kiếm name cho chatroom
-  if (!chatroom.name) {
+  if (!chatroom.name || chatroom.name === "") {
     const names = [];
     chatroom.membersPopulate.forEach((member) => {
       names.push(member.name);

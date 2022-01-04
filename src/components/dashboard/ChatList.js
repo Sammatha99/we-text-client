@@ -17,10 +17,12 @@ import { constants, utilFunction, Paginate } from "../../utils";
 import { backendWithAuth } from "../../api/backend";
 import { chatroomsAction, thisUserAction } from "../../features";
 
+// TODO 1.1 out group
+// TODO 1.2 load message
 export default function ChatList() {
   const userId = useSelector((state) => state.thisUser.value.id);
   const selectedChatroom = useSelector(
-    (state) => state.features.value?.selectedChatroom
+    (state) => state.chatrooms.value?.selectedChatroom?.id
   );
   const chatrooms = useSelector((state) => state.chatrooms.value?.chatrooms);
   const paginate = useSelector((state) => state.chatrooms.value?.paginate);

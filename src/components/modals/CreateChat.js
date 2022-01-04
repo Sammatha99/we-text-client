@@ -86,17 +86,23 @@ export default function CreateChatModal() {
       };
       const axios = await backendWithAuth();
       if (axios) {
-        swal.closeSwal();
         const res = await axios.post("/chatrooms", dataToSend);
+
         if (!res.data.isExist) {
           // chưa tồn tại
-          const formatChatroom = utilFunction.formatChatroom(res.data, userId);
-          dispatch(chatroomsAction.unshiftChatroom(formatChatroom));
+          Object.assign(
+            res.data,
+            utilFunction.formatChatroom(res.data, userId)
+          );
+          dispatch(chatroomsAction.unshiftChatroom(res.data));
+          dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
+          swal.closeSwal();
+          swal.showSuccessSwal();
+        } else {
+          // đã tồn tại
+          dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
+          swal.closeSwal();
         }
-
-        dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
-
-        swal.showSuccessSwal();
       } else {
         dispatch(thisUserAction.logout());
       }

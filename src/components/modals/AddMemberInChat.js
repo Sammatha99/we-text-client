@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import "../../style/modals.css";
 
@@ -10,17 +10,11 @@ import {
   LoadingComponent,
   UserCardCheckbox,
   EndNoDataComponent,
-  catchError,
-  swal,
 } from "../utils";
 import { constants, Paginate } from "../../utils";
 
-import { thisUserAction } from "../../features";
-import { backendWithAuth } from "../../api/backend";
-
 export default function AddMemberInChat({ membersId, handleSubmitAdd }) {
   const modalCheckboxRef = useRef();
-  const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
 
   const [selectedUsers, setSelectedUsers] = useState([]);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -13,7 +13,11 @@ import {
   LoadingComponent,
   swal,
 } from "../utils";
-import { modalsName, AddMemberInChatModal } from "../modals";
+import {
+  modalsName,
+  AddMemberInChatModal,
+  ChangeGroupChatName,
+} from "../modals";
 import { utilFunction } from "../../utils";
 
 import {
@@ -32,6 +36,8 @@ export default function ChatInfo() {
     (state) => state.chatrooms.value?.selectedChatroom
   );
   const files = useSelector((state) => state.files.value);
+  const { setOpenChangeGroupNameModal, ChangeGroupChatNameModal } =
+    ChangeGroupChatName();
 
   useEffect(() => {
     if (files.paginate == null || files.chatroomId !== chatroom.id) {
@@ -55,17 +61,12 @@ export default function ChatInfo() {
   };
 
   const loadFiles = async (page = files.paginate.page, f = addNew) => {
-    console.group("GET FILES");
-    console.log("chatroom id: ", chatroom.id);
-    console.log("paginate: ", files.paginate);
-    console.log("data length: ", files.files.length);
     try {
       const axios = await backendWithAuth();
       if (axios != null) {
         const url = `/chatrooms/${chatroom.id}/files?page=${page}`;
 
         const res = await axios.get(url);
-        console.log("res: ", res.data);
 
         f({
           chatroomId: chatroom.id,
@@ -82,11 +83,9 @@ export default function ChatInfo() {
     } catch (err) {
       catchError(err);
     }
-    console.groupEnd();
   };
 
   const handleSubmitAdd = async (newMembers) => {
-    console.log(newMembers);
     swal.showLoadingSwal();
     try {
       const axios = await backendWithAuth();
@@ -96,6 +95,7 @@ export default function ChatInfo() {
         });
         Object.assign(res.data, utilFunction.formatChatroom(res.data, userId));
         dispatch(chatroomsAction.updateChatroom(res.data));
+        dispatch(chatroomsAction.unshiftChatroom(res.data));
         swal.closeSwal();
         swal.showSuccessSwal();
       } else {
@@ -111,6 +111,10 @@ export default function ChatInfo() {
     dispatch(featuresAction.setSelectedChatroom(null));
   };
 
+  const handleChatNameClick = () => {
+    if (chatroom.isGroupChat) setOpenChangeGroupNameModal(true);
+  };
+
   const ChatInfoMenus = () => {
     if (chatroom.isGroupChat) {
       return (
@@ -118,7 +122,12 @@ export default function ChatInfo() {
           <div className="smallPanel-menu-item">Out group</div>
           <div className="smallPanel-menu-item">Delete chat</div>
           <div className="smallPanel-menu-item">Block</div>
-          <div className="smallPanel-menu-item">Change group name</div>
+          <div
+            onClick={() => setOpenChangeGroupNameModal(true)}
+            className="smallPanel-menu-item"
+          >
+            Change group name
+          </div>
         </>
       );
     }
@@ -130,7 +139,6 @@ export default function ChatInfo() {
     );
   };
 
-  // TODO thêm thành viên
   const membersInfo = () => {
     return (
       <>
@@ -201,10 +209,15 @@ export default function ChatInfo() {
                 />
               )}
             </div>
-            {/* TODO chat change group name  */}
-            <div className="text--medium-2 text--center chatInfo__room-name">
+            <div
+              onClick={handleChatNameClick}
+              className="text--medium-2 text--center chatInfo__room-name"
+            >
               {chatroom.name}
             </div>
+
+            <ChangeGroupChatNameModal />
+
             {!chatroom.isGroupChat && (
               <button className="btn btn--primary btn--medium chatInfo__btn">
                 See profile

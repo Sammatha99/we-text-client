@@ -77,6 +77,14 @@
   justify-content: flex-end;
 }
 
+.modal__footer--btn-wrap {
+  flex-direction: row;
+}
+
+.modal__footer--btn-wrap .btn ~ .btn {
+  margin-left: var(--spacing-2);
+}
+
 @keyframes scaleTo {
   from {
     transform: scale(0);
@@ -166,4 +174,12 @@
 #create-contact-modal:checked ~ #create-contact-modal__modal,
 #create-contact-modal:checked ~ #create-contact-modal__label {
   display: flex;
+}
+
+/* small modal  */
+.modal-wrapper--small {
+  min-height: unset;
+  max-height: unset;
+  top: unset;
+  bottom: unset;
 }
