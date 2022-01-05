@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-const EndNoData = ({ theme, style }) => {
+const EndNoData = ({ theme, style, text }) => {
   return (
     <div
       className={clsx("no-data", {
@@ -8,17 +8,17 @@ const EndNoData = ({ theme, style }) => {
         style: `no-data--${style}`,
       })}
     >
-      No more data
+      {text}
     </div>
   );
 };
 
-const EndNoDataLight = () => {
-  return <EndNoData theme={"light"} />;
+const EndNoDataLight = ({ text = "No more data" }) => {
+  return <EndNoData theme={"light"} text={text} />;
 };
 
-const EndNoDataDark = () => {
-  return <EndNoData theme={"dark"} />;
+const EndNoDataDark = ({ text = "No more data" }) => {
+  return <EndNoData theme={"dark"} text={text} />;
 };
 
 export { EndNoDataLight, EndNoDataDark };

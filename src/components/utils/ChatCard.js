@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
 import { PopupMenus } from "../utils";
@@ -12,6 +12,7 @@ import { chatroomsAction } from "../../features";
 import { thisUserData } from "../../utils/fakeData";
 
 export default function ChatCard({ chatroom, isSelected }) {
+  const userId = useSelector((state) => state.thisUser.value.id);
   const dispatch = useDispatch();
   const { PopupMenu, triggerProps, handleClickPopupMenu } =
     PopupMenus.PopupMenu();
@@ -69,6 +70,13 @@ export default function ChatCard({ chatroom, isSelected }) {
     return "No messages";
   };
 
+  const isSeen = () => {
+    if (chatroom.seenHistory) {
+      return Object.keys(chatroom.seenHistory).includes(userId);
+    }
+    return false;
+  };
+
   const handleClick = (e) => {
     if (!isSelected && !e.target.closest(".chatCard__options-wrapper")) {
       dispatch(chatroomsAction.setSelectedChatroomById(chatroom.id));
@@ -81,6 +89,7 @@ export default function ChatCard({ chatroom, isSelected }) {
         onClick={handleClick}
         className={clsx("chatCard", {
           "chatCard--active": isSelected,
+          "chatCard--isNotSeen": !isSeen(),
         })}
         style={{ position: "relative" }}
       >

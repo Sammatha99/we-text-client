@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
 
+import { swal, catchError, EndNoDataComponent } from "../../utils";
 import { UsersSeenChatModal } from "../../modals";
 import { constants } from "../../../utils";
 
 import { notFoundImage } from "../../../assets/imgs";
 
-import {
-  messagesChatgroupData,
-  messagesPersonalData,
-} from "../../../utils/fakeData";
+import { backendWithAuth } from "../../../api/backend";
+import { thisUserAction } from "../../../features";
 
 // TODO 1.6 messages list infinite scroll, load messages
 
@@ -65,7 +65,7 @@ const UsersSeenComponent = ({ usersSeen }) => {
   }
 };
 
-const MessageCard = function ({ message, isGroupChat }) {
+const MessageCard = function ({ message, isGroupChat, fakeThisUserId }) {
   const thisUserId =
     useSelector((state) => state.thisUser.value.id) === message?.sender?.id;
 
@@ -140,7 +140,7 @@ const MessageCard = function ({ message, isGroupChat }) {
     return (
       <div
         className={clsx("messageCard--loading", "messageCard-wraper", {
-          "messageCard--end": thisUserId,
+          "messageCard--end": fakeThisUserId,
         })}
       >
         <div className="messageCard-wrap-avatar">
@@ -156,82 +156,132 @@ const MessageCard = function ({ message, isGroupChat }) {
 };
 
 export default function ChatBody() {
+  const dispatch = useDispatch();
   const chatroom = useSelector(
     (state) => state.chatrooms.value.selectedChatroom
   );
+  const thisUser = useSelector((state) => state.thisUser.value);
   const userId = useSelector((state) => state.thisUser.value.id);
-  const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [paginate, setPaginate] = useState(null);
 
   useEffect(() => {
-    // TODO 2.3 chat screen
-    if (chatroom != null) {
-      // get messages from Backend
-      let getMessages;
-      if (chatroom.isGroupChat) {
-        getMessages = JSON.parse(JSON.stringify(messagesChatgroupData));
-      } else {
-        getMessages = JSON.parse(JSON.stringify(messagesPersonalData));
-      }
-
-      // get sender for each message
-      getMessages.forEach((message) => {
-        if (chatroom.members.includes(message.sender)) {
-          message.sender = chatroom.membersPopulate.find(
-            (member) => member.id === message.sender
-          );
-        } else if (chatroom.outGroupMembers.includes(message.sender)) {
-          message.sender = chatroom.outGroupMembersPopulate.find(
-            (member) => member.id === message.sender
-          );
-        } else {
-          message.sender = {
-            name: "not found",
-            avatar: notFoundImage,
-            id: null,
-          };
-        }
-      });
-
-      // trong backend gửi lên cần được reverse sẵn
-      getMessages = getMessages.reverse();
-
-      setMessages(getMessages);
-    }
-
+    setMessages([]);
+    setPaginate(null);
+    loadMessages(1);
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [chatroom.id]);
 
-  if (messages) {
+  const formatMessage = (message) => {
+    if (chatroom.members.includes(message.sender)) {
+      if (!chatroom.isGroupChat && message.sender === thisUser.id)
+        message.sender = thisUser;
+      else {
+        message.sender = chatroom.membersPopulate.find(
+          (member) => member.id === message.sender
+        );
+      }
+      console.log("members: ", message);
+    } else if (chatroom.outGroupMembers.includes(message.sender)) {
+      message.sender = chatroom.outGroupMembersPopulate.find(
+        (member) => member.id === message.sender
+      );
+      console.log("out group member: ", message);
+    } else {
+      message.sender = {
+        name: "not found",
+        avatar: notFoundImage,
+        id: null,
+      };
+      console.log("not found ", message);
+    }
+
+    return message;
+  };
+
+  const setMessagesToMessages = (messages) => {
+    messages.forEach((message) => formatMessage(message));
+    setMessages((prev) => [...prev, ...messages]);
+    console.groupEnd();
+  };
+
+  const setPaginateToPaginate = (newPaginate) => {
+    setPaginate((prev) => {
+      if (prev == null) prev = {};
+      Object.assign(prev, newPaginate);
+      return prev;
+    });
+  };
+
+  const loadMessages = async (page = paginate.page) => {
+    try {
+      const axios = await backendWithAuth();
+      if (axios) {
+        const url = `/messages?chatroomId=${chatroom.id}&page=${page}`;
+        const res = await axios.get(url);
+        setMessagesToMessages(res.data.results);
+        setPaginateToPaginate({
+          page: page + 1,
+          totalPages: res.data.totalPages,
+          totalResults: res.data.totalResults,
+        });
+      } else {
+        dispatch(thisUserAction.logout());
+      }
+    } catch (err) {
+      catchError(err);
+    }
+  };
+
+  const LoadingMessages = () => {
     return (
       <>
-        <div className="chat-body-wrapper">
-          {messages.map((message) => (
-            <div
-              style={{ display: "flex", flexDirection: "column" }}
-              key={message.id}
-            >
-              <MessageCard
-                isGroupChat={chatroom.isGroupChat}
-                message={message}
-                thisUserId={message.sender.id === userId}
-              />
-              <UsersSeenComponent
-                // key={`${message.id}__usersSeen`}
-                usersSeen={getMembersSeen(chatroom, message.id)}
-              />
-            </div>
-          ))}
-        </div>
+        {constants.list3.map((item) => (
+          <MessageCard key={item} fakeThisUserId={item % 2} />
+        ))}
       </>
     );
-  } else {
-    return (
-      <div className="chat-body-wrapper">
-        {constants.list4.map((item) => (
-          <MessageCard key={item} thisUserId={item % 2} />
-        ))}
+  };
+
+  return (
+    <>
+      <div id="chat-body-warpper" className="chat-body-wrapper">
+        {paginate != null ? (
+          <InfiniteScroll
+            style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
+            inverse={true} //
+            scrollableTarget="chat-body-warpper"
+            dataLength={messages.length}
+            next={loadMessages}
+            loader={<LoadingMessages />}
+            hasMore={messages.length < paginate.totalResults}
+          >
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                style={{ display: "flex", flexDirection: "column" }}
+              >
+                <MessageCard
+                  isGroupChat={chatroom.isGroupChat}
+                  message={message}
+                  thisUserId={message.sender.id === userId}
+                />
+                <UsersSeenComponent
+                  usersSeen={getMembersSeen(chatroom, message.id)}
+                />
+              </div>
+            ))}
+          </InfiniteScroll>
+        ) : (
+          <LoadingMessages />
+        )}
+        {messages.length === 0 && (
+          <div className="center">
+            <EndNoDataComponent.EndNoDataLight text="No Messages" />
+          </div>
+        )}
       </div>
-    );
-  }
+    </>
+  );
 }

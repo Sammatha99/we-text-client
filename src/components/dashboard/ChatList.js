@@ -64,9 +64,6 @@ export default function ChatList() {
           return chatroom;
         });
 
-        console.log("data: ", res.data);
-        console.log("page: ", page);
-
         // dispatch set chatrooms & paginate
         dispatch(
           chatroomsAction.addNew({

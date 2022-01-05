@@ -45,6 +45,7 @@ const routePath = {
 const imageType = ["image/png", "image/jpeg"];
 
 const list4 = [0, 1, 2, 3];
+const list3 = [0, 1, 2];
 
 const storageType = {
   rfToken: "refreshToken",
@@ -79,6 +80,7 @@ export {
   smallPanelRightType,
   thisUserTabs,
   imageType,
+  list3,
   list4,
   routePath,
   storageType,

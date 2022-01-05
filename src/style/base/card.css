@@ -55,17 +55,20 @@
   word-break: break-word;
 }
 
-.chatCard__name,
+/* .chatCard__name, */
 .userCard__name {
   font-weight: var(--font-weight-medium);
 }
 
 .chatCard__name {
+  font-weight: var(--font-weight-light);
   margin-top: var(--spacing-2);
+  color: var(--text-2x-light-color);
 }
 
 .chatCard__last-message {
-  font-weight: var(--font-weight-light);
+  font-weight: var(--font-weight-x-light);
+  color: var(--text-2x-light-color);
 }
 
 .chatCard__options-wrapper,
@@ -181,4 +184,21 @@
   width: 30%;
   overflow: hidden;
   color: transparent;
+}
+
+/* chat card active  */
+.chatCard--active .chatCard__name,
+.chatCard--active .chatCard__last-message {
+  color: var(--white-color);
+}
+
+/* chat card is not seen  */
+.chatCard--isNotSeen .chatCard__name {
+  font-weight: var(--font-weight-bold);
+  color: var(--white-color);
+}
+
+.chatCard--isNotSeen .chatCard__last-message {
+  font-weight: unset;
+  color: var(--white-color);
 }
