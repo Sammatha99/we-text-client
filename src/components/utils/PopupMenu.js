@@ -16,12 +16,12 @@ const PopupMenuChatGroupCard = (chatId) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
   const selectedChatroomId = useSelector(
-    (state) => state.features.value.selectedChatroom
+    (state) => state.chatrooms.value.selectedChatroom?.id
   );
   const currentPage =
     useSelector((state) => state.chatrooms.value.paginate.page) - 1;
 
-  const LoadingMissingChatroom = async (axios) => {
+  const loadingMissingChatroom = async (axios) => {
     const url = `/chatrooms?userId=${userId}&page=${currentPage}`;
 
     const res = await axios.get(url);
@@ -58,10 +58,10 @@ const PopupMenuChatGroupCard = (chatId) => {
         await axios.patch(`/chatrooms/${chatId}/delete-member`, { userId });
 
         if (selectedChatroomId === chatId) {
-          dispatch(featuresAction.setSelectedChatroom(null));
+          dispatch(featuresAction.setSelectedChatroom(false));
         }
         dispatch(chatroomsAction.deleteChatroom(chatId));
-        await LoadingMissingChatroom(axios);
+        await loadingMissingChatroom(axios);
         swal.closeSwal();
       } else {
         dispatch(thisUserAction.logout());

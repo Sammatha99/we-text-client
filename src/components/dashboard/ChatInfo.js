@@ -36,6 +36,8 @@ export default function ChatInfo() {
     (state) => state.chatrooms.value?.selectedChatroom
   );
   const files = useSelector((state) => state.files.value);
+  const currentPage =
+    useSelector((state) => state.chatrooms.value.paginate.page) - 1;
   const { setOpenChangeGroupNameModal, ChangeGroupChatNameModal } =
     ChangeGroupChatName();
 
@@ -107,8 +109,64 @@ export default function ChatInfo() {
     }
   };
 
+  const LoadingMissingChatroom = async (axios) => {
+    const url = `/chatrooms?userId=${userId}&page=${currentPage}`;
+
+    const res = await axios.get(url);
+
+    //format chatrooms
+    res.data.results.forEach((chatroom) => {
+      chatroom = utilFunction.formatChatroom(chatroom, userId);
+      return chatroom;
+    });
+
+    console.log("data: ", res.data);
+    console.log("page: ", currentPage);
+
+    // dispatch set chatrooms & paginate
+    dispatch(
+      chatroomsAction.addNew({
+        chatrooms: res.data.results,
+        paginate: {
+          // page: currentPage + 1,
+          totalPages: res.data.totalPages,
+          totalResults: res.data.totalResults,
+        },
+      })
+    );
+  };
+
+  const handleOutGroup = async (e) => {
+    e.stopPropagation();
+    // delete in redux: chatrooms, features
+    try {
+      swal.showLoadingSwal();
+      const axios = await backendWithAuth();
+      if (axios) {
+        await axios.patch(`/chatrooms/${chatroom.id}/delete-member`, {
+          userId,
+        });
+
+        dispatch(featuresAction.setSelectedChatroom(false));
+        dispatch(chatroomsAction.deleteChatroom(chatroom.id));
+        await LoadingMissingChatroom(axios);
+        swal.closeSwal();
+      } else {
+        dispatch(thisUserAction.logout());
+        swal.closeSwal();
+      }
+    } catch (err) {
+      catchError(err);
+    }
+  };
+
+  const handleSeeProfile = () => {
+    const otherUserId = chatroom.membersPopulate[0].id;
+    dispatch(featuresAction.setSelectedUser(otherUserId));
+  };
+
   const handleCloseChatInfo = () => {
-    dispatch(featuresAction.setSelectedChatroom(null));
+    dispatch(featuresAction.setSelectedChatroom(false));
   };
 
   const handleChatNameClick = () => {
@@ -119,7 +177,9 @@ export default function ChatInfo() {
     if (chatroom.isGroupChat) {
       return (
         <>
-          <div className="smallPanel-menu-item">Out group</div>
+          <div onClick={handleOutGroup} className="smallPanel-menu-item">
+            Out group
+          </div>
           <div className="smallPanel-menu-item">Delete chat</div>
           <div className="smallPanel-menu-item">Block</div>
           <div
@@ -219,7 +279,10 @@ export default function ChatInfo() {
             <ChangeGroupChatNameModal />
 
             {!chatroom.isGroupChat && (
-              <button className="btn btn--primary btn--medium chatInfo__btn">
+              <button
+                onClick={handleSeeProfile}
+                className="btn btn--primary btn--medium chatInfo__btn"
+              >
                 See profile
               </button>
             )}

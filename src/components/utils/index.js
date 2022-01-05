@@ -3,7 +3,6 @@ export { default as ChatCard } from "./ChatCard";
 export * from "./UserCard";
 export { default as UserCardCheckbox } from "./UserCardCheckbox";
 export * as LoadingComponent from "./LoadingScreen";
-export * as ChatComponents from "./Chat";
 export * as PopupMenus from "./PopupMenu";
 export * as swal from "./swal";
 export { default as catchError } from "./catchError";

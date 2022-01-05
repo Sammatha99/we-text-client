@@ -35,7 +35,7 @@ export default function Sidebar({ setSelectedTab, selectedTab }) {
 
   const handleChangeTab = (name) => {
     if (name === "profile") {
-      dispatch(featuresAction.setSelectedChatroom(null));
+      dispatch(featuresAction.setSelectedChatroom(false));
     }
     setSelectedTab(name);
   };
