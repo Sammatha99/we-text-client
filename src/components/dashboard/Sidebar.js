@@ -7,7 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import "../../style/sidebar.css";
 
 import { constants, localStorage } from "../../utils";
-import { thisUserAction, featuresAction } from "../../features";
+import {
+  thisUserAction,
+  featuresAction,
+  chatroomsAction,
+} from "../../features";
 import { backendWithoutAuth } from "../../api/backend";
 
 export default function Sidebar({ setSelectedTab, selectedTab }) {
@@ -36,6 +40,7 @@ export default function Sidebar({ setSelectedTab, selectedTab }) {
   const handleChangeTab = (name) => {
     if (name === "profile") {
       dispatch(featuresAction.setSelectedChatroom(false));
+      dispatch(chatroomsAction.setSelectedChatroomById());
     }
     setSelectedTab(name);
   };

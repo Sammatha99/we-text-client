@@ -59,7 +59,7 @@ export default function ChangeAvatar({ handleSubmit, setShowModal }) {
           {preview && (
             <div className="modal__image-wrapper center">
               <div
-                alt="not fount"
+                alt="not found"
                 className="modal__image-preview"
                 style={{ backgroundImage: `url(${preview})` }}
               ></div>

@@ -43,9 +43,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { constants, localStorage } from "./utils";
 import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
-import { thisUserAction, thisUserDetailAction } from "./features";
+import {
+  chatroomsAction,
+  filesAction,
+  thisUserAction,
+  thisUserDetailAction,
+} from "./features";
 import { backendWithoutAuth } from "./api/backend";
 import { catchError, LoadingComponent } from "./components/utils";
+import files from "./features/files";
 
 library.add(
   fab,
@@ -114,10 +120,20 @@ function App() {
 
       setLoading(false);
     }
+
     loadApp();
+    dispatch(chatroomsAction.clearChatrooms());
+    dispatch(filesAction.clearFiles());
+
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [thisUser?.id]);
+
+  // useEffect(() => {
+  //   effect
+  //   return () => {
+  //     cleanup
+  //   }
+  // }, [input])
 
   // const updateUserArrayRelationship = async (userId) => {
   //   const ids = [

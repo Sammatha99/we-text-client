@@ -14,15 +14,17 @@ import { utilFunction } from "../utils";
 //   paginate: null,
 // };
 
+const initState = {
+  chatrooms: [],
+  chatroomsId: [],
+  selectedChatroom: null,
+  paginate: null,
+};
+
 export const chatroomsSlice = createSlice({
   name: "chatrooms",
   initialState: {
-    value: {
-      chatrooms: [],
-      chatroomsId: [],
-      selectedChatroom: null,
-      paginate: null,
-    },
+    value: initState,
   },
   reducers: {
     // action: {chatrooms: [chatroom], page, totalPages, totalResults}
@@ -41,9 +43,11 @@ export const chatroomsSlice = createSlice({
     },
     // action.payload: id:string
     setSelectedChatroomById: (state, action) => {
-      state.value.selectedChatroom = state.value.chatrooms.find(
-        (chatroom) => chatroom.id === action.payload
-      );
+      if (action.payload)
+        state.value.selectedChatroom = state.value.chatrooms.find(
+          (chatroom) => chatroom.id === action.payload
+        );
+      else state.value.selectedChatroom = null;
     },
     // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
     unshiftChatroom: (state, action) => {
@@ -105,7 +109,7 @@ export const chatroomsSlice = createSlice({
       Object.assign(state.value.paginate, action.payload.paginate);
     },
     clearChatrooms: (state, action) => {
-      state.value = null;
+      state.value = initState;
     },
   },
 });

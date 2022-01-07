@@ -13,12 +13,12 @@ const EndNoData = ({ theme, style, text }) => {
   );
 };
 
-const EndNoDataLight = ({ text = "No more data" }) => {
-  return <EndNoData theme={"light"} text={text} />;
+const EndNoDataLight = ({ text } = {}) => {
+  return <EndNoData theme={"light"} text={text || "No more data"} />;
 };
 
-const EndNoDataDark = ({ text = "No more data" }) => {
-  return <EndNoData theme={"dark"} text={text} />;
+const EndNoDataDark = ({ text } = {}) => {
+  return <EndNoData theme={"dark"} text={text || "No more data"} />;
 };
 
 export { EndNoDataLight, EndNoDataDark };

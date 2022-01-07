@@ -32,9 +32,6 @@ const PopupMenuChatGroupCard = (chatId) => {
       return chatroom;
     });
 
-    console.log("data: ", res.data);
-    console.log("page: ", currentPage);
-
     // dispatch set chatrooms & paginate
     dispatch(
       chatroomsAction.addNew({

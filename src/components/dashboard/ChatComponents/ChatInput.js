@@ -1,12 +1,111 @@
-import { useSelector } from "react-redux";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+import { catchError } from "../../utils";
+import { constants } from "../../../utils";
+import { thisUserAction } from "../../../features";
+import { backendWithAuth } from "../../../api/backend";
+import { useStore, actions } from "../../../contextStore/chatInput";
+
+const ChatInputImage = ({ file, index }) => {
+  const [, messageDispatch] = useStore();
+
+  const handleRemoveImage = () => {
+    messageDispatch(actions.removeImage(index));
+  };
+
+  if (file.type === "image")
+    return (
+      <>
+        <div
+          className="chat-input__image"
+          style={{ backgroundImage: `url(${file.file})` }}
+        >
+          <div
+            onClick={handleRemoveImage}
+            className="chat-input__image-delete center"
+          >
+            <Icon icon="times" />
+          </div>
+        </div>
+      </>
+    );
+  if (file.type === "video") {
+    return (
+      <>
+        <div className="chat-input__image">
+          <video>
+            <source src={file.file} type="video/mp4" />
+          </video>
+          <div
+            onClick={handleRemoveImage}
+            className="chat-input__image-delete center"
+          >
+            <Icon icon="times" />
+          </div>
+        </div>
+      </>
+    );
+  }
+};
+
+const ChatInputImagesWrapper = () => {
+  const [messageState] = useStore();
+  const [previews, setPreviews] = useState(null);
+
+  useEffect(() => {
+    if (messageState.images.length === 0 || !messageState.images) {
+      setPreviews(null);
+      return;
+    }
+
+    const objectUrls = messageState.images.map((image) => ({
+      file: URL.createObjectURL(image.file),
+      type: image.type,
+    }));
+    setPreviews(objectUrls);
+
+    return () => {
+      objectUrls.forEach((objectUrl) => {
+        URL.revokeObjectURL(objectUrl.file);
+      });
+    };
+  }, [messageState.images, messageState.images.length]);
+
+  return (
+    <div className="chat-input__images-wrapper">
+      {previews && (
+        <>
+          {previews.map((preview, index) => (
+            <ChatInputImage index={index} key={index} file={preview} />
+          ))}
+          <label
+            htmlFor="chat-input__image-input"
+            className=" chat-input__image center chat-input__image--add"
+          >
+            <Icon icon="plus" />
+          </label>
+        </>
+      )}
+    </div>
+  );
+};
 
 export default function ChatInput() {
-  /**
-   * thisUser lấy từ redux store tổng
-   * input lấy từ reducer chat
-   */
+  const [messageState, messageDispatch] = useStore();
+  const imageType = useMemo(() => {
+    const imageType = constants.imageType;
+    imageType.push("image/gif", "video/mp4");
+    return imageType;
+  }, []);
+  const dispatch = useDispatch();
   const thisUser = useSelector((state) => state.thisUser.value);
+  const chatroomId = useSelector(
+    (state) => state.chatrooms.value.selectedChatroom.id
+  );
+  const inputRef = useRef();
 
   const handleChatInputKeyDown = (e) => {
     // Get the code of pressed key
@@ -16,30 +115,84 @@ export default function ChatInput() {
     if (keyCode === 13 && !e.shiftKey) {
       // Don't generate a new line
       e.preventDefault();
+      handleSubmit();
 
       // Do something else such as send the message to back-end
       // ...
     }
   };
 
-  const handleFileClick = () => {
-    // TODO open file to choose
+  const handleFileClick = (e) => {
+    const validFiles = [];
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      if (imageType.includes(file.type)) {
+        const type = file.type.split("/").shift();
+        validFiles.push({ file, type });
+      }
+    });
+    e.target.value = null;
+    messageDispatch(actions.addImages(validFiles));
   };
 
   const handleRecordClick = () => {
-    // TODO open record
+    // handle open record
   };
 
   const handleEmojiClick = () => {
     // open emoji
   };
 
+  const handleSendMessage = async (text, type) => {
+    const dataToSend = {
+      text,
+      type,
+      sender: thisUser.id,
+      chatroomId: chatroomId,
+      time: Date.now(),
+    };
+    try {
+      const axios = await backendWithAuth();
+      if (axios) {
+        axios.post("/messages", dataToSend);
+      } else {
+        dispatch(thisUserAction.logout());
+      }
+    } catch (err) {
+      catchError(err);
+    }
+  };
+
+  const handleSendFile = async (images) => {
+    images.forEach(async (image) => {
+      // upload file to firebase
+      const imagePath = `chatrooms/${chatroomId}/${image.file.name}`;
+      const imageRef = ref(getStorage(), imagePath);
+      await uploadBytes(imageRef, image.file);
+
+      // get the url after upload
+      const text = await getDownloadURL(imageRef);
+
+      // send backend
+      handleSendMessage(text, image.type);
+    });
+  };
+
   const handleSubmit = () => {
-    /**
-     * send message: check then send
-     * 1. reducer chat -> update messages -> clear input
-     * 2. redux store -> chatroomsList(last messages)
-     */
+    if (messageState.text.trim() !== "") {
+      handleSendMessage(messageState.text.trim(), constants.messagesType.TEXT);
+    }
+    if (messageState.images.length !== 0) {
+      handleSendFile([...messageState.images]);
+    }
+
+    messageDispatch(actions.clearMessageState());
+
+    inputRef.current.focus();
+  };
+
+  const handleChangeInputText = (e) => {
+    messageDispatch(actions.updateMessage(e.target.value));
   };
 
   return (
@@ -53,19 +206,32 @@ export default function ChatInput() {
           />
         </div>
         <div className="chat-input__input">
+          <ChatInputImagesWrapper />
           <textarea
+            ref={inputRef}
             onKeyDown={handleChatInputKeyDown}
             type="text"
             rows="3"
             placeholder="Insert text ...."
+            value={messageState.text}
+            onChange={handleChangeInputText}
           />
         </div>
       </div>
       <div className="chat-input__wrap">
         <div className="chat-input__icon-wrapper">
-          <div className="chat-input__icon" onClick={handleFileClick}>
+          <input
+            id="chat-input__image-input"
+            type="file"
+            name="files[]"
+            multiple
+            accept="video/*,image/*"
+            onChange={handleFileClick}
+            hidden
+          />
+          <label htmlFor="chat-input__image-input" className="chat-input__icon">
             <Icon icon="photo-video" />
-          </div>
+          </label>
           <div className="chat-input__icon" onClick={handleRecordClick}>
             <Icon icon="paperclip" />
           </div>

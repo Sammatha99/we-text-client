@@ -9,8 +9,6 @@ import { utilFunction } from "../../utils";
 
 import { chatroomsAction } from "../../features";
 
-import { thisUserData } from "../../utils/fakeData";
-
 export default function ChatCard({ chatroom, isSelected }) {
   const userId = useSelector((state) => state.thisUser.value.id);
   const dispatch = useDispatch();
@@ -26,11 +24,11 @@ export default function ChatCard({ chatroom, isSelected }) {
         );
 
   const lastMessage = () => {
-    if (chatroom.lastMessage) {
+    if (chatroom.lastMessage && chatroom.lastMessagePopulate) {
       var senderName = "";
 
       // lấy tên sender name: chính bạn, ng còn lại của personal chat, trong nhóm, rời nhóm
-      if (thisUserData.id === chatroom.lastMessagePopulate.sender) {
+      if (userId === chatroom.lastMessagePopulate.sender) {
         senderName = "you";
       } else if (!chatroom.isGroupChat) {
         senderName = chatroom.membersPopulate[0].name;

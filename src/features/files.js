@@ -41,26 +41,21 @@ export const filesSlice = createSlice({
     },
     addNew: (state, action) => {
       // action.payload: {chatroomId:string, files: [file], paginate: {page, totalResults, totalPages}}
-      // console.log(state.value.filesId);
-      const temp = state.value.filesId;
-      console.log(temp);
       for (const newFile of action.payload.files) {
         if (!state.value.filesId.includes(newFile.id)) {
           state.value.files.push(newFile);
           state.value.filesId.push(newFile.id);
-        } else {
-          console.log(newFile.id);
         }
       }
       state.value.chatroomId = action.payload.chatroomId;
       state.value.paginate = action.payload.paginate;
     },
-    clear: (state, action) => {
+    clearFiles: (state, action) => {
       state.value = initValue;
     },
   },
 });
 
-export const { set, unshiftFile, addNew, clear } = filesSlice.actions;
+export const { set, unshiftFile, addNew, clearFiles } = filesSlice.actions;
 
 export default filesSlice.reducer;

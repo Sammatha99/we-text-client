@@ -4,7 +4,7 @@ import dateFormat from "dateformat";
 import { useSelector, useDispatch } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import { swal, catchError, EndNoDataComponent } from "../../utils";
+import { catchError, EndNoDataComponent } from "../../utils";
 import { UsersSeenChatModal } from "../../modals";
 import { constants } from "../../../utils";
 
@@ -12,8 +12,6 @@ import { notFoundImage } from "../../../assets/imgs";
 
 import { backendWithAuth } from "../../../api/backend";
 import { thisUserAction } from "../../../features";
-
-// TODO 1.6 messages list infinite scroll, load messages
 
 const getMembersSeen = (chatroom, messageId) => {
   if (
@@ -67,7 +65,7 @@ const UsersSeenComponent = ({ usersSeen }) => {
 
 const MessageCard = function ({ message, isGroupChat, fakeThisUserId }) {
   const thisUserId =
-    useSelector((state) => state.thisUser.value.id) === message?.sender?.id;
+    useSelector((state) => state.thisUser.value.id) === message?.sender;
 
   const MessageContent = (type, text) => {
     switch (type) {
@@ -104,7 +102,7 @@ const MessageCard = function ({ message, isGroupChat, fakeThisUserId }) {
       return (
         <>
           <div className="messageCard-wrap-notify">
-            {thisUserId ? "You" : isGroupChat && message.sender.name}{" "}
+            {thisUserId ? "You" : isGroupChat && message.senderPopulate.name}{" "}
             {message.text}
             {" - "}
             {dateFormat(message.time)}
@@ -121,15 +119,18 @@ const MessageCard = function ({ message, isGroupChat, fakeThisUserId }) {
           >
             <div className="messageCard-wrap-avatar">
               <div className="avatar avatar--2x-small center">
-                <img src={message.sender.avatar} alt={message.sender.name} />
+                <img
+                  src={message.senderPopulate.avatar}
+                  alt={message.senderPopulate.name}
+                />
               </div>
             </div>
             <div className="messageCard-wrap-text">
               {MessageContent(message.type, message.text)}
               <p className="messageCard-time">
-                {thisUserId
-                  ? "You"
-                  : isGroupChat && `${message.sender.name} - `}
+                {isGroupChat &&
+                  !thisUserId &&
+                  `${message.senderPopulate.name} - `}
                 {dateFormat(message.time)}
               </p>
             </div>
@@ -160,7 +161,6 @@ export default function ChatBody() {
   const chatroom = useSelector(
     (state) => state.chatrooms.value.selectedChatroom
   );
-  const thisUser = useSelector((state) => state.thisUser.value);
   const userId = useSelector((state) => state.thisUser.value.id);
   const [messages, setMessages] = useState([]);
   const [paginate, setPaginate] = useState(null);
@@ -173,37 +173,46 @@ export default function ChatBody() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.id]);
 
+  // const formatMessage = (message) => {
+  //   if (chatroom.members.includes(message.sender)) {
+  //     if (!chatroom.isGroupChat && message.sender === thisUser.id)
+  //       message.sender = thisUser;
+  //     else {
+  //       message.sender = chatroom.membersPopulate.find(
+  //         (member) => member.id === message.sender
+  //       );
+  //     }
+  //     console.log("members: ", message);
+  //   } else if (chatroom.outGroupMembers.includes(message.sender)) {
+  //     message.sender = chatroom.outGroupMembersPopulate.find(
+  //       (member) => member.id === message.sender
+  //     );
+  //     console.log("out group member: ", message);
+  //   } else {
+  //     message.sender = {
+  //       name: "not found",
+  //       avatar: notFoundImage,
+  //       id: null,
+  //     };
+  //     console.log("not found ", message);
+  //   }
+
+  //   return message;
+  // };
+
   const formatMessage = (message) => {
-    if (chatroom.members.includes(message.sender)) {
-      if (!chatroom.isGroupChat && message.sender === thisUser.id)
-        message.sender = thisUser;
-      else {
-        message.sender = chatroom.membersPopulate.find(
-          (member) => member.id === message.sender
-        );
-      }
-      console.log("members: ", message);
-    } else if (chatroom.outGroupMembers.includes(message.sender)) {
-      message.sender = chatroom.outGroupMembersPopulate.find(
-        (member) => member.id === message.sender
-      );
-      console.log("out group member: ", message);
-    } else {
-      message.sender = {
+    if (!message.senderPopulate)
+      message.senderPopulate = {
         name: "not found",
         avatar: notFoundImage,
         id: null,
       };
-      console.log("not found ", message);
-    }
-
     return message;
   };
 
   const setMessagesToMessages = (messages) => {
     messages.forEach((message) => formatMessage(message));
     setMessages((prev) => [...prev, ...messages]);
-    console.groupEnd();
   };
 
   const setPaginateToPaginate = (newPaginate) => {
@@ -218,8 +227,9 @@ export default function ChatBody() {
     try {
       const axios = await backendWithAuth();
       if (axios) {
-        const url = `/messages?chatroomId=${chatroom.id}&page=${page}`;
+        const url = `/messages?chatroomId=${chatroom.id}&page=${page}&limit=15`;
         const res = await axios.get(url);
+
         setMessagesToMessages(res.data.results);
         setPaginateToPaginate({
           page: page + 1,
@@ -265,7 +275,7 @@ export default function ChatBody() {
                 <MessageCard
                   isGroupChat={chatroom.isGroupChat}
                   message={message}
-                  thisUserId={message.sender.id === userId}
+                  thisUserId={message.senderPopulate.id === userId}
                 />
                 <UsersSeenComponent
                   usersSeen={getMembersSeen(chatroom, message.id)}

@@ -33,7 +33,6 @@ export default function ChangeGroupChatName() {
 
   const handleCloseModal = (e) => {
     e.preventDefault();
-    console.log("close modal");
     setOpen(false);
   };
 
@@ -53,7 +52,6 @@ export default function ChangeGroupChatName() {
             res.data,
             utilFunction.formatChatroom(res.data, userId)
           );
-          console.log(res.data);
           dispatch(chatroomsAction.updateChatroom(res.data));
           dispatch(chatroomsAction.unshiftChatroom(res.data));
           swal.closeSwal();

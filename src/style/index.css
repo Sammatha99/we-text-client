@@ -62,6 +62,8 @@
   --spacing-12: 48px;
   --spacing-content: 16px;
 
+  --input-image: 50px;
+
   --content-width-small: 320px;
   --normal-line-height: 1.8rem;
 
@@ -112,6 +114,7 @@ div {
 /* scrollbar style  */
 ::-webkit-scrollbar {
   width: 18px;
+  height: 18px;
 }
 
 ::-webkit-scrollbar-track {
@@ -126,11 +129,27 @@ div {
   background-clip: padding-box;
 }
 
+::-webkit-scrollbar-thumb:horizontal {
+  background: var(--text-light-color);
+  border-radius: 18px 18px 10px 10px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-top: 7px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-color);
   border-radius: 18px 10px 10px 18px;
   border: 1px solid rgba(0, 0, 0, 0);
   border-left: 7px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background: var(--primary-color);
+  border-radius: 18px 18px 10px 10px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-top: 7px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
 }
 

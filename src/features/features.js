@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initFeatures = {
   openRightPanel: false,
+  openChat: false,
   selectedChatroom: null, //boolean
   selectedUser: null, //id: string
 };
@@ -39,6 +40,9 @@ export const featuresSlice = createSlice({
         state.value.selectedChatroom = true;
         state.value.openRightPanel = true;
       }
+    },
+    clearFeatures: (state, action) => {
+      state.value = initFeatures;
     },
   },
 });

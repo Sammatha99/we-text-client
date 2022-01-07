@@ -17,7 +17,6 @@ import { constants, utilFunction, Paginate } from "../../utils";
 import { backendWithAuth } from "../../api/backend";
 import { chatroomsAction, thisUserAction } from "../../features";
 
-// TODO 1 load message + infinite scroll
 export default function ChatList() {
   const userId = useSelector((state) => state.thisUser.value.id);
   const selectedChatroom = useSelector(

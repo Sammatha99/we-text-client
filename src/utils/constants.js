@@ -42,7 +42,7 @@ const routePath = {
   verifyEmailPath: "/verify-email",
 };
 
-const imageType = ["image/png", "image/jpeg"];
+const imageType = ["image/png", "image/jpeg", "image/jpg"];
 
 const list4 = [0, 1, 2, 3];
 const list3 = [0, 1, 2];
@@ -74,6 +74,15 @@ const rightPanelType = {
   CHATINFO: "chat",
 };
 
+const messagesType = {
+  NOTIFY: "notify",
+  TEXT: "text",
+  IMAGE: "image",
+  VIDEO: "video",
+  FILE: "file",
+  RECORD: "record",
+};
+
 export {
   tabs,
   optionsChatList,
@@ -88,4 +97,5 @@ export {
   paginateInit,
   searchType,
   rightPanelType,
+  messagesType,
 };

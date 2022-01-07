@@ -140,7 +140,6 @@ const Chatrooms = (children, userId) => {
           ids.push(chatroom.id);
         }
       });
-      console.log(results);
       return { populate: results, ids: ids };
     });
   };
@@ -181,7 +180,6 @@ const Chatrooms = (children, userId) => {
         });
 
         setPaginate((prev) => {
-          console.log(prev);
           const o = {
             search: search,
             sortBy: sortBy,
@@ -189,7 +187,6 @@ const Chatrooms = (children, userId) => {
             totalPages: res.data.totalPages,
             totalResults: res.data.totalResults,
           };
-          console.log(o);
           return o;
         });
 
