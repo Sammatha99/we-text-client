@@ -173,33 +173,6 @@ export default function ChatBody() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.id]);
 
-  // const formatMessage = (message) => {
-  //   if (chatroom.members.includes(message.sender)) {
-  //     if (!chatroom.isGroupChat && message.sender === thisUser.id)
-  //       message.sender = thisUser;
-  //     else {
-  //       message.sender = chatroom.membersPopulate.find(
-  //         (member) => member.id === message.sender
-  //       );
-  //     }
-  //     console.log("members: ", message);
-  //   } else if (chatroom.outGroupMembers.includes(message.sender)) {
-  //     message.sender = chatroom.outGroupMembersPopulate.find(
-  //       (member) => member.id === message.sender
-  //     );
-  //     console.log("out group member: ", message);
-  //   } else {
-  //     message.sender = {
-  //       name: "not found",
-  //       avatar: notFoundImage,
-  //       id: null,
-  //     };
-  //     console.log("not found ", message);
-  //   }
-
-  //   return message;
-  // };
-
   const formatMessage = (message) => {
     if (!message.senderPopulate)
       message.senderPopulate = {

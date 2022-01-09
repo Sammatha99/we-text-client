@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,6 @@ import { backendWithAuth } from "../../api/backend";
 
 const UserCard = ({ user, classes }) => {
   const dispatch = useDispatch();
-  const [status, setSatus] = useState(user && user.status);
 
   const thisUserId = useSelector((state) => state.thisUser.value.id);
   const thisUserContacts = useSelector(
@@ -120,7 +119,7 @@ const UserCard = ({ user, classes }) => {
       <div className={clsx("userCard", classes)}>
         <div
           className={clsx("avatar", "avatar--small", "center", {
-            "user-active-dots": status,
+            "user-active-dots": user.status,
           })}
         >
           <img

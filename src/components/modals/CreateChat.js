@@ -87,6 +87,14 @@ export default function CreateChatModal() {
       const axios = await backendWithAuth();
       if (axios) {
         const res = await axios.post("/chatrooms", dataToSend);
+        const messageDataToSend = {
+          text: "created this chatroom",
+          type: constants.messagesType.NOTIFY,
+          sender: userId,
+          chatroomId: res.data.id,
+          time: Date.now(),
+        };
+        axios.post("/messages", messageDataToSend);
 
         if (!res.data.isExist) {
           // chưa tồn tại

@@ -20,6 +20,7 @@ import {
   filesReducer,
 } from "./features";
 import App from "./App";
+import Global from "./Global";
 
 /**
  * redux: store structure
@@ -53,6 +54,7 @@ const store = configureStore({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <Global />
       <App />
     </Provider>
   </React.StrictMode>,

@@ -1,7 +1,3 @@
-// import { useEffect } from "react";
-// import io from "socket.io-client";
-// let socket;
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -51,7 +47,7 @@ import {
 } from "./features";
 import { backendWithoutAuth } from "./api/backend";
 import { catchError, LoadingComponent } from "./components/utils";
-import files from "./features/files";
+import { socket } from "./Global";
 
 library.add(
   fab,
@@ -88,10 +84,6 @@ library.add(
 );
 
 function App() {
-  // useEffect(() => {
-  //   socket = io("http://localhost:3000");
-  // }, []);
-
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const thisUser = useSelector((state) => state.thisUser.value);
@@ -104,9 +96,14 @@ function App() {
   useEffect(() => {
     async function loadApp() {
       const userId = localStorage.userIdStorage.get();
-
       try {
         if (userId != null) {
+          await backendWithoutAuth.post(
+            `/auth/update-status/${userId}?status=true`
+          );
+
+          socket.emit("login", userId);
+
           const resUser = await backendWithoutAuth.get(`/users/${userId}`);
           dispatch(thisUserAction.login(resUser.data));
           const resUserDetail = await backendWithoutAuth.get(
@@ -127,63 +124,6 @@ function App() {
 
     return () => {};
   }, [thisUser?.id]);
-
-  // useEffect(() => {
-  //   effect
-  //   return () => {
-  //     cleanup
-  //   }
-  // }, [input])
-
-  // const updateUserArrayRelationship = async (userId) => {
-  //   const ids = [
-  //     "6198879b0ffff891fca6bf0f",
-  //     "619887a90ffff891fca6bf14",
-  //     "619887d40ffff891fca6bf19",
-  //     "619887de0ffff891fca6bf1e",
-  //     "619887ea0ffff891fca6bf23",
-  //     "619887f50ffff891fca6bf28",
-  //     "619888110ffff891fca6bf2e",
-  //     "61c0344ad4a6e67258d1aa6c",
-  //     "61c426ababc2f39bc4bbd64c",
-  //     "61c426e1abc2f39bc4bbd653",
-  //     "61c42708abc2f39bc4bbd65a",
-  //     "61c42748abc2f39bc4bbd661",
-  //     "61c4277eabc2f39bc4bbd668",
-  //     "61c4279aabc2f39bc4bbd66f",
-  //     "61c427b5abc2f39bc4bbd676",
-  //     "61c427c9abc2f39bc4bbd67d",
-  //     "61c427e5abc2f39bc4bbd684",
-  //     "61c427faabc2f39bc4bbd68b",
-  //     "61c42818abc2f39bc4bbd692",
-  //     "61c4282eabc2f39bc4bbd699",
-  //     "61c42848abc2f39bc4bbd6a0",
-  //     "61c4285aabc2f39bc4bbd6a7",
-  //     "61c4287dabc2f39bc4bbd6ae",
-  //     "61c42895abc2f39bc4bbd6b5",
-  //     "61c428aaabc2f39bc4bbd6bc",
-  //   ];
-
-  //   try {
-  //     const axios = await backendWithAuth();
-  //     if (axios != null) {
-  //       for (var id of ids) {
-  //         console.log(id);
-  //         await axios.patch(`/userDetails/${userId}/add-follower`, {
-  //           userId: id,
-  //         });
-  //         await axios.patch(`/userDetails/${userId}/add-following`, {
-  //           userId: id,
-  //         });
-  //         await axios.patch(`/userDetails/${userId}/add-contact`, {
-  //           userId: id,
-  //         });
-  //       }
-  //     }
-  //   } catch (err) {
-  //     catchError(err);
-  //   }
-  // };
 
   return (
     <>

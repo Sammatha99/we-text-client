@@ -46,10 +46,10 @@ export default function Sidebar({ setSelectedTab, selectedTab }) {
   };
 
   const handleLogout = async () => {
-    await backendWithoutAuth.post("/auth/logout", {
-      refreshToken: localStorage.rfTokenStorage.get().token,
-    });
-    localStorage.storage.removeAll();
+    // await backendWithoutAuth.post("/auth/logout", {
+    //   refreshToken: localStorage.rfTokenStorage.get().token,
+    // });
+    // localStorage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };
 

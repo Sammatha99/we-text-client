@@ -111,6 +111,27 @@ export const chatroomsSlice = createSlice({
     clearChatrooms: (state, action) => {
       state.value = initState;
     },
+    // action.payload: {userId, status}
+    updateUserStatusInChatroom: (state, action) => {
+      const { userId, status } = action.payload;
+      state.value.chatrooms.forEach((chatroom) => {
+        if (chatroom.members.includes(userId)) {
+          const i = chatroom.membersPopulate.findIndex(
+            (member) => member.id === userId
+          );
+          i !== -1 && Object.assign(chatroom.membersPopulate[i], { status });
+        }
+      });
+      if (state.value.selectedChatroom?.members.includes(userId)) {
+        const i = state.value.selectedChatroom.membersPopulate.findIndex(
+          (member) => member.id === userId
+        );
+        i !== -1 &&
+          Object.assign(state.value.selectedChatroom.membersPopulate[i], {
+            status,
+          });
+      }
+    },
   },
 });
 
@@ -122,6 +143,7 @@ export const {
   addNew,
   clearChatrooms,
   deleteChatroom,
+  updateUserStatusInChatroom,
 } = chatroomsSlice.actions;
 
 export default chatroomsSlice.reducer;

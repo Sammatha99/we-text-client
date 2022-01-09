@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -33,8 +33,9 @@ export default function ChatInfo() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
   const chatroom = useSelector(
-    (state) => state.chatrooms.value?.selectedChatroom
+    (state) => state.chatrooms.value.selectedChatroom
   );
+  console.log(chatroom.membersPopulate);
   const files = useSelector((state) => state.files.value);
   const currentPage =
     useSelector((state) => state.chatrooms.value.paginate.page) - 1;
