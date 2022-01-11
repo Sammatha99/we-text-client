@@ -11,6 +11,7 @@ import { chatroomsAction } from "../../features";
 
 export default function ChatCard({ chatroom, isSelected }) {
   const userId = useSelector((state) => state.thisUser.value.id);
+  const thisUser = useSelector((state) => state.thisUser.value);
   const dispatch = useDispatch();
   const { PopupMenu, triggerProps, handleClickPopupMenu } =
     PopupMenus.PopupMenu();
@@ -42,7 +43,13 @@ export default function ChatCard({ chatroom, isSelected }) {
           }
         }
       } else {
-        senderName = "Left group";
+        for (var memberOutGroup of chatroom.outGroupMembersPopulate) {
+          if (memberOutGroup.id === chatroom.lastMessagePopulate.sender) {
+            senderName = memberOutGroup.name;
+            break;
+          }
+        }
+        // senderName = "Left group";
       }
 
       switch (chatroom.lastMessagePopulate.type) {
@@ -110,13 +117,20 @@ export default function ChatCard({ chatroom, isSelected }) {
             src={chatroom.membersPopulate[0].avatar}
             alt={`${chatroom.membersPopulate[0].name} avatar`}
           />
-          {chatroom.isGroupChat && (
-            <img
-              className="avatar"
-              src={chatroom.membersPopulate[1].avatar}
-              alt={`${chatroom.membersPopulate[1].name} avatar`}
-            />
-          )}
+          {chatroom.isGroupChat &&
+            (chatroom.membersPopulate.length > 1 ? (
+              <img
+                className="avatar"
+                src={chatroom.membersPopulate[1].avatar}
+                alt={`${chatroom.membersPopulate[1].name} avatar`}
+              />
+            ) : (
+              <img
+                className="avatar"
+                src={thisUser.avatar}
+                alt={`${thisUser.name} avatar`}
+              />
+            ))}
         </div>
         <div className="chatCard__content">
           <p className="chatCard__name">{chatroom.name}</p>

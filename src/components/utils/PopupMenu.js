@@ -52,8 +52,10 @@ const PopupMenuChatGroupCard = (chatId) => {
       swal.showLoadingSwal();
       const axios = await backendWithAuth();
       if (axios) {
-        await axios.patch(`/chatrooms/${chatId}/delete-member`, { userId });
-
+        const res = await axios.patch(`/chatrooms/${chatId}/delete-member`, {
+          userId,
+        });
+        // TODO outgroup socket
         if (selectedChatroomId === chatId) {
           dispatch(featuresAction.setSelectedChatroom(false));
         }

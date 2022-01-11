@@ -7,6 +7,7 @@ import {
   ADD_MESSAGES_PAGINATE,
   UNSHIFT_MESSAGE,
   CLEAR_MESSAGES_PAGINATE,
+  UNSHIFT_MESSAGES,
 } from "./constants";
 
 import { utilFunction } from "../../utils";
@@ -44,7 +45,8 @@ function reducer(state, action) {
       };
     case CLEAR_INPUT_STATE:
       return { ...state, images: [], text: "" };
-    case ADD_MESSAGES_PAGINATE: // action.payload: {messages, paginate}
+    case ADD_MESSAGES_PAGINATE: {
+      // action.payload: {messages, paginate}
       const newMessages = [];
       const newMessagesId = state.messagesId;
       action.payload.messages.forEach((message) => {
@@ -60,7 +62,10 @@ function reducer(state, action) {
         paginate: action.payload.paginate,
       });
       return { ...state };
-    case UNSHIFT_MESSAGE: // action.payload: message
+    }
+
+    case UNSHIFT_MESSAGE: {
+      // action.payload: message
       if (!state.messagesId.includes(action.payload.id)) {
         utilFunction.formatMessage(action.payload);
         if (state.paginate == null) {
@@ -83,6 +88,7 @@ function reducer(state, action) {
         }
       }
       return { ...state };
+    }
     case CLEAR_MESSAGES_PAGINATE:
       return {
         ...state,
@@ -90,6 +96,27 @@ function reducer(state, action) {
         messagesId: [],
         paginate: null,
       };
+    // case UNSHIFT_MESSAGES: {
+    //   //action.payload: [messages]
+    //   const newMessages = [];
+    //   const newMessagesId = state.messagesId;
+    //   action.payload.forEach((message) => {
+    //     if (!newMessagesId.includes(message.id)) {
+    //       utilFunction.formatMessage(message);
+    //       newMessages.push(message);
+    //       newMessagesId.push(message.id);
+    //     }
+    //   });
+    //   Object.assign(state, {
+    //     messages: [...newMessages, ...state.messages],
+    //     messagesId: newMessagesId,
+    //     paginate: {
+    //       ...state.paginate,
+    //       totalResults: state.paginate.totalResults + newMessages.length,
+    //     },
+    //   });
+    //   return { ...state };
+    // }
     default:
       return state;
   }

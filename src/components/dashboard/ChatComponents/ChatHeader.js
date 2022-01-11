@@ -10,6 +10,7 @@ export default function ChatHeader() {
   const chatroom = useSelector(
     (state) => state.chatrooms.value.selectedChatroom
   );
+  const thisUser = useSelector((state) => state.thisUser.value);
 
   const handleCloseChat = () => {
     // close chat: chatrooms, features
@@ -39,13 +40,20 @@ export default function ChatHeader() {
               src={chatroom.membersPopulate[0].avatar}
               alt={`${chatroom.membersPopulate[0].name} avatar`}
             />
-            {chatroom.isGroupChat && (
-              <img
-                className="avatar"
-                src={chatroom.membersPopulate[1].avatar}
-                alt={`${chatroom.membersPopulate[1].name} avatar`}
-              />
-            )}
+            {chatroom.isGroupChat &&
+              (chatroom.membersPopulate.length > 1 ? (
+                <img
+                  className="avatar"
+                  src={chatroom.membersPopulate[1].avatar}
+                  alt={`${chatroom.membersPopulate[1].name} avatar`}
+                />
+              ) : (
+                <img
+                  className="avatar"
+                  src={thisUser.avatar}
+                  alt={`${thisUser.name} avatar`}
+                />
+              ))}
           </div>
           <p className="chat-header-info__name text--medium-2">
             {chatroom.name}

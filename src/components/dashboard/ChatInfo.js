@@ -28,10 +28,12 @@ import {
 } from "../../features";
 
 import { backendWithAuth } from "../../api/backend";
+import { socket } from "../../Global";
 
 export default function ChatInfo() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.thisUser.value.id);
+  const thisUser = useSelector((state) => state.thisUser.value);
   const chatroom = useSelector(
     (state) => state.chatrooms.value.selectedChatroom
   );
@@ -95,9 +97,13 @@ export default function ChatInfo() {
         const res = await axios.patch(`/chatrooms/${chatroom.id}/add-member`, {
           usersId: newMembers,
         });
-        Object.assign(res.data, utilFunction.formatChatroom(res.data, userId));
-        dispatch(chatroomsAction.updateChatroom(res.data));
-        dispatch(chatroomsAction.unshiftChatroom(res.data));
+        socket.emit(
+          "send-add-member",
+          chatroom.id,
+          res.data.lastMessage,
+          res.data.time,
+          newMembers
+        );
         swal.closeSwal();
         swal.showSuccessSwal();
       } else {
@@ -146,6 +152,7 @@ export default function ChatInfo() {
 
         dispatch(featuresAction.setSelectedChatroom(false));
         dispatch(chatroomsAction.deleteChatroom(chatroom.id));
+        // TODO outgroup socket
         await LoadingMissingChatroom(axios);
         swal.closeSwal();
       } else {
@@ -258,13 +265,20 @@ export default function ChatInfo() {
                 src={chatroom.membersPopulate[0].avatar}
                 alt={`${chatroom.membersPopulate[0].name} avatar`}
               />
-              {chatroom.isGroupChat && (
-                <img
-                  className="avatar"
-                  src={chatroom.membersPopulate[1].avatar}
-                  alt={`${chatroom.membersPopulate[1].name} avatar`}
-                />
-              )}
+              {chatroom.isGroupChat &&
+                (chatroom.membersPopulate.length > 1 ? (
+                  <img
+                    className="avatar"
+                    src={chatroom.membersPopulate[1].avatar}
+                    alt={`${chatroom.membersPopulate[1].name} avatar`}
+                  />
+                ) : (
+                  <img
+                    className="avatar"
+                    src={thisUser.avatar}
+                    alt={`${thisUser.name} avatar`}
+                  />
+                ))}
             </div>
             <div
               onClick={handleChatNameClick}

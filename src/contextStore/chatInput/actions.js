@@ -7,6 +7,7 @@ import {
   ADD_MESSAGES_PAGINATE,
   UNSHIFT_MESSAGE,
   CLEAR_MESSAGES_PAGINATE,
+  UNSHIFT_MESSAGES,
 } from "./constants";
 
 export const addImages = (payload) => ({
@@ -46,5 +47,10 @@ export const unshiftMessage = (payload) => ({
 
 export const clearMessagesPaginate = (payload) => ({
   type: CLEAR_MESSAGES_PAGINATE,
+  payload,
+});
+
+export const unshiftMessages = (payload) => ({
+  type: UNSHIFT_MESSAGES,
   payload,
 });

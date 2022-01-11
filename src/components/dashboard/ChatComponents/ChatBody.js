@@ -6,10 +6,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { catchError, EndNoDataComponent } from "../../utils";
 import { UsersSeenChatModal } from "../../modals";
-import { constants, utilFunction } from "../../../utils";
+import { constants } from "../../../utils";
 
 import { useStore, actions } from "../../../contextStore/chatInput";
-import { backendWithAuth } from "../../../api/backend";
+import { backendWithAuth, backendWithoutAuth } from "../../../api/backend";
 import { thisUserAction } from "../../../features";
 import { socket } from "../../../Global";
 
@@ -169,9 +169,11 @@ export default function ChatBody() {
     loadMessages(1);
 
     socket.on(`receive-message-${chatroom.id}`, handleRecieveMessage);
+    socket.on(`receive-add-member-${chatroom.id}`, handleRecieveAddMembers);
 
     return () => {
       socket.off(`receive-message-${chatroom.id}`);
+      socket.off(`receive-add-member-${chatroom.id}`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.id]);
@@ -185,6 +187,31 @@ export default function ChatBody() {
       };
       messageDispatch(actions.unshiftMessage(newMessage));
       console.groupEnd();
+    }
+  };
+
+  const handleRecieveAddMembers = (
+    chatroomId,
+    lastMessageId,
+    time,
+    newMembersId
+  ) => {
+    if (chatroom.id === chatroomId) {
+      newMembersId.forEach((newMemberId, index) => {
+        backendWithoutAuth.get(`/users/${newMemberId}`).then((res) => {
+          const user = res.data;
+          const message = {
+            id: `${lastMessageId}_${index}`,
+            text: "joined group",
+            sender: user.id,
+            senderPopulate: user,
+            type: "notify",
+            chatroomId,
+            time,
+          };
+          messageDispatch(actions.unshiftMessage(message));
+        });
+      });
     }
   };
 
