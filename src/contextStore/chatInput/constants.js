@@ -4,4 +4,8 @@ export const CLEAR_IMAGES = "clear_images";
 
 export const UPDATE_MESSAGE = "update_message";
 
-export const CLEAR_MESSAGE_STATE = "clear_message_state";
+export const CLEAR_INPUT_STATE = "clear_input_state";
+
+export const ADD_MESSAGES_PAGINATE = "update_message_paginate";
+export const UNSHIFT_MESSAGE = "unshift_message";
+export const CLEAR_MESSAGES_PAGINATE = "clear_messages_paginate";

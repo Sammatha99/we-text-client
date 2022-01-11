@@ -6,13 +6,12 @@ import { useSelector, useDispatch } from "react-redux";
 
 import "../../style/sidebar.css";
 
-import { constants, localStorage } from "../../utils";
+import { constants } from "../../utils";
 import {
   thisUserAction,
   featuresAction,
   chatroomsAction,
 } from "../../features";
-import { backendWithoutAuth } from "../../api/backend";
 
 export default function Sidebar({ setSelectedTab, selectedTab }) {
   const navigate = useNavigate();
@@ -46,10 +45,6 @@ export default function Sidebar({ setSelectedTab, selectedTab }) {
   };
 
   const handleLogout = async () => {
-    // await backendWithoutAuth.post("/auth/logout", {
-    //   refreshToken: localStorage.rfTokenStorage.get().token,
-    // });
-    // localStorage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };
 

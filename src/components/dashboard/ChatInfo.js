@@ -35,7 +35,6 @@ export default function ChatInfo() {
   const chatroom = useSelector(
     (state) => state.chatrooms.value.selectedChatroom
   );
-  console.log(chatroom.membersPopulate);
   const files = useSelector((state) => state.files.value);
   const currentPage =
     useSelector((state) => state.chatrooms.value.paginate.page) - 1;

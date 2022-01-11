@@ -31,7 +31,7 @@ export default function ChatCard({ chatroom, isSelected }) {
       if (userId === chatroom.lastMessagePopulate.sender) {
         senderName = "you";
       } else if (!chatroom.isGroupChat) {
-        senderName = chatroom.membersPopulate[0].name;
+        senderName = ""; //chatroom.membersPopulate[0].name;
       } else if (
         chatroom.members.includes(chatroom.lastMessagePopulate.sender)
       ) {
@@ -47,10 +47,9 @@ export default function ChatCard({ chatroom, isSelected }) {
 
       switch (chatroom.lastMessagePopulate.type) {
         case "text":
-          if (!chatroom.isGroupChat) {
-            return chatroom.lastMessagePopulate.text;
-          }
-          return `${senderName}: ${chatroom.lastMessagePopulate.text}`;
+          return senderName !== ""
+            ? `${senderName}: ${chatroom.lastMessagePopulate.text}`
+            : chatroom.lastMessagePopulate.text;
         case "notify":
           return `${senderName} ${chatroom.lastMessagePopulate.text}`;
         case "image":
@@ -68,11 +67,11 @@ export default function ChatCard({ chatroom, isSelected }) {
     return "No messages";
   };
 
-  const isSeen = () => {
+  const isNotSeen = () => {
     if (chatroom.seenHistory) {
-      return Object.keys(chatroom.seenHistory).includes(userId);
+      return !Object.keys(chatroom.seenHistory).includes(userId);
     }
-    return false;
+    return true;
   };
 
   const handleClick = (e) => {
@@ -87,7 +86,7 @@ export default function ChatCard({ chatroom, isSelected }) {
         onClick={handleClick}
         className={clsx("chatCard", {
           "chatCard--active": isSelected,
-          "chatCard--isNotSeen": !isSeen(),
+          "chatCard--isNotSeen": isNotSeen(),
         })}
         style={{ position: "relative" }}
       >

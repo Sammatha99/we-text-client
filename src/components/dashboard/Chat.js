@@ -10,9 +10,9 @@ export default function Chat() {
   return (
     <>
       <div className="bigPanelMiddle content">
-        <ChatHeader />
-        <ChatBody />
         <MessageProvider>
+          <ChatHeader />
+          <ChatBody />
           <ChatInput />
         </MessageProvider>
       </div>

@@ -51,22 +51,24 @@ export const chatroomsSlice = createSlice({
     },
     // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
     unshiftChatroom: (state, action) => {
-      const findIndex = state.value.chatrooms.findIndex(
-        (chatroom) => chatroom.id === action.payload.id
-      );
-      // nếu chatroom cần shift chưa tồn tại tại trong chatrooms, thì thêm như bth
-      if (findIndex === -1) {
-        state.value.chatrooms.unshift(action.payload);
-        state.value.chatroomsId.unshift(action.payload.id);
-        state.value.paginate.totalResults =
-          state.value.paginate.totalResults + 1;
-      } else {
-        // nếu chatroom cần shift đã tồn tại => swap vị trí lên đầu
-        state.value.chatrooms = utilFunction.swapItems(
-          state.value.chatrooms,
-          findIndex,
-          0
-        );
+      if (state.value.chatrooms[0].id !== action.payload.id) {
+        if (!state.value.chatroomsId.includes(action.payload.id)) {
+          // nếu chatroom cần shift chưa tồn tại tại trong chatrooms, thì thêm như bth
+          state.value.chatrooms.unshift(action.payload);
+          state.value.chatroomsId.unshift(action.payload.id);
+          state.value.paginate.totalResults =
+            state.value.paginate.totalResults + 1;
+        } else {
+          // nếu chatroom cần shift đã tồn tại => swap vị trí lên đầu
+          const findIndex = state.value.chatrooms.findIndex(
+            (chatroom) => chatroom.id === action.payload.id
+          );
+          state.value.chatrooms = utilFunction.swapItems(
+            state.value.chatrooms,
+            findIndex,
+            0
+          );
+        }
       }
     },
     // action.payload = id: string
@@ -85,14 +87,14 @@ export const chatroomsSlice = createSlice({
         }
       }
     },
-    // action.payload = chatroom
+    // action.payload = chatroomUpdateData ({..., id.required})
     updateChatroom: (state, action) => {
       const chatroomIndex = state.value.chatrooms.findIndex(
         (chatroom) => chatroom.id === action.payload.id
       );
       if (chatroomIndex !== -1) {
         Object.assign(state.value.chatrooms[chatroomIndex], action.payload);
-        if (state.value.selectedChatroom.id === action.payload.id) {
+        if (state.value.selectedChatroom?.id === action.payload.id) {
           Object.assign(state.value.selectedChatroom, action.payload);
         }
       }

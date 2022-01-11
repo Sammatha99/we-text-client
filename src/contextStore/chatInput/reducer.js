@@ -3,12 +3,20 @@ import {
   REMOVE_IMAGE,
   UPDATE_MESSAGE,
   CLEAR_IMAGES,
-  CLEAR_MESSAGE_STATE,
+  CLEAR_INPUT_STATE,
+  ADD_MESSAGES_PAGINATE,
+  UNSHIFT_MESSAGE,
+  CLEAR_MESSAGES_PAGINATE,
 } from "./constants";
+
+import { utilFunction } from "../../utils";
 
 const initState = {
   images: [],
   text: "",
+  messages: [],
+  messagesId: [],
+  paginate: null,
 };
 
 function reducer(state, action) {
@@ -34,10 +42,56 @@ function reducer(state, action) {
         ...state,
         text: action.payload,
       };
-    case CLEAR_MESSAGE_STATE:
-      return { ...initState };
-    default:
+    case CLEAR_INPUT_STATE:
+      return { ...state, images: [], text: "" };
+    case ADD_MESSAGES_PAGINATE: // action.payload: {messages, paginate}
+      const newMessages = [];
+      const newMessagesId = state.messagesId;
+      action.payload.messages.forEach((message) => {
+        if (!newMessagesId.includes(message.id)) {
+          utilFunction.formatMessage(message);
+          newMessagesId.push(message.id);
+          newMessages.push(message);
+        }
+      });
+      Object.assign(state, {
+        messages: [...state.messages, ...newMessages],
+        messagesId: newMessagesId,
+        paginate: action.payload.paginate,
+      });
       return { ...state };
+    case UNSHIFT_MESSAGE: // action.payload: message
+      if (!state.messagesId.includes(action.payload.id)) {
+        utilFunction.formatMessage(action.payload);
+        if (state.paginate == null) {
+          return {
+            ...state,
+            messages: [action.payload, ...state.messages],
+            messagesId: [action.payload.id, ...state.messagesId],
+            paginate: { totalResults: 1 },
+          };
+        } else {
+          return {
+            ...state,
+            messages: [action.payload, ...state.messages],
+            messagesId: [action.payload.id, ...state.messagesId],
+            paginate: {
+              ...state.paginate,
+              totalResults: state.paginate.totalResults + 1,
+            },
+          };
+        }
+      }
+      return { ...state };
+    case CLEAR_MESSAGES_PAGINATE:
+      return {
+        ...state,
+        messages: [],
+        messagesId: [],
+        paginate: null,
+      };
+    default:
+      return state;
   }
 }
 

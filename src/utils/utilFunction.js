@@ -1,3 +1,5 @@
+import { notFoundImage } from "../assets/imgs";
+
 const chatRoomStatus = function (chatroom) {
   if (!chatroom.isGroupChat) {
     return chatroom.membersPopulate[0].status;
@@ -59,6 +61,16 @@ const swapItems = (array, from, to) => {
   return array;
 };
 
+const formatMessage = (message) => {
+  if (!message.senderPopulate)
+    message.senderPopulate = {
+      name: "not found",
+      avatar: notFoundImage,
+      id: null,
+    };
+  return message;
+};
+
 export {
   chatRoomStatus,
   formatChatroom,
@@ -66,4 +78,5 @@ export {
   dateCompare,
   isEmltyObject,
   swapItems,
+  formatMessage,
 };

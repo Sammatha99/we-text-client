@@ -5,9 +5,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { catchError } from "../../utils";
 import { constants } from "../../../utils";
-import { thisUserAction } from "../../../features";
+import { chatroomsAction, thisUserAction } from "../../../features";
 import { backendWithAuth } from "../../../api/backend";
 import { useStore, actions } from "../../../contextStore/chatInput";
+import { socket } from "../../../Global";
 
 const ChatInputImage = ({ file, index }) => {
   const [, messageDispatch] = useStore();
@@ -151,10 +152,33 @@ export default function ChatInput() {
       chatroomId: chatroomId,
       time: Date.now(),
     };
+
     try {
       const axios = await backendWithAuth();
       if (axios) {
-        axios.post("/messages", dataToSend);
+        axios.post("/messages", dataToSend).then((res) => {
+          console.log("chatinput.emit('send-message')");
+          messageDispatch(
+            actions.unshiftMessage({
+              ...res.data,
+              senderPopulate: thisUser,
+            })
+          );
+          const updateData = {
+            lastMessage: res.data.id,
+            lastMessagePopulate: res.data,
+            time: res.data.time,
+            id: res.data.chatroomId,
+          };
+          dispatch(chatroomsAction.updateChatroom(updateData));
+          dispatch(chatroomsAction.unshiftChatroom(updateData));
+
+          socket.emit("send-message", res.data, {
+            id: thisUser.id,
+            avatar: thisUser.avatar,
+            name: thisUser.name,
+          });
+        });
       } else {
         dispatch(thisUserAction.logout());
       }

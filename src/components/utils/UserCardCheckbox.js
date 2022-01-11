@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import clsx from "clsx";
 
 export default function UserCardCheckbox({
@@ -8,8 +8,6 @@ export default function UserCardCheckbox({
   isChecked,
   disabled = false,
 }) {
-  const [status, setSatus] = useState(user && user.status);
-
   const handleCheckboxClick = (e) => {
     handleCheckbox(user, e.target.checked);
   };
@@ -23,7 +21,7 @@ export default function UserCardCheckbox({
       >
         <div
           className={clsx("avatar", "avatar--small", "center", {
-            "user-active-dots": status,
+            "user-active-dots": user.status,
           })}
         >
           <img

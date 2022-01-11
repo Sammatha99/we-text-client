@@ -6,12 +6,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { catchError, EndNoDataComponent } from "../../utils";
 import { UsersSeenChatModal } from "../../modals";
-import { constants } from "../../../utils";
+import { constants, utilFunction } from "../../../utils";
 
-import { notFoundImage } from "../../../assets/imgs";
-
+import { useStore, actions } from "../../../contextStore/chatInput";
 import { backendWithAuth } from "../../../api/backend";
 import { thisUserAction } from "../../../features";
+import { socket } from "../../../Global";
 
 const getMembersSeen = (chatroom, messageId) => {
   if (
@@ -162,53 +162,49 @@ export default function ChatBody() {
     (state) => state.chatrooms.value.selectedChatroom
   );
   const userId = useSelector((state) => state.thisUser.value.id);
-  const [messages, setMessages] = useState([]);
-  const [paginate, setPaginate] = useState(null);
+  const [messageState, messageDispatch] = useStore();
 
   useEffect(() => {
-    setMessages([]);
-    setPaginate(null);
+    messageDispatch(actions.clearMessagesPaginate());
     loadMessages(1);
-    return () => {};
+
+    socket.on(`receive-message-${chatroom.id}`, handleRecieveMessage);
+
+    return () => {
+      socket.off(`receive-message-${chatroom.id}`);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.id]);
 
-  const formatMessage = (message) => {
-    if (!message.senderPopulate)
-      message.senderPopulate = {
-        name: "not found",
-        avatar: notFoundImage,
-        id: null,
+  const handleRecieveMessage = (message, sender) => {
+    if (message.chatroomId === chatroom.id) {
+      console.group("chatBoy on receive-message");
+      const newMessage = {
+        ...message,
+        senderPopulate: sender,
       };
-    return message;
+      messageDispatch(actions.unshiftMessage(newMessage));
+      console.groupEnd();
+    }
   };
 
-  const setMessagesToMessages = (messages) => {
-    messages.forEach((message) => formatMessage(message));
-    setMessages((prev) => [...prev, ...messages]);
-  };
-
-  const setPaginateToPaginate = (newPaginate) => {
-    setPaginate((prev) => {
-      if (prev == null) prev = {};
-      Object.assign(prev, newPaginate);
-      return prev;
-    });
-  };
-
-  const loadMessages = async (page = paginate.page) => {
+  const loadMessages = async (page = messageState.paginate.page) => {
     try {
       const axios = await backendWithAuth();
       if (axios) {
         const url = `/messages?chatroomId=${chatroom.id}&page=${page}&limit=15`;
         const res = await axios.get(url);
 
-        setMessagesToMessages(res.data.results);
-        setPaginateToPaginate({
-          page: page + 1,
-          totalPages: res.data.totalPages,
-          totalResults: res.data.totalResults,
-        });
+        messageDispatch(
+          actions.addMessagesPaginate({
+            messages: res.data.results,
+            paginate: {
+              page: page + 1,
+              totalPages: res.data.totalPages,
+              totalResults: res.data.totalResults,
+            },
+          })
+        );
       } else {
         dispatch(thisUserAction.logout());
       }
@@ -230,17 +226,19 @@ export default function ChatBody() {
   return (
     <>
       <div id="chat-body-warpper" className="chat-body-wrapper">
-        {paginate != null ? (
+        {messageState.paginate != null && (
           <InfiniteScroll
             style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
             inverse={true} //
             scrollableTarget="chat-body-warpper"
-            dataLength={messages.length}
+            dataLength={messageState.messages.length}
             next={loadMessages}
             loader={<LoadingMessages />}
-            hasMore={messages.length < paginate.totalResults}
+            hasMore={
+              messageState.messages.length < messageState.paginate.totalResults
+            }
           >
-            {messages.map((message) => (
+            {messageState.messages.map((message) => (
               <div
                 key={message.id}
                 style={{ display: "flex", flexDirection: "column" }}
@@ -256,10 +254,9 @@ export default function ChatBody() {
               </div>
             ))}
           </InfiniteScroll>
-        ) : (
-          <LoadingMessages />
         )}
-        {messages.length === 0 && (
+        {messageState.paginate == null && <LoadingMessages />}
+        {messageState.messages.length === 0 && (
           <div className="center">
             <EndNoDataComponent.EndNoDataLight text="No Messages" />
           </div>

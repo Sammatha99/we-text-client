@@ -13,10 +13,11 @@ import {
   swal,
   EndNoDataComponent,
 } from "../utils";
-import { constants, Paginate, utilFunction } from "../../utils";
+import { constants, Paginate } from "../../utils";
 
 import { chatroomsAction, thisUserAction } from "../../features";
 import { backendWithAuth } from "../../api/backend";
+import { socket } from "../../Global";
 
 export default function CreateChatModal() {
   const modalCheckboxRef = useRef();
@@ -94,16 +95,17 @@ export default function CreateChatModal() {
           chatroomId: res.data.id,
           time: Date.now(),
         };
-        axios.post("/messages", messageDataToSend);
+        await axios.post("/messages", messageDataToSend);
 
         if (!res.data.isExist) {
           // chưa tồn tại
-          Object.assign(
-            res.data,
-            utilFunction.formatChatroom(res.data, userId)
+          socket.emit(
+            "create-chatroom",
+            userId,
+            res.data.id,
+            dataToSend.members
           );
-          dispatch(chatroomsAction.unshiftChatroom(res.data));
-          dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));
+
           swal.closeSwal();
           swal.showSuccessSwal();
         } else {

@@ -61,7 +61,7 @@
 }
 
 .chatCard__name {
-  font-weight: var(--font-weight-light);
+  /* font-weight: var(--font-weight-light); */
   margin-top: var(--spacing-2);
   color: var(--text-2x-light-color);
 }
