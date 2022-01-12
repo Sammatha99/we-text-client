@@ -11,10 +11,11 @@ import {
   thisUserAction,
 } from "../../features";
 import { backendWithAuth } from "../../api/backend";
+import { socket } from "../../Global";
 
 const PopupMenuChatGroupCard = (chatId) => {
   const dispatch = useDispatch();
-  const userId = useSelector((state) => state.thisUser.value.id);
+  const thisUser = useSelector((state) => state.thisUser.value);
   const selectedChatroomId = useSelector(
     (state) => state.chatrooms.value.selectedChatroom?.id
   );
@@ -22,13 +23,13 @@ const PopupMenuChatGroupCard = (chatId) => {
     useSelector((state) => state.chatrooms.value.paginate.page) - 1;
 
   const loadingMissingChatroom = async (axios) => {
-    const url = `/chatrooms?userId=${userId}&page=${currentPage}`;
+    const url = `/chatrooms?userId=${thisUser.id}&page=${currentPage}`;
 
     const res = await axios.get(url);
 
     //format chatrooms
     res.data.results.forEach((chatroom) => {
-      chatroom = utilFunction.formatChatroom(chatroom, userId);
+      chatroom = utilFunction.formatChatroom(chatroom, thisUser.id);
       return chatroom;
     });
 
@@ -53,9 +54,13 @@ const PopupMenuChatGroupCard = (chatId) => {
       const axios = await backendWithAuth();
       if (axios) {
         const res = await axios.patch(`/chatrooms/${chatId}/delete-member`, {
-          userId,
+          userId: thisUser.id,
         });
-        // TODO outgroup socket
+        socket.emit("send-remove-member", res.data.lastMessagePopulate, {
+          id: thisUser.id,
+          avatar: thisUser.avatar,
+          name: thisUser.name,
+        });
         if (selectedChatroomId === chatId) {
           dispatch(featuresAction.setSelectedChatroom(false));
         }

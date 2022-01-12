@@ -26,6 +26,7 @@ export default function Global() {
       socket.off("receive-message");
       socket.off("receive-seen-message");
       socket.off("receive-add-member");
+      socket.off("receive-remove-member");
       return () => {
         window.removeEventListener("beforeunload");
       };
@@ -50,6 +51,7 @@ export default function Global() {
     socket.on("new-chatroom", handleNewChatroom);
     socket.on("receive-message", handleRecieveMessage);
     socket.on("receive-add-member", handleRecieveNewMembers);
+    socket.on("receive-remove-member", handleRecieveRemoveMember);
 
     return () => {
       window.removeEventListener("beforeunload", beforeunloadHandle);
@@ -118,6 +120,37 @@ export default function Global() {
         }
       });
     } catch (err) {}
+  };
+
+  const handleRecieveRemoveMember = (message, sender) => {
+    const userId = localStorage.userIdStorage.get();
+    if (!chatroomsRef.current.chatroomsId.includes(message.chatroomId)) {
+      // update redux store: add and unshift
+      try {
+        backendWithAuth().then((axios) => {
+          if (axios) {
+            axios.get(`/chatrooms/${message.chatroomId}`).then((res) => {
+              const newChatroom = utilFunction.formatChatroom(res.data, userId);
+              dispatch(chatroomsAction.unshiftChatroom(newChatroom));
+            });
+          } else {
+            dispatch(thisUserAction.logout());
+          }
+        });
+      } catch (err) {}
+    } else {
+      // update redux : updateChatroom + unshiftChatroom
+      const updateData = {
+        lastMessage: message.id,
+        lastMessagePopulate: message,
+        time: message.time,
+        id: message.chatroomId,
+      };
+      dispatch(
+        chatroomsAction.removeMemberChatroom({ updateData, removeUser: sender })
+      );
+      dispatch(chatroomsAction.unshiftChatroom(updateData));
+    }
   };
 
   return <></>;

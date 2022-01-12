@@ -8,5 +8,4 @@ export const CLEAR_INPUT_STATE = "clear_input_state";
 
 export const ADD_MESSAGES_PAGINATE = "update_message_paginate";
 export const UNSHIFT_MESSAGE = "unshift_message";
-export const UNSHIFT_MESSAGES = "unshift_messages";
 export const CLEAR_MESSAGES_PAGINATE = "clear_messages_paginate";

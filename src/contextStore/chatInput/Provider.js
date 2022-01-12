@@ -4,6 +4,7 @@ import reducer, { initState } from "./reducer";
 
 const logger = (reducer) => (state, action) => {
   console.group(action.type);
+  console.log("payload: ", action.payload);
 
   console.log("prevState: ", state);
 

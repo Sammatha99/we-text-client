@@ -157,7 +157,6 @@ export default function ChatInput() {
       const axios = await backendWithAuth();
       if (axios) {
         axios.post("/messages", dataToSend).then((res) => {
-          console.log("chatinput.emit('send-message')");
           messageDispatch(
             actions.unshiftMessage({
               ...res.data,

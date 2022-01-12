@@ -134,6 +134,41 @@ export const chatroomsSlice = createSlice({
           });
       }
     },
+    removeMemberChatroom: (state, action) => {
+      // action.payload = {updateData: {...}, removeUser: user}
+      const { updateData, removeUser } = action.payload;
+      const chatroomIndex = state.value.chatrooms.findIndex(
+        (chatroom) => chatroom.id === updateData.id
+      );
+      // TODO
+      if (chatroomIndex !== -1) {
+        const chatroomUpdateData = { ...updateData };
+
+        chatroomUpdateData.membersPopulate = state.value.chatrooms[
+          chatroomIndex
+        ].membersPopulate.filter((member) => member.id !== removeUser.id);
+
+        chatroomUpdateData.members = state.value.chatrooms[
+          chatroomIndex
+        ].members.filter((memberId) => memberId !== removeUser.id);
+
+        chatroomUpdateData.outGroupMembers = [
+          ...state.value.chatrooms[chatroomIndex].outGroupMembers,
+          removeUser.id,
+        ];
+
+        chatroomUpdateData.outGroupMembers = [
+          ...state.value.chatrooms[chatroomIndex].outGroupMembersPopulate,
+          removeUser,
+        ];
+
+        Object.assign(state.value.chatrooms[chatroomIndex], chatroomUpdateData);
+
+        if (state.value.selectedChatroom?.id === updateData.id) {
+          Object.assign(state.value.selectedChatroom, chatroomUpdateData);
+        }
+      }
+    },
   },
 });
 
@@ -146,6 +181,7 @@ export const {
   clearChatrooms,
   deleteChatroom,
   updateUserStatusInChatroom,
+  removeMemberChatroom,
 } = chatroomsSlice.actions;
 
 export default chatroomsSlice.reducer;

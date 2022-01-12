@@ -180,7 +180,7 @@ export default function ChatBody() {
 
   const handleRecieveMessage = (message, sender) => {
     if (message.chatroomId === chatroom.id) {
-      console.group("chatBoy on receive-message");
+      console.group("chatBody on receive-message");
       const newMessage = {
         ...message,
         senderPopulate: sender,
@@ -197,6 +197,8 @@ export default function ChatBody() {
     newMembersId
   ) => {
     if (chatroom.id === chatroomId) {
+      console.log("chatBody on add-members: ", newMembersId);
+
       newMembersId.forEach((newMemberId, index) => {
         backendWithoutAuth.get(`/users/${newMemberId}`).then((res) => {
           const user = res.data;

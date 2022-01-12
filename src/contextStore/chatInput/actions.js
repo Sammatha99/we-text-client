@@ -49,8 +49,3 @@ export const clearMessagesPaginate = (payload) => ({
   type: CLEAR_MESSAGES_PAGINATE,
   payload,
 });
-
-export const unshiftMessages = (payload) => ({
-  type: UNSHIFT_MESSAGES,
-  payload,
-});

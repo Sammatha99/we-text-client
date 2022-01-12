@@ -146,13 +146,20 @@ export default function ChatInfo() {
       swal.showLoadingSwal();
       const axios = await backendWithAuth();
       if (axios) {
-        await axios.patch(`/chatrooms/${chatroom.id}/delete-member`, {
-          userId,
+        const res = await axios.patch(
+          `/chatrooms/${chatroom.id}/delete-member`,
+          {
+            userId,
+          }
+        );
+        socket.emit("send-remove-member", res.data.lastMessagePopulate, {
+          id: thisUser.id,
+          avatar: thisUser.avatar,
+          name: thisUser.name,
         });
 
         dispatch(featuresAction.setSelectedChatroom(false));
         dispatch(chatroomsAction.deleteChatroom(chatroom.id));
-        // TODO outgroup socket
         await LoadingMissingChatroom(axios);
         swal.closeSwal();
       } else {
