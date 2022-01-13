@@ -166,7 +166,7 @@ export default function ChatBody() {
       }
       return seenHistoryFormat;
     }
-    return null;
+    return {};
   }, [chatroom.seenHistory, userId, messageState.messages[0]]);
 
   useEffect(() => {
@@ -184,14 +184,32 @@ export default function ChatBody() {
   }, [chatroom.id]);
 
   useEffect(() => {
+    console.log(
+      " messageState.messages[0]?.id: ",
+      messageState.messages[0]?.id
+    );
+    console.log(
+      'messageState.messages[0]?.type !== "notify": ',
+      messageState.messages[0]?.type !== "notify"
+    );
+    console.log("chatroom.seenHistory: ", chatroom.seenHistory);
+    console.log(
+      !chatroom.seenHistory ||
+        (chatroom.seenHistory &&
+          chatroom.seenHistory[userId] !== messageState.messages[0]?.id)
+    );
+
     messageState.messages[0]?.id &&
       messageState.messages[0]?.type !== "notify" &&
-      chatroom.seenHistory[userId] !== messageState.messages[0]?.id &&
+      (!chatroom.seenHistory ||
+        (chatroom.seenHistory &&
+          chatroom.seenHistory[userId] !== messageState.messages[0]?.id)) &&
       sendSeenHistory(messageState.messages[0].id);
     return () => {};
   }, [messageState.messages[0]?.id]);
 
   const sendSeenHistory = (messageId) => {
+    console.log("??");
     try {
       backendWithAuth().then((axios) => {
         if (axios) {

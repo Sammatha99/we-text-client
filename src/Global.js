@@ -63,12 +63,14 @@ export default function Global() {
 
   const handleNewChatroom = async (senderId, chatroomId) => {
     try {
+      console.log("handle socket join chatroom");
       const userId = localStorage.userIdStorage.get();
       socket.emit("join-room", chatroomId);
       const axios = await backendWithAuth();
       if (axios) {
         const res = await axios.get(`/chatrooms/${chatroomId}`);
         Object.assign(res.data, utilFunction.formatChatroom(res.data, userId));
+        console.log("res data: ", res.data);
         dispatch(chatroomsAction.unshiftChatroom(res.data));
         if (senderId === userId) {
           dispatch(chatroomsAction.setSelectedChatroomById(res.data.id));

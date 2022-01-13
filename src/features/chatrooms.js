@@ -51,7 +51,8 @@ export const chatroomsSlice = createSlice({
     },
     unshiftChatroom: (state, action) => {
       // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
-      if (state.value.chatrooms[0].id !== action.payload.id) {
+
+      if (state.value.chatrooms[0]?.id !== action.payload.id) {
         if (!state.value.chatroomsId.includes(action.payload.id)) {
           // nếu chatroom cần shift chưa tồn tại tại trong chatrooms, thì thêm như bth
           state.value.chatrooms.unshift(action.payload);

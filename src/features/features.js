@@ -52,6 +52,7 @@ export const {
   setSelectedChatroom,
   setSelectedUser,
   toggleSelectedChatroom,
+  clearFeatures,
 } = featuresSlice.actions;
 
 export default featuresSlice.reducer;

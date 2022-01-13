@@ -41,6 +41,7 @@ import { PublicRoute, PrivateRoute, VerifyEmailRoute } from "./routes";
 import { MainDashboard, NotFoundPage, AuthPages } from "./components";
 import {
   chatroomsAction,
+  featuresAction,
   filesAction,
   thisUserAction,
   thisUserDetailAction,
@@ -119,6 +120,7 @@ function App() {
     }
 
     loadApp();
+    dispatch(featuresAction.clearFeatures());
     dispatch(chatroomsAction.clearChatrooms());
     dispatch(filesAction.clearFiles());
 

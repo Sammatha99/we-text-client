@@ -78,7 +78,6 @@ export default function VerifyEmail() {
   };
 
   const handleLogout = () => {
-    localStorage.storage.removeAll();
     dispatch(thisUserAction.logout());
   };
 
