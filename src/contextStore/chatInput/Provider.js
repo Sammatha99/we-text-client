@@ -18,10 +18,7 @@ const logger = (reducer) => (state, action) => {
 };
 
 function Provider({ children }) {
-  const [messageState, messageDispatch] = useReducer(
-    logger(reducer),
-    initState
-  );
+  const [messageState, messageDispatch] = useReducer(reducer, initState);
 
   return (
     <Context.Provider value={[messageState, messageDispatch]}>

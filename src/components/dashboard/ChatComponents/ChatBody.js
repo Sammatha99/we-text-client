@@ -13,30 +13,6 @@ import { backendWithAuth, backendWithoutAuth } from "../../../api/backend";
 import { thisUserAction, chatroomsAction } from "../../../features";
 import { socket } from "../../../Global";
 
-const getMembersSeen = (chatroom, messageId) => {
-  if (
-    !chatroom.seenHistory ||
-    !Object.values(chatroom.seenHistory).includes(messageId)
-  ) {
-    return null;
-  }
-  console.group("GET MEMBERS SEEN");
-  console.log("seen-history: ", chatroom.seenHistory);
-  console.log("messageId: ", messageId);
-
-  const getKeys = Object.keys(chatroom.seenHistory).filter((key) => {
-    return chatroom.seenHistory[key] === messageId;
-  });
-
-  console.log("membersId: ", getKeys);
-  const members = chatroom.membersPopulate.filter((member) => {
-    return getKeys.includes(member.id);
-  });
-  console.log("members seen: ", members);
-  console.groupEnd();
-  return members;
-};
-
 const UsersSeenComponent = ({ usersSeen }) => {
   const [showModal, setShowModal] = useState(false);
   const handleUsersSeenClick = () => {
@@ -173,7 +149,25 @@ export default function ChatBody() {
   const userId = useSelector((state) => state.thisUser.value.id);
   const [messageState, messageDispatch] = useStore();
 
-  const seenUsers = useMemo(() => {}, [chatroom.seenHistory]);
+  const getUserById = (findId) => {
+    return chatroom.membersPopulate.find((user) => findId === user.id);
+  };
+
+  const seenUsers = useMemo(() => {
+    if (chatroom.seenHistory) {
+      const seenHistoryFormat = {}; //{mesageId: [user]}
+      for (var id in chatroom.seenHistory) {
+        if (id === userId) continue;
+        const user = getUserById(id);
+        user &&
+          (seenHistoryFormat[chatroom.seenHistory[id]]
+            ? seenHistoryFormat[chatroom.seenHistory[id]].push(user)
+            : (seenHistoryFormat[chatroom.seenHistory[id]] = [user]));
+      }
+      return seenHistoryFormat;
+    }
+    return null;
+  }, [chatroom.seenHistory, userId, messageState.messages[0]]);
 
   useEffect(() => {
     messageDispatch(actions.clearMessagesPaginate());
@@ -191,6 +185,8 @@ export default function ChatBody() {
 
   useEffect(() => {
     messageState.messages[0]?.id &&
+      messageState.messages[0]?.type !== "notify" &&
+      chatroom.seenHistory[userId] !== messageState.messages[0]?.id &&
       sendSeenHistory(messageState.messages[0].id);
     return () => {};
   }, [messageState.messages[0]?.id]);
@@ -221,13 +217,11 @@ export default function ChatBody() {
 
   const handleRecieveMessage = (message, sender) => {
     if (message.chatroomId === chatroom.id) {
-      console.group("chatBody on receive-message");
       const newMessage = {
         ...message,
         senderPopulate: sender,
       };
       messageDispatch(actions.unshiftMessage(newMessage));
-      console.groupEnd();
     }
   };
 
@@ -238,8 +232,6 @@ export default function ChatBody() {
     newMembersId
   ) => {
     if (chatroom.id === chatroomId) {
-      console.log("chatBody on add-members: ", newMembersId);
-
       newMembersId.forEach((newMemberId, index) => {
         backendWithoutAuth.get(`/users/${newMemberId}`).then((res) => {
           const user = res.data;
@@ -318,9 +310,7 @@ export default function ChatBody() {
                   message={message}
                   thisUserId={message.senderPopulate.id === userId}
                 />
-                <UsersSeenComponent
-                  usersSeen={getMembersSeen(chatroom, message.id)}
-                />
+                <UsersSeenComponent usersSeen={seenUsers[message.id]} />
               </div>
             ))}
           </InfiniteScroll>

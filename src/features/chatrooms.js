@@ -181,7 +181,6 @@ export const chatroomsSlice = createSlice({
         (chatroom) => chatroom.id === chatroomId
       );
       if (chatroomIndex !== -1) {
-        console.log("update redux chatroom.seenHistory");
         state.value.chatrooms[chatroomIndex].seenHistory = {
           ...state.value.chatrooms[chatroomIndex].seenHistory,
           ...seenHistory,
