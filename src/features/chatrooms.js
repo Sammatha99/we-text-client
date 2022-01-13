@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { utilFunction } from "../utils";
+import { localStorage, utilFunction } from "../utils";
 
 // const paginateInit = {
 //   page: 0,
@@ -27,8 +27,8 @@ export const chatroomsSlice = createSlice({
     value: initState,
   },
   reducers: {
-    // action: {chatrooms: [chatroom], page, totalPages, totalResults}
     set: (state, action) => {
+      // action: {chatrooms: [chatroom], page, totalPages, totalResults}
       const chatroomsIds = utilFunction.getIds(action.payload.chatrooms);
       state.value = {
         chatrooms: [...action.payload.chatrooms],
@@ -41,16 +41,16 @@ export const chatroomsSlice = createSlice({
         selectedChatroom: null,
       };
     },
-    // action.payload: id:string
     setSelectedChatroomById: (state, action) => {
+      // action.payload: id:string
       if (action.payload)
         state.value.selectedChatroom = state.value.chatrooms.find(
           (chatroom) => chatroom.id === action.payload
         );
       else state.value.selectedChatroom = null;
     },
-    // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
     unshiftChatroom: (state, action) => {
+      // thêm chatroom mới nhất vào đầu: action.payload = {chatroom}
       if (state.value.chatrooms[0].id !== action.payload.id) {
         if (!state.value.chatroomsId.includes(action.payload.id)) {
           // nếu chatroom cần shift chưa tồn tại tại trong chatrooms, thì thêm như bth
@@ -71,8 +71,8 @@ export const chatroomsSlice = createSlice({
         }
       }
     },
-    // action.payload = id: string
     deleteChatroom: (state, action) => {
+      // action.payload = id: string
       if (state.value.chatroomsId.includes(action.payload)) {
         state.value.chatrooms = state.value.chatrooms.filter(
           (chatroom) => chatroom.id !== action.payload
@@ -87,20 +87,26 @@ export const chatroomsSlice = createSlice({
         }
       }
     },
-    // action.payload = chatroomUpdateData ({..., id.required})
     updateChatroom: (state, action) => {
+      // action.payload = chatroomUpdateData ({..., id.required})
       const chatroomIndex = state.value.chatrooms.findIndex(
         (chatroom) => chatroom.id === action.payload.id
       );
       if (chatroomIndex !== -1) {
+        const thisUserId = localStorage.userIdStorage.get();
         Object.assign(state.value.chatrooms[chatroomIndex], action.payload);
+        utilFunction.formatChatroom(
+          state.value.chatrooms[chatroomIndex],
+          thisUserId
+        );
         if (state.value.selectedChatroom?.id === action.payload.id) {
           Object.assign(state.value.selectedChatroom, action.payload);
+          utilFunction.formatChatroom(state.value.selectedChatroom, thisUserId);
         }
       }
     },
-    // action.payload = {chatrooms: [newChatrooms], paginate:{ page, totalPages, totalResults}}
     addNew: (state, action) => {
+      // action.payload = {chatrooms: [newChatrooms], paginate:{ page, totalPages, totalResults}}
       for (const newChatroom of action.payload.chatrooms) {
         if (!state.value.chatroomsId.includes(newChatroom.id)) {
           state.value.chatrooms.push(newChatroom);
@@ -113,8 +119,8 @@ export const chatroomsSlice = createSlice({
     clearChatrooms: (state, action) => {
       state.value = initState;
     },
-    // action.payload: {userId, status}
     updateUserStatusInChatroom: (state, action) => {
+      // action.payload: {userId, status}
       const { userId, status } = action.payload;
       state.value.chatrooms.forEach((chatroom) => {
         if (chatroom.members.includes(userId)) {
@@ -140,7 +146,6 @@ export const chatroomsSlice = createSlice({
       const chatroomIndex = state.value.chatrooms.findIndex(
         (chatroom) => chatroom.id === updateData.id
       );
-      // TODO
       if (chatroomIndex !== -1) {
         const chatroomUpdateData = { ...updateData };
 
@@ -169,6 +174,26 @@ export const chatroomsSlice = createSlice({
         }
       }
     },
+    updateSeenHistory: (state, action) => {
+      // action.payload: {chatroomId, object: seenHistory}
+      const { chatroomId, seenHistory } = action.payload;
+      const chatroomIndex = state.value.chatrooms.findIndex(
+        (chatroom) => chatroom.id === chatroomId
+      );
+      if (chatroomIndex !== -1) {
+        console.log("update redux chatroom.seenHistory");
+        state.value.chatrooms[chatroomIndex].seenHistory = {
+          ...state.value.chatrooms[chatroomIndex].seenHistory,
+          ...seenHistory,
+        };
+
+        state.value.selectedChatroom?.id === chatroomId &&
+          (state.value.selectedChatroom.seenHistory = {
+            ...state.value.selectedChatroom.seenHistory,
+            ...seenHistory,
+          });
+      }
+    },
   },
 });
 
@@ -182,6 +207,7 @@ export const {
   deleteChatroom,
   updateUserStatusInChatroom,
   removeMemberChatroom,
+  updateSeenHistory,
 } = chatroomsSlice.actions;
 
 export default chatroomsSlice.reducer;

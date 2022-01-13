@@ -95,7 +95,6 @@ function reducer(state, action) {
         messagesId: [],
         paginate: null,
       };
-
     default:
       return state;
   }

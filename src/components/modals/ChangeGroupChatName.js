@@ -7,8 +7,10 @@ import { utilFunction } from "../../utils";
 
 import { chatroomsAction, thisUserAction } from "../../features";
 import { backendWithAuth } from "../../api/backend";
+import { socket } from "../../Global";
 
 export default function ChangeGroupChatName() {
+  const thisUser = useSelector((state) => state.thisUser.value);
   const chatroomName = useSelector(
     (state) => state.chatrooms.value.selectedChatroom.name
   );
@@ -48,10 +50,22 @@ export default function ChangeGroupChatName() {
             userId,
             name: newName,
           });
+          socket.emit(
+            "send-chatroom-name",
+            newName,
+            res.data.lastMessagePopulate,
+            {
+              name: thisUser.name,
+              id: thisUser.id,
+              avatar: thisUser.avatar,
+            }
+          );
+
           Object.assign(
             res.data,
             utilFunction.formatChatroom(res.data, userId)
           );
+
           dispatch(chatroomsAction.updateChatroom(res.data));
           dispatch(chatroomsAction.unshiftChatroom(res.data));
           swal.closeSwal();

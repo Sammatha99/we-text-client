@@ -24,9 +24,10 @@ export default function Global() {
       socket.off("logout");
       socket.off("new-chatroom");
       socket.off("receive-message");
-      socket.off("receive-seen-message");
       socket.off("receive-add-member");
       socket.off("receive-remove-member");
+      socket.off("receive-chatroom-name");
+      socket.off("receive-seen-message");
       return () => {
         window.removeEventListener("beforeunload");
       };
@@ -52,6 +53,8 @@ export default function Global() {
     socket.on("receive-message", handleRecieveMessage);
     socket.on("receive-add-member", handleRecieveNewMembers);
     socket.on("receive-remove-member", handleRecieveRemoveMember);
+    socket.on("receive-chatroom-name", handleRecieveChatroomName);
+    socket.on("receive-seen-message", handleRecieveSeenHistory);
 
     return () => {
       window.removeEventListener("beforeunload", beforeunloadHandle);
@@ -151,6 +154,38 @@ export default function Global() {
       );
       dispatch(chatroomsAction.unshiftChatroom(updateData));
     }
+  };
+
+  const handleRecieveChatroomName = (newName, message) => {
+    const userId = localStorage.userIdStorage.get();
+    if (!chatroomsRef.current.chatroomsId.includes(message.chatroomId)) {
+      try {
+        backendWithAuth().then((axios) => {
+          if (axios) {
+            axios.get(`/chatrooms/${message.chatroomId}`).then((res) => {
+              const newChatroom = utilFunction.formatChatroom(res.data, userId);
+              dispatch(chatroomsAction.unshiftChatroom(newChatroom));
+            });
+          } else {
+            dispatch(thisUserAction.logout());
+          }
+        });
+      } catch (err) {}
+    } else {
+      const updateData = {
+        name: newName,
+        lastMessage: message.id,
+        lastMessagePopulate: message,
+        time: message.time,
+        id: message.chatroomId,
+      };
+      dispatch(chatroomsAction.updateChatroom(updateData));
+      dispatch(chatroomsAction.unshiftChatroom(updateData));
+    }
+  };
+
+  const handleRecieveSeenHistory = (chatroomId, seenHistory) => {
+    dispatch(chatroomsAction.updateSeenHistory({ chatroomId, seenHistory }));
   };
 
   return <></>;

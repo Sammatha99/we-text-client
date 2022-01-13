@@ -75,8 +75,9 @@ export default function ChatCard({ chatroom, isSelected }) {
   };
 
   const isNotSeen = () => {
+    if (chatroom.lastMessagePopulate.sender === userId) return false;
     if (chatroom.seenHistory) {
-      return !Object.keys(chatroom.seenHistory).includes(userId);
+      return !(chatroom.seenHistory[userId] === chatroom.lastMessage);
     }
     return true;
   };

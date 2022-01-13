@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import clsx from "clsx";
 import dateFormat from "dateformat";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,21 +10,30 @@ import { constants } from "../../../utils";
 
 import { useStore, actions } from "../../../contextStore/chatInput";
 import { backendWithAuth, backendWithoutAuth } from "../../../api/backend";
-import { thisUserAction } from "../../../features";
+import { thisUserAction, chatroomsAction } from "../../../features";
 import { socket } from "../../../Global";
 
 const getMembersSeen = (chatroom, messageId) => {
   if (
     !chatroom.seenHistory ||
     !Object.values(chatroom.seenHistory).includes(messageId)
-  )
+  ) {
     return null;
-  const members = chatroom.membersPopulate.filter((member) => {
-    const getKeys = Object.keys(chatroom.seenHistory).filter(
-      (key) => chatroom.seenHistory[key] === messageId
-    );
-    return getKeys.find((key) => key === member.id.toString());
+  }
+  console.group("GET MEMBERS SEEN");
+  console.log("seen-history: ", chatroom.seenHistory);
+  console.log("messageId: ", messageId);
+
+  const getKeys = Object.keys(chatroom.seenHistory).filter((key) => {
+    return chatroom.seenHistory[key] === messageId;
   });
+
+  console.log("membersId: ", getKeys);
+  const members = chatroom.membersPopulate.filter((member) => {
+    return getKeys.includes(member.id);
+  });
+  console.log("members seen: ", members);
+  console.groupEnd();
   return members;
 };
 
@@ -164,6 +173,8 @@ export default function ChatBody() {
   const userId = useSelector((state) => state.thisUser.value.id);
   const [messageState, messageDispatch] = useStore();
 
+  const seenUsers = useMemo(() => {}, [chatroom.seenHistory]);
+
   useEffect(() => {
     messageDispatch(actions.clearMessagesPaginate());
     loadMessages(1);
@@ -177,6 +188,36 @@ export default function ChatBody() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.id]);
+
+  useEffect(() => {
+    messageState.messages[0]?.id &&
+      sendSeenHistory(messageState.messages[0].id);
+    return () => {};
+  }, [messageState.messages[0]?.id]);
+
+  const sendSeenHistory = (messageId) => {
+    try {
+      backendWithAuth().then((axios) => {
+        if (axios) {
+          axios
+            .patch(`/chatrooms/${chatroom.id}/seen-history`, {
+              userIdMessageId: { [userId]: messageId },
+            })
+            .then((res) => {
+              socket.emit("send-seen-message", chatroom.id, {
+                [userId]: messageId,
+              });
+            });
+          dispatch(
+            chatroomsAction.updateSeenHistory({
+              chatroomId: chatroom.id,
+              seenHistory: { [userId]: messageId },
+            })
+          );
+        }
+      });
+    } catch (err) {}
+  };
 
   const handleRecieveMessage = (message, sender) => {
     if (message.chatroomId === chatroom.id) {

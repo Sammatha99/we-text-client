@@ -7,7 +7,7 @@ import {
   ADD_MESSAGES_PAGINATE,
   UNSHIFT_MESSAGE,
   CLEAR_MESSAGES_PAGINATE,
-  UNSHIFT_MESSAGES,
+  UPDATE_SEEN_HISTORY,
 } from "./constants";
 
 export const addImages = (payload) => ({
