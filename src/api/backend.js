@@ -4,7 +4,7 @@ import { swal } from "../components/utils";
 
 import { localStorage, utilFunction } from "../utils";
 
-const url = "http://localhost:3000/v1";
+const url = "https://quiet-bayou-43878.herokuapp.com/v1";
 
 const backendWithoutAuth = axios.create({
   baseURL: url,
