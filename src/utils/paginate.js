@@ -3,7 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 
 import { catchError } from "../components/utils";
-import { constants, utilFunction } from "./";
+import { constants, utilFunction } from ".";
 import { thisUserAction } from "../features";
 import { backendWithoutAuth, backendWithAuth } from "../api/backend";
 
