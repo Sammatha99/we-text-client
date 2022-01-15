@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import "../../../style/auth.css";
 import { googleLogo } from "../../../assets/imgs";
 
 import { InputPassword, swal, catchError } from "../../utils";

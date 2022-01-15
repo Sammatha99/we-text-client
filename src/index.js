@@ -12,6 +12,16 @@ import "./style/base/panel.css";
 import "./style/base/card.css";
 import "./style/base/tooltip.css";
 
+import "./style/dashboard.css";
+import "./style/auth.css";
+import "./style/chat.css";
+import "./style/chatInfo.css";
+import "./style/chatList.css";
+import "./style/modals.css";
+import "./style/otherUserProfile.css";
+import "./style/sidebar.css";
+import "./style/thisUserProfile.css";
+
 import {
   thisUserReducer,
   chatroomsReducer,

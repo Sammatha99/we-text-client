@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 
-import "../../../style/auth.css";
-
 import { swal, catchError } from "../../utils";
 import { schemas, constants } from "../../../utils";
 import { backendWithoutAuth } from "../../../api/backend";

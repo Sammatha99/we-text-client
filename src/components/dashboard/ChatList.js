@@ -3,8 +3,6 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import "../../style/chatList.css";
-
 import {
   LoadingComponent,
   ChatCard,

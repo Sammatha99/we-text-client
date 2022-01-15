@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import clsx from "clsx";
 import { useSelector, useDispatch } from "react-redux";
 
-import "../../style/thisUserProfile.css";
-
 import { catchError, LoadingComponent, ErrorComponent } from "../utils";
 import {
   AboutContent,

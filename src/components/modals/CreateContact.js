@@ -2,8 +2,6 @@ import React, { useRef, useState } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 
-import "../../style/modals.css";
-
 import { modalsName } from ".";
 import {
   LoadingComponent,

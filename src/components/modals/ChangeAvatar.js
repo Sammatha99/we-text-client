@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 
-import "../../style/modals.css";
-
 import { imageType } from "../../utils/constants";
 
 export default function ChangeAvatar({ handleSubmit, setShowModal }) {

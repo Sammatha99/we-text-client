@@ -1,7 +1,6 @@
 import React from "react";
 
 import { backgroundImage } from "../../assets/imgs";
-import "../../style/dashboard.css";
 
 export default function Background() {
   return (

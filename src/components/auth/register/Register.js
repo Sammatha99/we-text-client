@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import { googleLogo } from "../../../assets/imgs";
-import "../../../style/auth.css";
 
 import { InputPassword, swal, catchError } from "../../utils";
 import { schemas, constants, localStorage } from "../../../utils";

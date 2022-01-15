@@ -4,8 +4,6 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import "../../style/sidebar.css";
-
 import { constants } from "../../utils";
 import {
   thisUserAction,

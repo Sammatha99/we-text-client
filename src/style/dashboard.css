@@ -7,7 +7,7 @@
 
 .background {
   top: 0;
-  left: calc(var(--sidebar-small-width) -3px);
+  left: calc(var(--sidebar-small-width) - 3px);
   bottom: 0;
   right: 0;
   background-color: var(--black-color);

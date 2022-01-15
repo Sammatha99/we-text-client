@@ -4,8 +4,6 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 
-import "../../style/otherUserProfile.css";
-
 import {
   UserCard,
   LoadingComponent,

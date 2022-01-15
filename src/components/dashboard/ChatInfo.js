@@ -4,8 +4,6 @@ import clsx from "clsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
 
-import "../../style/chatInfo.css";
-
 import {
   UserCard,
   ThisUserCard,

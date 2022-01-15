@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 
-import "../../../style/auth.css";
-
 import { LoadingComponent, swal, catchError, Timer } from "../../utils";
 import { schemas, constants, localStorage } from "../../../utils";
 import { thisUserAction } from "../../../features";
