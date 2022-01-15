@@ -35,7 +35,9 @@ export default function Global() {
 
     window.addEventListener("beforeunload", beforeunloadHandle);
 
-    socket = io("https://quiet-bayou-43878.herokuapp.com/");
+    socket = io("https://quiet-bayou-43878.herokuapp.com/", {
+      transports: ["websocket", "polling", "flashsocket"],
+    });
 
     socket.on("login", (userId) => {
       dispatch(
