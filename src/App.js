@@ -125,6 +125,7 @@ function App() {
     dispatch(filesAction.clearFiles());
 
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thisUser?.id]);
 
   return (

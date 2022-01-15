@@ -2,20 +2,20 @@ import { useReducer } from "react";
 import Context from "./Context";
 import reducer, { initState } from "./reducer";
 
-const logger = (reducer) => (state, action) => {
-  console.group(action.type);
-  console.log("payload: ", action.payload);
+// const logger = (reducer) => (state, action) => {
+//   console.group(action.type);
+//   console.log("payload: ", action.payload);
 
-  console.log("prevState: ", state);
+//   console.log("prevState: ", state);
 
-  const newState = reducer(state, action);
+//   const newState = reducer(state, action);
 
-  console.log("newState: ", newState);
+//   console.log("newState: ", newState);
 
-  console.groupEnd();
+//   console.groupEnd();
 
-  return newState;
-};
+//   return newState;
+// };
 
 function Provider({ children }) {
   const [messageState, messageDispatch] = useReducer(reducer, initState);

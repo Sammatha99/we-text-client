@@ -59,6 +59,7 @@ export default function Global() {
     return () => {
       window.removeEventListener("beforeunload", beforeunloadHandle);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNewChatroom = async (senderId, chatroomId) => {

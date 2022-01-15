@@ -167,6 +167,7 @@ export default function ChatBody() {
       return seenHistoryFormat;
     }
     return {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatroom.seenHistory, userId, messageState.messages[0]]);
 
   useEffect(() => {
@@ -206,6 +207,7 @@ export default function ChatBody() {
           chatroom.seenHistory[userId] !== messageState.messages[0]?.id)) &&
       sendSeenHistory(messageState.messages[0].id);
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageState.messages[0]?.id]);
 
   const sendSeenHistory = (messageId) => {
