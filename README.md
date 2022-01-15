@@ -1,49 +1,49 @@
 # WE TEXT
 
-> Personal exercise how to create realtime chat application with reactJS, bootstrap and socket.io
+> Personal exercise how to create SPA realtime chat application by reactJS
+> live demo [_HERE_](https://we-text-client.vercel.app/)
 
 ## Table of Contents
 
 - [General Info](#general-information)
+- [Technologies Used](#technologies-used)
 - [Features](#features)
-- [Screenshots](#screenshots)
 - [Setup](#setup)
 - [Project Status](#project-status)
-- [Acknowledgements](#acknowledgements)
 - [Contact](#contact)
 
 ## General Information
 
-- This project is a simple chat application, you can connect to other people by there Id
-- The purpose of this project is to practice using reactJs, bootstrap and how socket.io work
+- This project is a simple chat application, you can connect to other people by there name/email, save contacts, following other user.
+- The purpose of this project is to practice using reactJs
+
+### Technologies Used
+
+- React
+- Redux toolkit
+- firebase
 
 ## Features
 
 List the ready features:
 
+- authentication features: login, register, forgot password, ...
 - Create new contact
+- follow other user
 - Create new conversation
 - Send message
-
-## Screenshots
-
-![Example screenshot](./assets/imgs/demo.PNG)
+- manage profile
 
 ## Setup
 
-0. Clone project: https://github.com/Sammatha99/1-chat-app.git
-1. In the Server directory `./1-chat-app-server`, you can run `npm run devStart`
-2. after the server run successfully, go to client directory `./1-chat-app-client`, you can run `yarn start` or `npm start`. the app will pop up in your browser or you can view in by open `http://localhost:3000`
+0. Clone project: https://github.com/Sammatha99/we-text-client.git
+1. Install the dependencies `yarn install`.
+2. running locally `yarn start`, the app will pop up in your browser or you can view in by open `http://localhost:3006`
 
 ## Project Status
 
 Project is: _complete_ .
 I still try to upgrade it more by adding more feature or improve UI/UX
-
-## Acknowledgements
-
-- This project was based on [this tutorial](https://www.youtube.com/watch?v=tBr-PybP_9c) and [this course](https://www.youtube.com/watch?v=ZKEqqIO7n-k)
-- Many thanks to [WebDevSimplified](https://github.com/WebDevSimplified) and [F8](https://fullstack.edu.vn/)
 
 ## Contact
 
