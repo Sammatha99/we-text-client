@@ -2,6 +2,7 @@
 
 > Personal exercise how to create SPA realtime chat application by reactJS
 > live demo [_HERE_](https://we-text-client.vercel.app/)
+> The backend [_HERE_](https://github.com/Sammatha99/we-text-server)
 
 ## Table of Contents
 
